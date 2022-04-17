@@ -1,0 +1,268 @@
+﻿<Window x:Class="AudioSourceSelector.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="MainWindow"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        mc:Ignorable="d"
+        ShowInTaskbar="False"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      GlassFrameThickness="1"
+                      ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="ForegroundTextColor" Color="WhiteSmoke"/>
+        <Color x:Key="SelectionColor">MediumSeaGreen</Color>
+        <Color x:Key="BorderMouseOverColor">WhiteSmoke</Color>
+        <SolidColorBrush x:Key="BorderKeyboardFocusColor" Color="WhiteSmoke"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="Transparent"/>
+        <Color x:Key="PressedBackgroundColor">DimGray</Color>
+
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
+        <!-- FocusVisual -->
+        <Style x:Key="ButtonFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border>
+                            <Rectangle Margin="8"
+                                       StrokeThickness="2"
+                                       Stroke="{StaticResource BorderKeyboardFocusColor}"
+                                       />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Button -->
+        <!--
+        <Style TargetType="Button" x:Key="SelectButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border TextBlock.Foreground="{TemplateBinding Foreground}"
+                                x:Name="Border"
+                                BorderThickness="2"
+                                Margin="8"
+                                Height="156"
+                                Width="128"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <Border Background="{StaticResource BackgroundColor}" x:Name="Selector">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3*"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Foreground="{StaticResource ForegroundSelectColor}"
+                                               Grid.Column="0"
+                                               Grid.Row="0"
+                                               Margin="8"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Top"
+                                               TextAlignment="Center"
+                                               Visibility="{Binding ShowSelected, Converter={StaticResource BoolToVisibility}}">
+                                        <ContentPresenter Content="&#xECCC;"/>
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource ForegroundTextColor}"
+                                               FontWeight="Normal"
+                                               Grid.Column="0"
+                                               Grid.Row="0"
+                                               FontSize="48"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center">
+                                        <ContentPresenter Content="&#xE767;"/>
+                                    </TextBlock>
+                                    <TextBlock Foreground="{StaticResource ForegroundTextColor}"
+                                               FontWeight="Normal"
+                                               Grid.Column="0"
+                                               Grid.Row="2"
+                                               Margin="4"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center">
+                                        <ContentPresenter>
+                                            <ContentPresenter.Resources>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                                </Style>
+                                            </ContentPresenter.Resources>
+                                        </ContentPresenter>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="{StaticResource BorderMouseOverColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Selector" Property="Background" Value="{StaticResource PressedBackgroundColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
+        <Style TargetType="RadioButton">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="false" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <BulletDecorator Background="Transparent" Margin="4">
+                            <BulletDecorator.Bullet>
+                                <Grid Width="128" Height="156">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3*"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+                                    <Rectangle x:Name="Border"
+                                               StrokeThickness="2"
+                                               Grid.RowSpan="2"
+                                               Grid.Column="0"
+                                               Visibility="Collapsed">
+                                        <Rectangle.Stroke>
+                                            <SolidColorBrush Color="{DynamicResource BorderMouseOverColor}" />
+                                        </Rectangle.Stroke>
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="Transparent" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Ellipse x:Name="CheckMark"
+                                             Margin="8"
+                                             Visibility="Collapsed"
+                                             Grid.Column="0"
+                                             Grid.Row="0"
+                                             Width="12"
+                                             Height="12"
+                                             HorizontalAlignment="Right"
+                                             VerticalAlignment="Top">
+                                        <Ellipse.Fill>
+                                            <SolidColorBrush Color="{DynamicResource SelectionColor}" />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Foreground="{StaticResource ForegroundTextColor}"
+                                               FontWeight="Normal"
+                                               Grid.Column="0"
+                                               Grid.Row="0"
+                                               FontSize="48"
+                                               FontFamily="Segoe MDL2 Assets"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center">
+                                        <ContentPresenter Content="&#xE767;"/>
+                                    </TextBlock>
+                                    <ContentPresenter Margin="8,4,8,8"
+                                                    Grid.Row="1"
+                                                    Grid.Column="0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    RecognizesAccessKey="True">
+                                        <ContentPresenter.Resources>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                                <Setter Property="TextAlignment" Value="Center" />
+                                                <Setter Property="Foreground" Value="{StaticResource ForegroundTextColor}"/>
+                                            </Style>
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
+                                </Grid>
+                            </BulletDecorator.Bullet>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                 Storyboard.TargetName="Border">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                            Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                 Storyboard.TargetName="Border">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                            Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0"
+                                                Value="{StaticResource PressedBackgroundColor}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                                <EasingColorKeyFrame KeyTime="0"
+                                                Value="{StaticResource PressedBackgroundColor}" />
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                 Storyboard.TargetName="CheckMark">
+                                                <DiscreteObjectKeyFrame KeyTime="0"
+                                            Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Unchecked" />
+                                    <VisualState x:Name="Indeterminate" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </BulletDecorator>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Border Background="#B20F0F0F" Padding="4">
+        <UniformGrid x:Name="AudioList"
+                     VerticalAlignment="Top"
+                     Background="Transparent"
+                     KeyDown="AudioListKeyDown">
+            <RadioButton>test</RadioButton>
+        </UniformGrid>
+    </Border>
+
+</Window>

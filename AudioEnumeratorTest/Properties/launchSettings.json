@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "AudioToolsTest": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NativeCoreAudio": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
