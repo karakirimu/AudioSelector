@@ -59,7 +59,15 @@ namespace AudioSourceSelector
                 Keyboard.ClearFocus();
             };
 
-            UpdateDeviceList(enumerationEvent.Devices);
+            IsVisibleChanged += (o, e) =>
+            {
+                Debug.WriteLine("[MainWindow.IsVisibleChanged]");
+                if ((bool)e.NewValue == true)
+                {
+                    UpdateDeviceList(enumerationEvent.Devices);
+                }
+            };
+
         }
 
         protected override void OnClosing(CancelEventArgs e)
