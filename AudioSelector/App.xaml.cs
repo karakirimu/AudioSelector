@@ -80,6 +80,12 @@ namespace AudioSourceSelector
         /// </summary>
         private void ShowSelectWindow()
         {
+            if(enumerationEvent.Devices.Count == 0)
+            {
+                Debug.WriteLine($"[App.ShowSelectWindow] No device listed");
+                return;
+            }
+
             try
             {
                 taskbarControl.Visible = false;
