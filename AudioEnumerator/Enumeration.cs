@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.OLE.Interop;
 using NativeCoreAudio;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static NativeCoreAudio.ComInterfaces;
 
 namespace AudioTools
@@ -59,11 +61,18 @@ namespace AudioTools
                 MultiMediaDevice multiMedia = new();
                 using SafeIMMDevice device = new(i, collection);
 
-                multiMedia.Connectors = ListConnector(device);
-                multiMedia.Id = device.GetId();
-                multiMedia.DeviceName = GetFriendlyName(device);
+                try
+                {
+                    multiMedia.Connectors = ListConnector(device);
+                    multiMedia.Id = device.GetId();
+                    multiMedia.DeviceName = GetFriendlyName(device);
+                    multiMediaDevices.Add(multiMedia);
 
-                multiMediaDevices.Add(multiMedia);
+                }catch(COMException ex)
+                {
+                    Debug.WriteLine($"[Enumeration.ListActiveRenderDevices] {ex.Message}");
+                }
+
             }
 
             return multiMediaDevices;
