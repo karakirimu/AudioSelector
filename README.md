@@ -2,12 +2,14 @@
 
 This is a simple audio output selection tool for Windows.
 
+![appimage_1](https://user-images.githubusercontent.com/37269014/171012545-8436861d-cb02-437c-9285-f5086088502c.png)
+
 ## Usage
 
 When the executable file is run, it is stored in the task tray.
 By pressing Ctrl + Alt + V keys or double-clicking the task tray icon
 The selection screen will appear and you can click the mouse or move the tab key to
-Press Enter to select the output device.
+Press Enter to select the output device. The currently selected device is displayed with a green filled circle.
 
 If required at startup, place the shortcut manually.
 
@@ -25,23 +27,25 @@ If required at startup, place the shortcut manually.
 
 # AudioSelector
 
-Windows‚Å‚ÌŠÈˆÕƒI[ƒfƒBƒIo—Í‘I‘ğƒc[ƒ‹‚Å‚·B
+Windowsã§ã®ç°¡æ˜“ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªå‡ºåŠ›é¸æŠãƒ„ãƒ¼ãƒ«ã§ã™ã€‚
 
-## g‚¢•û
+![appimage_1](https://user-images.githubusercontent.com/37269014/171012545-8436861d-cb02-437c-9285-f5086088502c.png)
 
-Àsƒtƒ@ƒCƒ‹‚ğÀs‚·‚é‚ÆAƒ^ƒXƒNƒgƒŒƒC‚ÉŠi”[‚³‚ê‚Ü‚·B
-Ctrl + Alt + VƒL[‚ğ‰Ÿ‚·‚©Aƒ^ƒXƒNƒgƒŒƒCƒAƒCƒRƒ“‚ğƒ_ƒuƒ‹ƒNƒŠƒbƒN‚·‚é‚±‚Æ‚Å
-‘I‘ğ‰æ–Ê‚ª•\¦‚³‚êAƒ}ƒEƒX‚ğƒNƒŠƒbƒN‚·‚é‚©Aƒ^ƒuƒL[‚ğˆÚ“®‚µA
-EnterƒL[‚ğ‰Ÿ‚µ‚ÄAo—ÍƒfƒoƒCƒX‚ğ‘I‘ğ‚µ‚Ü‚·B
+## ä½¿ã„æ–¹
 
-‹N“®‚É•K—v‚Èê‡‚ÍAè“®‚ÅƒVƒ‡[ƒgƒJƒbƒg‚ğ”z’u‚µ‚Ä‚­‚¾‚³‚¢B
+å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’å®Ÿè¡Œã™ã‚‹ã¨ã€ã‚¿ã‚¹ã‚¯ãƒˆãƒ¬ã‚¤ã«æ ¼ç´ã•ã‚Œã¾ã™ã€‚
+Ctrl + Alt + Vã‚­ãƒ¼ã‚’æŠ¼ã™ã‹ã€ã‚¿ã‚¹ã‚¯ãƒˆãƒ¬ã‚¤ã‚¢ã‚¤ã‚³ãƒ³ã‚’ãƒ€ãƒ–ãƒ«ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã“ã¨ã§
+é¸æŠç”»é¢ãŒè¡¨ç¤ºã•ã‚Œã€ãƒã‚¦ã‚¹ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã‹ã€ã‚¿ãƒ–ã‚­ãƒ¼ã‚’ç§»å‹•ã—ã€
+Enterã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã€å‡ºåŠ›ãƒ‡ãƒã‚¤ã‚¹ã‚’é¸æŠã—ã¾ã™ã€‚ç¾åœ¨é¸æŠä¸­ã®ãƒ‡ãƒã‚¤ã‚¹ã¯ç·‘è‰²ã®ä¸¸ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚
 
-## ŠÂ‹«
+èµ·å‹•æ™‚ã«å¿…è¦ãªå ´åˆã¯ã€æ‰‹å‹•ã§ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’é…ç½®ã—ã¦ãã ã•ã„ã€‚
+
+## ç’°å¢ƒ
 
 - .NET 6.0
-- x64‚Ì‚İg—p‰Â
+- x64ã®ã¿ä½¿ç”¨å¯
 - Windows 10 20H2
 
-## ƒ‰ƒCƒZƒ“ƒX
+## ãƒ©ã‚¤ã‚»ãƒ³ã‚¹
 
-- MITƒ‰ƒCƒZƒ“ƒX
+- MITãƒ©ã‚¤ã‚»ãƒ³ã‚¹
