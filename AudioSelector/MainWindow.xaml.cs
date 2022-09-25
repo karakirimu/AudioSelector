@@ -19,15 +19,27 @@ namespace AudioSourceSelector
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private readonly AudioDeviceEnumerationEvent enumerationEvent;
+        /// <summary>
+        /// Selector UI element.
+        /// </summary>
         private readonly Dictionary<string, RadioButton> deviceCollection;
+
+        /// <summary>
+        /// This value avoids multiple call Close() event.
+        /// </summary>
         private static bool IsCloseCalled;
+
+        /// <summary>
+        /// This value sets audio device select menu column count.
+        /// </summary>
         private static readonly int columnSize = 4;
 
+        /// <summary>
+        /// MainWindow constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            //enumerationEvent = new();
             deviceCollection = new Dictionary<string, RadioButton>();
 
             Loaded += (o, e) =>
@@ -40,18 +52,12 @@ namespace AudioSourceSelector
             Activated += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Activated]");
-                //enumerationEvent.Start(); // これを実行してもUI状の選択状態は変化しないのでは?
-                //enumerationEvent.Add += OnDeviceAdd;
-                //enumerationEvent.Remove += OnDeviceRemoved;
                 IsCloseCalled = false;
             };
 
             Deactivated += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Deactivated]");
-                //enumerationEvent.Stop();
-                //enumerationEvent.Add -= OnDeviceAdd;
-                //enumerationEvent.Remove -= OnDeviceRemoved;
                 CallClose();
             };
 
@@ -126,28 +132,6 @@ namespace AudioSourceSelector
 
             base.OnClosing(e);
         }
-
-        //private void OnDeviceAdd(MultiMediaDevice device)
-        //{
-        //    Dispatcher.Invoke(() =>
-        //    {
-        //        RadioButton selectbutton = CreateButtonItem(device.Id, device.DeviceName);
-        //        deviceCollection.Add(device.Id, selectbutton);
-        //        AudioList.Columns = GetAudioListColumnCount(deviceCollection.Count);
-
-        //        UpdateDeviceList(enumerationEvent.Devices);
-        //    });
-        //}
-
-        //private void OnDeviceRemoved(MultiMediaDevice device)
-        //{
-        //    Dispatcher.Invoke(() =>
-        //    {
-        //        _ = deviceCollection.Remove(device.Id);
-        //        UpdateDeviceList(enumerationEvent.Devices);
-        //    });
-        //}
-
         private void AudioListKeyDown(object sender, KeyEventArgs e)
         {
             if (deviceCollection.Count < 1)
