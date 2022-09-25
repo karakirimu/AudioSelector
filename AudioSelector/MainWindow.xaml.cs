@@ -1,8 +1,11 @@
-﻿using AudioSourceSelector.AudioDevice;
+﻿using AudioSelector;
+using AudioSourceSelector.AudioDevice;
 using AudioTools;
 using NativeCoreAudio;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -16,7 +19,7 @@ namespace AudioSourceSelector
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly AudioDeviceEnumerationEvent enumerationEvent;
+        //private readonly AudioDeviceEnumerationEvent enumerationEvent;
         private readonly Dictionary<string, RadioButton> deviceCollection;
         private static bool IsCloseCalled;
         private static readonly int columnSize = 4;
@@ -24,24 +27,31 @@ namespace AudioSourceSelector
         public MainWindow()
         {
             InitializeComponent();
-            enumerationEvent = new();
+            //enumerationEvent = new();
             deviceCollection = new Dictionary<string, RadioButton>();
+
+            Loaded += (o, e) =>
+            {
+                Debug.WriteLine("[MainWindow.Loaded]");
+                AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
+                model.Devices.CollectionChanged += DevicesCollectionChanged;
+            };
 
             Activated += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Activated]");
+                //enumerationEvent.Start(); // これを実行してもUI状の選択状態は変化しないのでは?
+                //enumerationEvent.Add += OnDeviceAdd;
+                //enumerationEvent.Remove += OnDeviceRemoved;
                 IsCloseCalled = false;
-                enumerationEvent.Start();
-                enumerationEvent.Add += OnDeviceAdd;
-                enumerationEvent.Remove += OnDeviceRemoved;
             };
 
             Deactivated += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Deactivated]");
-                enumerationEvent.Stop();
-                enumerationEvent.Add -= OnDeviceAdd;
-                enumerationEvent.Remove -= OnDeviceRemoved;
+                //enumerationEvent.Stop();
+                //enumerationEvent.Add -= OnDeviceAdd;
+                //enumerationEvent.Remove -= OnDeviceRemoved;
                 CallClose();
             };
 
@@ -64,10 +74,49 @@ namespace AudioSourceSelector
                 Debug.WriteLine("[MainWindow.IsVisibleChanged]");
                 if ((bool)e.NewValue == true)
                 {
-                    UpdateDeviceList(enumerationEvent.Devices);
+                    AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
+                    UpdateDeviceList(model.Devices);
                 }
             };
 
+        }
+
+        private void DevicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Debug.WriteLine("[MainWindow.DevicesCollectionChanged]");
+            ObservableCollection<MultiMediaDevice> device = sender as ObservableCollection<MultiMediaDevice>;
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    Debug.WriteLine("[MainWindow.DevicesCollectionChanged] NotifyCollectionChangedAction.Add");
+                    foreach (MultiMediaDevice m in e.NewItems)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            RadioButton selectbutton = CreateButtonItem(m.Id, m.DeviceName);
+                            deviceCollection.Add(m.Id, selectbutton);
+                            AudioList.Columns = GetAudioListColumnCount(deviceCollection.Count);
+
+                            UpdateDeviceList(device);
+                        });
+                    }
+
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    Debug.WriteLine("[MainWindow.DevicesCollectionChanged] NotifyCollectionChangedAction.Remove");
+                    foreach (MultiMediaDevice m in e.OldItems)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            _ = deviceCollection.Remove(m.Id);
+                            UpdateDeviceList(device);
+                        });
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -78,26 +127,26 @@ namespace AudioSourceSelector
             base.OnClosing(e);
         }
 
-        private void OnDeviceAdd(MultiMediaDevice device)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                RadioButton selectbutton = CreateButtonItem(device.Id, device.DeviceName);
-                deviceCollection.Add(device.Id, selectbutton);
-                AudioList.Columns = GetAudioListColumnCount(deviceCollection.Count);
+        //private void OnDeviceAdd(MultiMediaDevice device)
+        //{
+        //    Dispatcher.Invoke(() =>
+        //    {
+        //        RadioButton selectbutton = CreateButtonItem(device.Id, device.DeviceName);
+        //        deviceCollection.Add(device.Id, selectbutton);
+        //        AudioList.Columns = GetAudioListColumnCount(deviceCollection.Count);
 
-                UpdateDeviceList(enumerationEvent.Devices);
-            });
-        }
+        //        UpdateDeviceList(enumerationEvent.Devices);
+        //    });
+        //}
 
-        private void OnDeviceRemoved(MultiMediaDevice device)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                _ = deviceCollection.Remove(device.Id);
-                UpdateDeviceList(enumerationEvent.Devices);
-            });
-        }
+        //private void OnDeviceRemoved(MultiMediaDevice device)
+        //{
+        //    Dispatcher.Invoke(() =>
+        //    {
+        //        _ = deviceCollection.Remove(device.Id);
+        //        UpdateDeviceList(enumerationEvent.Devices);
+        //    });
+        //}
 
         private void AudioListKeyDown(object sender, KeyEventArgs e)
         {
