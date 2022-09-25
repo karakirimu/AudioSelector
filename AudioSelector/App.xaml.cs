@@ -43,7 +43,7 @@ namespace AudioSourceSelector
 
                 taskbarControl = new()
                 {
-                    Text = "AudioSourceSelector\nPress Ctrl+Alt+V to show selector window",
+                    Text = "AudioSelector\nPress Ctrl+Alt+V to show selector window",
                     Icon = taskbarIcon,
                     Visible = true
                 };
