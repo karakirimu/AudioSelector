@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HotKeyEvent"
         mc:Ignorable="d"
-        Title="MessageWindow"
+        Title=""
         Height="0"
         Width="0"
         WindowStyle="None"
         ShowInTaskbar="False"
         AllowsTransparency="True"
         Background="Transparent"
+        Visibility="Hidden"
         ResizeMode="NoResize">
     <Grid>
         
