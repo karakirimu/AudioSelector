@@ -25,11 +25,6 @@ namespace AudioSourceSelector
         private readonly Dictionary<string, RadioButton> deviceCollection;
 
         /// <summary>
-        /// This value avoids multiple call Close() event.
-        /// </summary>
-        private static bool IsCloseCalled;
-
-        /// <summary>
         /// This value sets audio device select menu column count.
         /// </summary>
         private static readonly int columnSize = 4;
@@ -52,13 +47,12 @@ namespace AudioSourceSelector
             Activated += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Activated]");
-                IsCloseCalled = false;
             };
 
             Deactivated += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Deactivated]");
-                CallClose();
+                Hide();
             };
 
             SizeChanged += (o, e) =>
@@ -125,13 +119,6 @@ namespace AudioSourceSelector
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            Visibility = Visibility.Collapsed;
-            e.Cancel = true;
-
-            base.OnClosing(e);
-        }
         private void AudioListKeyDown(object sender, KeyEventArgs e)
         {
             if (deviceCollection.Count < 1)
@@ -152,7 +139,7 @@ namespace AudioSourceSelector
                 case Key.Separator:
                     RadioButton button = AudioList.Children[index] as RadioButton;
                     SetDefaultEndpoint(button.Tag as string);
-                    CallClose();
+                    Hide();
                     break;
 
                 default:
@@ -190,11 +177,13 @@ namespace AudioSourceSelector
 
         private RadioButton CreateButtonItem(string id, string devicename)
         {
-            RadioButton button = new();
-            button.Content = devicename;
-            button.Tag = id;
-            button.IsChecked = false;
-            button.GroupName = "AudioDevices";
+            RadioButton button = new()
+            {
+                Content = devicename,
+                Tag = id,
+                IsChecked = false,
+                GroupName = "AudioDevices"
+            };
             button.Click += OnButtonItemClick;
             return button;
         }
@@ -204,7 +193,7 @@ namespace AudioSourceSelector
             RadioButton clicked = sender as RadioButton;
             Debug.WriteLine(clicked.Tag);
             SetDefaultEndpoint(clicked.Tag as string);
-            CallClose();
+            Hide();
         }
 
         private static void SetDefaultEndpoint(string id)
@@ -247,17 +236,5 @@ namespace AudioSourceSelector
 
             return resultindex;
         }
-
-        private void CallClose()
-        {
-            if (IsCloseCalled)
-            {
-                return;
-            }
-
-            IsCloseCalled = true;
-            Close();
-        }
-
     }
 }
