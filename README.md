@@ -21,7 +21,7 @@ This is a simple audio output selection tool for Windows.
 
 - NET 6.0
 - Only x64 is available
-- Windows 10 20H2
+- Windows 11 pro 22H2
 
 ## License
 
@@ -39,7 +39,7 @@ Windowsでの簡易オーディオ出力選択ツールです。
 
 - 実行ファイルを実行すると、タスクトレイに格納されます。
 
-- Ctrl + Alt + Vキーを押すか、タスクトレイアイコンをダブルクリックすることで
+- Ctrl + Alt + Vキーを同時押し、またはタスクトレイアイコンをダブルクリックすることで
   選択画面が表示されます。
 
 - タブキーで選択デバイスを移動しEnterキーを押す、または出力したいデバイスをマウスクリックすることで
@@ -53,7 +53,7 @@ Windowsでの簡易オーディオ出力選択ツールです。
 
 - .NET 6.0
 - x64のみ使用可
-- Windows 10 20H2
+- Windows 11 pro 22H2
 
 ## ライセンス
 
