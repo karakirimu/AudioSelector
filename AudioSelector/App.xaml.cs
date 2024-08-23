@@ -1,4 +1,5 @@
 ﻿using AudioSelector;
+using AudioSelector.Setting;
 using AudioSourceSelector.AudioDevice;
 using AudioTools;
 using HotKeyEvent;
@@ -32,12 +33,12 @@ namespace AudioSourceSelector
         {
             Startup += (o, e) =>
             {
-                CurrentTheme theme = SystemRegistrySetting.GetCurrentTheme();
+                SystemTheme theme = SystemRegistry.GetCurrentTheme();
                 System.Drawing.Icon taskbarIcon
                 = theme switch
                 {
-                    CurrentTheme.Dark => AudioSelector.Properties.Resources.appicon_white,
-                    CurrentTheme.Light or CurrentTheme.Invalid => AudioSelector.Properties.Resources.appicon_black,
+                    SystemTheme.Dark => AudioSelector.Properties.Resources.appicon_white,
+                    SystemTheme.Light or SystemTheme.Invalid => AudioSelector.Properties.Resources.appicon_black,
                     _ => AudioSelector.Properties.Resources.appicon_black,
                 };
 

@@ -2,18 +2,18 @@
 using System;
 using System.Diagnostics;
 
-namespace AudioSourceSelector
+namespace AudioSelector.Setting
 {
-    public enum CurrentTheme : int
+    public enum SystemTheme : int
     {
         Dark,
         Light,
         Invalid
     }
 
-    internal class SystemRegistrySetting
+    internal class SystemRegistry
     {
-        public SystemRegistrySetting()
+        public SystemRegistry()
         {
 
         }
@@ -22,7 +22,7 @@ namespace AudioSourceSelector
         /// Get current system theme mode from registry
         /// </summary>
         /// <returns>Dark, Light or Invalid</returns>
-        public static CurrentTheme GetCurrentTheme()
+        public static SystemTheme GetCurrentTheme()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace AudioSourceSelector
                 int s = (int)key?.GetValue("SystemUsesLightTheme");
                 //if (!string.IsNullOrWhiteSpace(s))
                 {
-                    return s == 1 ? CurrentTheme.Light : CurrentTheme.Dark;
+                    return s == 1 ? SystemTheme.Light : SystemTheme.Dark;
                 }
             }
             catch (Exception ex)
@@ -41,7 +41,7 @@ namespace AudioSourceSelector
                 Trace.WriteLine($"{ex.Message}");
             }
 
-            return CurrentTheme.Invalid;
+            return SystemTheme.Invalid;
         }
 
     }
