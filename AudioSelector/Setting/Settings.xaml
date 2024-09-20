@@ -1,0 +1,41 @@
+﻿<Window x:Class="AudioSelector.Setting.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AudioSelector"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="Settings" Height="450" Width="600">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" BorderThickness="0">
+            <Border.Background>
+                <SolidColorBrush Color="{DynamicResource ListBackgroundColor}"/>
+            </Border.Background>
+            <ListBox Name="settingsListBox"
+                 SelectionChanged="SettingsListBox_SelectionChanged"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 Margin="8"
+                 >
+                <ListBoxItem Style="{DynamicResource ListBoxItemStyle}" x:Name="General" Content="General"/>
+            </ListBox>
+        </Border>
+        <Rectangle Grid.Column="1" StrokeThickness="0">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{DynamicResource ContentBackgroundColor}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <ContentControl Grid.Column="1" Name="settingsContentControl"/>
+    </Grid>
+</Window>

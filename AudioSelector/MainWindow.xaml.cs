@@ -35,7 +35,7 @@ namespace AudioSourceSelector
         public MainWindow()
         {
             InitializeComponent();
-            deviceCollection = new Dictionary<string, RadioButton>();
+            deviceCollection = [];
 
             Loaded += (o, e) =>
             {
@@ -182,7 +182,8 @@ namespace AudioSourceSelector
                 Content = devicename,
                 Tag = id,
                 IsChecked = false,
-                GroupName = "AudioDevices"
+                GroupName = "AudioDevices",
+                Style = (Style)FindResource("SelectorRadioButtonStyle"),
             };
             button.Click += OnButtonItemClick;
             return button;

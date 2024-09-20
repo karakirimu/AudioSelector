@@ -6,9 +6,9 @@ namespace AudioSelector.Setting
 {
     public enum SystemTheme : int
     {
-        Dark,
         Light,
-        Invalid
+        Dark,
+        System
     }
 
     internal class SystemRegistry
@@ -21,7 +21,7 @@ namespace AudioSelector.Setting
         /// <summary>
         /// Get current system theme mode from registry
         /// </summary>
-        /// <returns>Dark, Light or Invalid</returns>
+        /// <returns>Dark, Light or System</returns>
         public static SystemTheme GetCurrentTheme()
         {
             try
@@ -41,7 +41,7 @@ namespace AudioSelector.Setting
                 Trace.WriteLine($"{ex.Message}");
             }
 
-            return SystemTheme.Invalid;
+            return SystemTheme.System;
         }
 
     }

@@ -4,9 +4,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="HotKey.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="MessageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>

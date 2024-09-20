@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AudioSelector.Setting;
+using System;
 using System.Windows.Forms;
 
 namespace AudioSourceSelector
@@ -9,7 +10,19 @@ namespace AudioSourceSelector
     internal class TaskbarContextMenu
     {
         public ContextMenuStrip ContextMenu { get; private set; }
+        private IAppConfig appConfig;
 
+        /// <summary>
+        /// Menu item for application setting
+        /// </summary>
+        /// <returns></returns>
+        private ToolStripMenuItem AddSettingMenu()
+        {
+            ToolStripMenuItem item = new("Setting");
+            item.Click += OpenSettingWindow;
+
+            return item;
+        }
 
         /// <summary>
         /// Menu item for application exit
@@ -23,6 +36,11 @@ namespace AudioSourceSelector
             return item;
         }
 
+        private void OpenSettingWindow(object sender, EventArgs e)
+        {
+            new Settings(appConfig).ShowDialog();
+        }
+
         /// <summary>
         /// Mouse click event when clicked by AddExitMenu function
         /// </summary>
@@ -34,10 +52,12 @@ namespace AudioSourceSelector
             System.Windows.Application.Current.Shutdown(0);
         }
 
-        public TaskbarContextMenu()
+        public TaskbarContextMenu(IAppConfig config)
         {
             ContextMenu = new();
+            ContextMenu.Items.Add(AddSettingMenu());
             ContextMenu.Items.Add(AddExitMenu());
+            appConfig = config;
         }
 
     }
