@@ -4,8 +4,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>appicon_black.ico</ApplicationIcon>
-    <PackageIcon>appicon_black.ico</PackageIcon>
+    <ApplicationIcon>.\Properties\appicon_black.ico</ApplicationIcon>
+    <PackageIcon>.\Properties\appicon_black.ico</PackageIcon>
     <PackageIconUrl />
     <AssemblyVersion>1.1.0.1</AssemblyVersion>
     <FileVersion>1.1.0.1</FileVersion>
