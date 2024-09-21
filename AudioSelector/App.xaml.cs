@@ -258,8 +258,20 @@ namespace AudioSourceSelector
             try
             {
                 taskbarControl.Visible = false;
-                container.GetRequiredService<Window>().Show();
-                if (container.GetRequiredService<Window>().Activate())
+                Window window = container.GetRequiredService<Window>();
+
+                // Display the window at the cursor position.
+                var cursorPosition = System.Windows.Forms.Cursor.Position;
+                Debug.WriteLine($"Cursor Position: X = {cursorPosition.X}, Y = {cursorPosition.Y}");
+                Screen screen = Screen.FromPoint(cursorPosition);
+                double dpiscale = ((double)96 / 144);
+
+                window.Left = (screen.WorkingArea.X + (screen.WorkingArea.Width / 2)) * dpiscale - (window.Width / 2);
+                window.Top = (screen.WorkingArea.Y + (screen.WorkingArea.Height / 2)) * dpiscale - (window.Height / 2);
+                Debug.WriteLine($"Window Position: X = {window.Left}, Y = {window.Top}");
+
+                window.Show();
+                if (window.Activate())
                 {
                     Debug.WriteLine($"[App.ShowSelectWindow] Activate successful");
                 }
