@@ -488,7 +488,7 @@
                                            Grid.Column="0"
                                            Grid.Row="0"
                                            FontSize="48"
-                                           FontFamily="Segoe MDL2 Assets"
+                                           FontFamily="Segoe Fluent Icons"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            TextAlignment="Center">
