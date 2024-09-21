@@ -15,6 +15,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>karakirimu</Authors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />

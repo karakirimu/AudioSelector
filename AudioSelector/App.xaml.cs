@@ -264,11 +264,16 @@ namespace AudioSourceSelector
                 var cursorPosition = System.Windows.Forms.Cursor.Position;
                 Debug.WriteLine($"Cursor Position: X = {cursorPosition.X}, Y = {cursorPosition.Y}");
                 Screen screen = Screen.FromPoint(cursorPosition);
-                double dpiscale = ((double)96 / 144);
 
-                window.Left = (screen.WorkingArea.X + (screen.WorkingArea.Width / 2)) * dpiscale - (window.Width / 2);
-                window.Top = (screen.WorkingArea.Y + (screen.WorkingArea.Height / 2)) * dpiscale - (window.Height / 2);
-                Debug.WriteLine($"Window Position: X = {window.Left}, Y = {window.Top}");
+                IntPtr hMonitor = NativeMethods.MonitorFromPoint(cursorPosition, NativeMethods.MONITOR_DEFAULTTONEAREST);
+                int result = NativeMethods.GetDpiForMonitor(hMonitor, NativeMethods.MDT_EFFECTIVE_DPI, out uint dpiX, out uint dpiY);
+                if (result == 0) // S_OK
+                {
+                    Debug.WriteLine($"DPI: {dpiX} x {dpiY}");
+                    window.Left = (screen.WorkingArea.X + (screen.WorkingArea.Width / 2)) * ((double)96 / dpiX) - (window.ActualWidth / 2);
+                    window.Top = (screen.WorkingArea.Y + (screen.WorkingArea.Height / 2)) * ((double)96 / dpiY) - (window.ActualHeight / 2);
+                    Debug.WriteLine($"Window Position: X = {window.Left}, Y = {window.Top}");
+                }
 
                 window.Show();
                 if (window.Activate())
