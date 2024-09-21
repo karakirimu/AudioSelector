@@ -1,18 +1,15 @@
-﻿using AudioSelector;
-using AudioSourceSelector.AudioDevice;
-using AudioTools;
+﻿using AudioTools;
 using NativeCoreAudio;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace AudioSourceSelector
+namespace AudioSelector
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

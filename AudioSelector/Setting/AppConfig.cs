@@ -62,8 +62,9 @@ namespace AudioSelector.Setting
         public delegate void ValueUpdate(AppConfigType type, AppConfigProperty property);
         public event ValueUpdate UserConfigurationUpdate;
 
-        public AppConfig() {
-            string AppDataPath= Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public AppConfig()
+        {
+            string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             ConfigFolder = Path.Combine(AppDataPath, "AudioSelector");
         }
 

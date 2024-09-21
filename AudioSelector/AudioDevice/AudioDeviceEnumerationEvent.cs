@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using static NativeCoreAudio.ComInterfaces;
 
-namespace AudioSourceSelector.AudioDevice
+namespace AudioSelector.AudioDevice
 {
     /// <summary>
     /// This class manages audio devices connection list

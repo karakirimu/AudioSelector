@@ -1,6 +1,5 @@
-﻿using AudioSelector;
+﻿using AudioSelector.AudioDevice;
 using AudioSelector.Setting;
-using AudioSourceSelector.AudioDevice;
 using AudioTools;
 using HotKeyEvent;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace AudioSourceSelector
+namespace AudioSelector
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -129,21 +128,25 @@ namespace AudioSourceSelector
         {
             List<string> keylist = [];
             ushort modifier = 0;
-            if (config.Hotkey.Win) {
+            if (config.Hotkey.Win)
+            {
                 modifier |= GlobalHotKey.MOD_WIN;
                 keylist.Add(AudioSelector.Properties.Resources.KeyWin);
             }
-            if (config.Hotkey.Ctrl) {
+            if (config.Hotkey.Ctrl)
+            {
                 modifier |= GlobalHotKey.MOD_CONTROL;
                 keylist.Add(AudioSelector.Properties.Resources.KeyCtrl);
             }
-            if (config.Hotkey.Alt) {
+            if (config.Hotkey.Alt)
+            {
                 modifier |= GlobalHotKey.MOD_ALT;
                 keylist.Add(AudioSelector.Properties.Resources.KeyAlt);
             }
-            if (config.Hotkey.Shift) {
+            if (config.Hotkey.Shift)
+            {
                 modifier |= GlobalHotKey.MOD_SHIFT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyShift); 
+                keylist.Add(AudioSelector.Properties.Resources.KeyShift);
             }
             keylist.Add(config.Hotkey.VirtualKey);
 
@@ -156,7 +159,7 @@ namespace AudioSourceSelector
             hotKey = new(config.Hotkey_id, modifier, (ushort)formsKey);
             GlobalHotKey.HotKeyDown += OnKeyChange;
         }
-        
+
         private void UpdateHotKey(AppConfigProperty config)
         {
             List<string> keylist = [];
@@ -189,7 +192,7 @@ namespace AudioSourceSelector
             Key key = (Key)Enum.Parse(typeof(Key), config.Hotkey.VirtualKey);
             Keys formsKey = (Keys)KeyInterop.VirtualKeyFromKey(key);
 
-            if(!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
+            if (!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
             {
                 ShowHotKeyError();
             }
@@ -249,7 +252,7 @@ namespace AudioSourceSelector
         /// </summary>
         private void ShowSelectWindow()
         {
-            if(enumerationEvent.Devices.Count == 0)
+            if (enumerationEvent.Devices.Count == 0)
             {
                 Debug.WriteLine($"[App.ShowSelectWindow] No device listed");
                 return;

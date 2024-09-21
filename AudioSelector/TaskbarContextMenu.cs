@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace AudioSourceSelector
+namespace AudioSelector
 {
     /// <summary>
     /// Context Menu for NotifyIcon

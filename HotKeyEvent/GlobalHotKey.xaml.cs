@@ -48,7 +48,7 @@ namespace HotKeyEvent
             Show();
             return Set(hotKeyId, modKey, virtualKey);
         }
-        
+
         /// <summary>
         /// Update registered hotkey
         /// </summary>
