@@ -10,7 +10,7 @@ namespace AudioSelector
     internal class TaskbarContextMenu
     {
         public ContextMenuStrip ContextMenu { get; private set; }
-        private IAppConfig appConfig;
+        private readonly IAppConfig appConfig;
 
         /// <summary>
         /// Menu item for application setting

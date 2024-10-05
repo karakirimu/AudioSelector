@@ -27,21 +27,21 @@ namespace NativeCoreAudio
             [MarshalAs(UnmanagedType.LPWStr)] string pwstrDeviceId,
             DeviceState dwNewState)
         {
-            Trace.WriteLine("DeviceStateChanged");
+            Debug.WriteLine("DeviceStateChanged");
             return DeviceStateChanged?.Invoke(pwstrDeviceId, dwNewState) ?? 0;
         }
 
         public uint OnDeviceAdded(
             [MarshalAs(UnmanagedType.LPWStr)] string pwstrDeviceId)
         {
-            Trace.WriteLine("Added");
+            Debug.WriteLine("Added");
             return Add?.Invoke(pwstrDeviceId) ?? 0;
         }
 
         public uint OnDeviceRemoved(
             [MarshalAs(UnmanagedType.LPWStr)] string pwstrDeviceId)
         {
-            Trace.WriteLine("Removed");
+            Debug.WriteLine("Removed");
             return Remove?.Invoke(pwstrDeviceId) ?? 0;
         }
 
@@ -50,7 +50,7 @@ namespace NativeCoreAudio
             in ERole role,
             [MarshalAs(UnmanagedType.LPWStr)] string pwstrDefaultDeviceId)
         {
-            Trace.WriteLine("DefaultDeviceChanged");
+            Debug.WriteLine("[MMNotificationClientEvent.DefaultDeviceChanged] DefaultDeviceChanged");
             return DefaultDeviceChanged?.Invoke(flow, role, pwstrDefaultDeviceId) ?? 0;
         }
 
@@ -58,7 +58,7 @@ namespace NativeCoreAudio
             [MarshalAs(UnmanagedType.LPWStr)] string pwstrDeviceId,
             PROPERTYKEY key)
         {
-            Trace.WriteLine("PropertyValueChanged");
+            Debug.WriteLine($"[MMNotificationClientEvent.PropertyValueChanged] {pwstrDeviceId} key :{key.fmtid} pid: {key.pid}");
             return PropertyValueChanged?.Invoke(pwstrDeviceId, key) ?? 0;
         }
     }

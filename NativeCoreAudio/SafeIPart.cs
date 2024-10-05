@@ -19,13 +19,11 @@ namespace NativeCoreAudio
         public SafeIPart(SafeIConnector connectorto)
         {
             Guid IID_IPart = new("AE2DE0E4-5BCA-4F2D-AA46-5D13F8FDB3A9");
-#pragma warning disable CA1416 // プラットフォームの互換性を検証
             int hr = Marshal.QueryInterface(
                 connectorto.GetIUnknownPointer(),
                 ref IID_IPart,
                 out IntPtr ppIPart);
             ComResult.Check(hr);
-#pragma warning restore CA1416 // プラットフォームの互換性を検証
 
             SetReleaseObject(ppIPart);
         }

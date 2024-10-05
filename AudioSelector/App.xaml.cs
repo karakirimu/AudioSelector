@@ -22,6 +22,7 @@ namespace AudioSelector
         private TaskbarIconControl taskbarControl;
         private TaskbarContextMenu contextMenu;
         private AudioDeviceEnumerationEvent enumerationEvent;
+        private DeviceVolumeChangeEvent volumeChangeEvent;
         private GlobalHotKey hotKey;
         private AudioSelectorViewModel viewModel;
         private AppConfig appConfig;
@@ -56,8 +57,16 @@ namespace AudioSelector
                 enumerationEvent.Add += OnDeviceAdd;
                 enumerationEvent.Remove += OnDeviceRemoved;
 
+                // Audio device volume change event setup
+                volumeChangeEvent = new();
+                foreach (var device in enumerationEvent.Devices)
+                {
+                    volumeChangeEvent.AddCallback(device.Id);
+                }
+
                 viewModel.Devices = new ObservableCollection<MultiMediaDevice>(enumerationEvent.Devices);
                 viewModel.AppConfig = appConfig;
+                viewModel.VolumeChangeEvent = volumeChangeEvent;
 
                 Current.MainWindow = new MainWindow
                 {
@@ -81,6 +90,11 @@ namespace AudioSelector
             Exit += (o, e) =>
             {
                 hotKey.Stop();
+                foreach (var device in enumerationEvent.Devices)
+                {
+                    volumeChangeEvent.RemoveCallback(device.Id);
+                }
+
                 enumerationEvent.Stop();
                 enumerationEvent.Add -= OnDeviceAdd;
                 enumerationEvent.Remove -= OnDeviceRemoved;

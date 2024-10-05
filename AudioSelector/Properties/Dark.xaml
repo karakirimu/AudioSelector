@@ -484,7 +484,8 @@
                                         <SolidColorBrush Color="{DynamicResource SelectedAccentColor}" />
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock FontWeight="Normal"
+                                <TextBlock x:Name="VolumeIcon"
+                                           FontWeight="Normal"
                                            Grid.Column="0"
                                            Grid.Row="0"
                                            FontSize="48"

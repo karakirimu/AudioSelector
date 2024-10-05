@@ -67,7 +67,7 @@ namespace AudioSelector.AudioDevice
         /// <returns>Always 0</returns>
         private uint OnDeviceStateChanged(string deviceId, DeviceState state)
         {
-            Trace.WriteLine($"{deviceId}.{state}");
+            Debug.WriteLine($"{deviceId}.{state}");
 
             switch (state)
             {
