@@ -35,13 +35,17 @@ namespace AudioSelector.Setting
 
         [JsonPropertyName("hotkey")]
         public HotKey Hotkey { get; set; }
+
+        [JsonPropertyName("startup")]
+        public bool Startup{ get; set; }
     }
 
     public enum AppConfigType
     {
         Theme,
         HotkeyId,
-        HotKey
+        HotKey,
+        Startup
     }
 
     public interface IAppConfig
@@ -51,6 +55,7 @@ namespace AudioSelector.Setting
         public void SetTheme(SystemTheme theme);
         public void SetHotkeyId(ushort hotkeyId);
         public void SetHotkey(HotKey hotkey);
+        public void SetStartup(bool enabled);
     }
 
     public class AppConfig : IAppConfig
@@ -97,7 +102,8 @@ namespace AudioSelector.Setting
                         Shift = false,
                         Alt = true,
                         VirtualKey = Key.V.ToString()
-                    }
+                    },
+                    Startup = SystemRegistry.HasStartupEntry()
                 };
 
                 JsonSerializer.Serialize(writer, data);
@@ -129,6 +135,12 @@ namespace AudioSelector.Setting
             Property.Hotkey = hotkey;
             Save();
             UserConfigurationUpdate?.Invoke(AppConfigType.HotKey, Property);
+        }
+        public void SetStartup(bool enabled)
+        {
+            Property.Startup = enabled;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.Startup, Property);
         }
 
         public void Save()
