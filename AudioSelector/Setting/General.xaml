@@ -13,9 +13,9 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="8"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="4"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="4"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="8"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -47,6 +47,17 @@
                      VerticalAlignment="Stretch"
                      VerticalContentAlignment="Center"/>
         </StackPanel>
+
+        <!-- Startup Setting -->
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="4" Grid.Column="0" Text="Launch on startup" VerticalAlignment="Center" Margin="8,0"/>
+        <ToggleButton Style="{DynamicResource ToggleButtonStyle}"
+                      Width="60"
+                      Margin="0"
+                      Grid.Row="4"
+                      Grid.Column="1"
+                      Content="{Binding AutoStartState, FallbackValue='State'}"
+                      IsChecked="{Binding AutoStart, Mode=TwoWay}"
+                      HorizontalAlignment="Right"/>
 
     </Grid>
 </UserControl>

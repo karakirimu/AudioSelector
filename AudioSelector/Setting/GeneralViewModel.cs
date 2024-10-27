@@ -8,8 +8,10 @@ namespace AudioSelector.Setting
         private bool _modifierShift;
         private bool _modifierAlt;
         private bool _modifierWin;
+        private bool _autoStart;
 
         private string _vKey;
+        private string _autoStartState;
 
         private int _themeIndex;
 
@@ -91,6 +93,33 @@ namespace AudioSelector.Setting
             }
         }
 
+        public string AutoStartState
+        {
+            get { return _autoStartState; }
+            set
+            {
+                if (value != _autoStartState)
+                {
+                    _autoStartState = value;
+                    OnPropertyChanged(nameof(AutoStartState));
+                }
+            }
+        }
+
+        public bool AutoStart
+        {
+            get { return _autoStart; }
+            set
+            {
+                if (_autoStart != value)
+                {
+                    _autoStart = value;
+                    OnPropertyChanged(nameof(AutoStart));
+                    AutoStartState = _autoStart ? Properties.Resources.SwitchEnabled : Properties.Resources.SwitchDisabled;
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
@@ -106,6 +135,8 @@ namespace AudioSelector.Setting
             _modifierWin = config.Property.Hotkey.Win;
             _vKey = config.Property.Hotkey.VirtualKey;
             _themeIndex = (int)config.Property.Theme;
+            _autoStart = config.Property.Startup;
+            _autoStartState = _autoStart ? Properties.Resources.SwitchEnabled : Properties.Resources.SwitchDisabled;
         }
     }
 }

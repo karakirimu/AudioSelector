@@ -29,16 +29,30 @@ namespace AudioSelector.Setting
 
         private void GeneralSettingPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            HotKey result = new()
+            if(e.PropertyName == nameof(viewModel.ModifierCtrl)
+                || e.PropertyName == nameof(viewModel.ModifierShift)
+                || e.PropertyName == nameof(viewModel.ModifierAlt)
+                || e.PropertyName == nameof(viewModel.ModifierWin)
+                || e.PropertyName == nameof(viewModel.VKey))
             {
-                Ctrl = viewModel.ModifierCtrl,
-                Shift = viewModel.ModifierShift,
-                Alt = viewModel.ModifierAlt,
-                Win = viewModel.ModifierWin,
-                VirtualKey = viewModel.VKey
-            };
+                HotKey result = new()
+                {
+                    Ctrl = viewModel.ModifierCtrl,
+                    Shift = viewModel.ModifierShift,
+                    Alt = viewModel.ModifierAlt,
+                    Win = viewModel.ModifierWin,
+                    VirtualKey = viewModel.VKey
+                };
 
-            appConfig?.SetHotkey(result);
+                appConfig?.SetHotkey(result);
+                return;
+            }
+
+            if(e.PropertyName == nameof(viewModel.AutoStart))
+            {
+                appConfig?.SetStartup(viewModel.AutoStart);
+                return;
+            }
         }
 
         private void LineEdit_PreviewKeyDown(object sender, KeyEventArgs e)

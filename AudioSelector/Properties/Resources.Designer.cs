@@ -127,6 +127,24 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
+        ///   Disabled に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SwitchDisabled {
+            get {
+                return ResourceManager.GetString("SwitchDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Enabled に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SwitchEnabled {
+            get {
+                return ResourceManager.GetString("SwitchEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   AudioSelector
         ///Press {0} to show selector window. に類似しているローカライズされた文字列を検索します。
         /// </summary>

@@ -144,4 +144,10 @@ Press {0} to show selector window.</value>
     <value>Hotkey registration failed.
 Please change the hotkey combination to be registered.</value>
   </data>
+  <data name="SwitchEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="SwitchDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
 </root>
