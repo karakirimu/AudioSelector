@@ -80,6 +80,7 @@ namespace AudioSelector
 
                 UpdateTheme(appConfig.Property);
                 InitializeHotKey(appConfig.Property);
+                UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
                 if (!hotKey.Start())
                 {
@@ -115,6 +116,9 @@ namespace AudioSelector
                         break;
                     }
                 case AppConfigType.HotkeyId:
+                    break;
+                case AppConfigType.Startup:
+                    UpdateStartup(config);
                     break;
             }
         }
@@ -212,7 +216,7 @@ namespace AudioSelector
             }
         }
 
-        private void UpdateTheme(AppConfigProperty config)
+        private static void UpdateTheme(AppConfigProperty config)
         {
             Current.Resources.MergedDictionaries.Clear();
             switch (config.Theme)
@@ -238,6 +242,24 @@ namespace AudioSelector
                             new ResourceDictionary() { Source = new Uri(LIGHT_THEME, UriKind.Relative) });
                     }
                     break;
+            }
+        }
+
+        private static void UpdateStartup(AppConfigProperty config)
+        {
+            bool registered = SystemRegistry.HasStartupEntry();
+            if (config.Startup)
+            {
+                if (!registered)
+                {
+                    SystemRegistry.RegisterStartup();
+                }
+                return;
+            }
+
+            if (registered)
+            {
+                SystemRegistry.UnregisterStartup();
             }
         }
 

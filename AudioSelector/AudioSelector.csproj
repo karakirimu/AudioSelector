@@ -4,8 +4,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>.\Properties\appicon_black.ico</ApplicationIcon>
-    <PackageIcon>.\Properties\appicon_black.ico</PackageIcon>
+    <ApplicationIcon>Properties\AudioSelector.ico</ApplicationIcon>
+    <PackageIcon>.\Properties\AudioSelector.ico</PackageIcon>
     <PackageIconUrl />
     <AssemblyVersion>1.1.0.1</AssemblyVersion>
     <FileVersion>1.1.0.1</FileVersion>
@@ -15,8 +15,13 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>karakirimu</Authors>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <StartupObject>AudioSelector.App</StartupObject>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Properties\AudioSelector.ico" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="..\README.md">
