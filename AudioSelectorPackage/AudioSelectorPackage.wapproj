@@ -57,7 +57,7 @@
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <NoWarn>$(NoWarn);NU1702</NoWarn>
     <EntryPointProjectUniqueName>..\AudioSelector\AudioSelector.csproj</EntryPointProjectUniqueName>
-    <PackageCertificateThumbprint>C81466F925534A1E6C95DA50756FA5D83D7ACF16</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>7CAFA87B28436C9A2B3DEC4270D38447DDBD9BF2</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
@@ -111,6 +111,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AudioSelectorPackage_TemporaryKey.pfx" />
     <Content Include="Images\LargeTile.scale-100.png" />
     <Content Include="Images\LargeTile.scale-125.png" />
     <Content Include="Images\LargeTile.scale-150.png" />
