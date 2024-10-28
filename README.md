@@ -2,59 +2,56 @@
 
 This is a simple audio output selection tool for Windows.
 
-![appimage_1](https://user-images.githubusercontent.com/37269014/171012545-8436861d-cb02-437c-9285-f5086088502c.png)
+![applogo](./AudioSelectorPackage/Images/Wide310x150Logo.scale-200.png)
 
 ## Usage
 
-- When the executable file is run, it will be stored in the task tray.
+When the executable file is run, it will be stored in the task tray.
 
-- By pressing Ctrl + Alt + V keys or double-clicking the task tray icon
-  The selection screen will appear.
+## Selection screen
 
-- Select the output device by moving the selected device with the tab key and pressing the Enter key, or by clicking the mouse on the device you want to output.
-  
+![appimage_1](./Document/Image/selector.png)
+
+- By pressing Ctrl + Alt + V keys or double-clicking the task tray icon. The selection screen will appear.
+
 - The currently selected device is indicated by a green circle.
 
-- If startup launch is required, place the shortcut manually.
+- Select the output device by moving the selected device with the tab key and pressing the Enter key, or by clicking the mouse on the device you want to output.
+
+## Settings
+
+Right click on the task tray icon and select "Settings" to launch the settings window.
+
+![appimage_2](./Document/Image/settings_general.png)
+
+### Theme
+
+This setting allows you to change the appearance of the application. You can choose from the following three themes.
+
+- Light
+
+- Dark
+
+- System (Synchronize with system settings)
+
+### Hotkey
+
+You can set the shortcut key for starting the Selection screen. The default setting is “Ctrl + Alt + V”.
+
+The selected modifier key is highlighted in green. The last text box can be set to any one key.
+
+### Launch at Startup
+
+Enabled: The application is automatically launched at system startup.
+
+Disabled: Applications are not automatically launched at system startup.
 
 ## Environment
 
-- NET 6.0
-- Only x64 is available
-- Windows 11 pro 22H2
+- NET 8.0
+- C# Build with AnyCPU
+- Windows 11
 
 ## License
 
 - MIT License
-
----
-
-# AudioSelector
-
-Windowsでの簡易オーディオ出力選択ツールです。
-
-![appimage_1](https://user-images.githubusercontent.com/37269014/171012545-8436861d-cb02-437c-9285-f5086088502c.png)
-
-## 使い方
-
-- 実行ファイルを実行すると、タスクトレイに格納されます。
-
-- Ctrl + Alt + Vキーを同時押し、またはタスクトレイアイコンをダブルクリックすることで
-  選択画面が表示されます。
-
-- タブキーで選択デバイスを移動しEnterキーを押す、または出力したいデバイスをマウスクリックすることで
-  出力デバイスを選択可能です。
-  
-- 現在選択中のデバイスは緑色の丸が表示されます。
-
-- スタートアップ起動が必要な場合は、手動でショートカットを配置してください。
-
-## 動作した環境
-
-- .NET 6.0
-- x64のみ使用可
-- Windows 11 pro 22H2
-
-## ライセンス
-
-- MITライセンス
