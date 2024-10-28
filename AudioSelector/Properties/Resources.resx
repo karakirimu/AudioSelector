@@ -150,4 +150,10 @@ Please change the hotkey combination to be registered.</value>
   <data name="SwitchDisabled" xml:space="preserve">
     <value>Disabled</value>
   </data>
+  <data name="TaskBarMenuSetting" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="TaskbarMenuExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>

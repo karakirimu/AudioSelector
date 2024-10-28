@@ -18,7 +18,7 @@ namespace AudioSelector
         /// <returns></returns>
         private ToolStripMenuItem AddSettingMenu()
         {
-            ToolStripMenuItem item = new("Setting");
+            ToolStripMenuItem item = new(Properties.Resources.TaskBarMenuSetting);
             item.Click += OpenSettingWindow;
 
             return item;
@@ -30,7 +30,7 @@ namespace AudioSelector
         /// <returns></returns>
         private ToolStripMenuItem AddExitMenu()
         {
-            ToolStripMenuItem item = new("Exit");
+            ToolStripMenuItem item = new(Properties.Resources.TaskbarMenuExit);
             item.Click += AppShutdown;
 
             return item;

@@ -49,7 +49,7 @@
         </StackPanel>
 
         <!-- Startup Setting -->
-        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="4" Grid.Column="0" Text="Launch on startup" VerticalAlignment="Center" Margin="8,0"/>
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="4" Grid.Column="0" Text="Launch at startup" VerticalAlignment="Center" Margin="8,0"/>
         <ToggleButton Style="{DynamicResource ToggleButtonStyle}"
                       Width="60"
                       Margin="0"

@@ -145,6 +145,24 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
+        ///   Exit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TaskbarMenuExit {
+            get {
+                return ResourceManager.GetString("TaskbarMenuExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TaskBarMenuSetting {
+            get {
+                return ResourceManager.GetString("TaskBarMenuSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   AudioSelector
         ///Press {0} to show selector window. に類似しているローカライズされた文字列を検索します。
         /// </summary>
