@@ -1,8 +1,8 @@
 # AudioSelector
 
-This is a simple audio output selection tool for Windows.
+![applogo](./AudioSelectorPackage/Images/SmallTile.scale-200.png)
 
-![applogo](./AudioSelectorPackage/Images/Wide310x150Logo.scale-200.png)
+This is a simple audio output selection tool for Windows.
 
 ## Usage
 
