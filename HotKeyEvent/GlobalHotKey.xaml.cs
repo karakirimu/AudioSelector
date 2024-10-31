@@ -16,9 +16,9 @@ namespace HotKeyEvent
         private HwndSourceHook hHook;
         private IntPtr hwnd;
 
-        private readonly int hotKeyId;
-        private readonly ushort modKey;
-        private readonly ushort virtualKey;
+        private int hotKeyId;
+        private ushort modKey;
+        private ushort virtualKey;
 
         public delegate void HotKeyDownEvent(int wparam);
         public static event HotKeyDownEvent HotKeyDown;
@@ -42,9 +42,27 @@ namespace HotKeyEvent
         /// <summary>
         /// Start hotkey capture
         /// </summary>
-        public void Start()
+        /// <returns>if the hotkey register success, return true, otherwise return false.</returns>
+        public bool Start()
         {
             Show();
+            return Set(hotKeyId, modKey, virtualKey);
+        }
+
+        /// <summary>
+        /// Update registered hotkey
+        /// </summary>
+        /// <param name="id">hotkey id</param>
+        /// <param name="modifiers">modifier key flags</param>
+        /// <param name="vk">Virtual key (Win32)</param>
+        /// <returns>if the hotkey update success, return true, otherwise return false.</returns>
+        public bool Update(int id, ushort modifiers, ushort vk)
+        {
+            UnSet(hotKeyId);
+            hotKeyId = id;
+            modKey = modifiers;
+            virtualKey = vk;
+            return Set(id, modifiers, vk);
         }
 
         /// <summary>
@@ -69,7 +87,6 @@ namespace HotKeyEvent
             {
                 Debug.WriteLine("[GlobalHotKey.OnSourceInitialized] The WndProc is prepared.");
             }
-            Set(hotKeyId, modKey, virtualKey);
         }
 
         /// <summary>
@@ -79,6 +96,7 @@ namespace HotKeyEvent
         protected override void OnClosed(EventArgs e)
         {
             source.RemoveHook(hHook);
+            source = null;
             UnSet(hotKeyId);
             UnSetWindowProc();
             base.OnClosed(e);
@@ -124,7 +142,8 @@ namespace HotKeyEvent
         /// <param name="id">Associate id for hotkey</param>
         /// <param name="modifiers">MOD_XXX members. It allows multiple selection</param>
         /// <param name="vk">Win32 virtual key</param>
-        private void Set(int id, ushort modifiers, ushort vk)
+        /// <returns>if register success, return true, otherwise return false.</returns>
+        private bool Set(int id, ushort modifiers, ushort vk)
         {
 
             if (NativeMethods.RegisterHotKey(
@@ -134,10 +153,11 @@ namespace HotKeyEvent
                 vk))
             {
                 Debug.WriteLine("[HotKey.Set] Register Success");
-                return;
+                return true;
             }
 
             Debug.WriteLine($"Error : {Marshal.GetLastWin32Error():X08}");
+            return false;
         }
 
         /// <summary>

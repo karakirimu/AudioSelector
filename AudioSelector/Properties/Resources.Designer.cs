@@ -19,7 +19,7 @@ namespace AudioSelector.Properties {
     // または Visual Studio のようなツールを使用して自動生成されました。
     // メンバーを追加または削除するには、.ResX ファイルを編集して、/str オプションと共に
     // ResGen を実行し直すか、または VS プロジェクトをビルドし直します。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -77,6 +77,98 @@ namespace AudioSelector.Properties {
             get {
                 object obj = ResourceManager.GetObject("appicon_white", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Hotkey registration failed.
+        ///Please change the hotkey combination to be registered. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string HotKeyRegistrationError {
+            get {
+                return ResourceManager.GetString("HotKeyRegistrationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Alt に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string KeyAlt {
+            get {
+                return ResourceManager.GetString("KeyAlt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ctrl に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string KeyCtrl {
+            get {
+                return ResourceManager.GetString("KeyCtrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Shift に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string KeyShift {
+            get {
+                return ResourceManager.GetString("KeyShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Win に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string KeyWin {
+            get {
+                return ResourceManager.GetString("KeyWin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Disabled に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SwitchDisabled {
+            get {
+                return ResourceManager.GetString("SwitchDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Enabled に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SwitchEnabled {
+            get {
+                return ResourceManager.GetString("SwitchEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Exit に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TaskbarMenuExit {
+            get {
+                return ResourceManager.GetString("TaskbarMenuExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Settings に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TaskBarMenuSetting {
+            get {
+                return ResourceManager.GetString("TaskBarMenuSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   AudioSelector
+        ///Press {0} to show selector window. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TaskbarToolTip {
+            get {
+                return ResourceManager.GetString("TaskbarToolTip", resourceCulture);
             }
         }
     }

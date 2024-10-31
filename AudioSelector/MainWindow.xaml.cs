@@ -1,18 +1,16 @@
-﻿using AudioSelector;
-using AudioSourceSelector.AudioDevice;
-using AudioTools;
+﻿using AudioTools;
 using NativeCoreAudio;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
-namespace AudioSourceSelector
+namespace AudioSelector
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -35,13 +33,14 @@ namespace AudioSourceSelector
         public MainWindow()
         {
             InitializeComponent();
-            deviceCollection = new Dictionary<string, RadioButton>();
+            deviceCollection = [];
 
             Loaded += (o, e) =>
             {
                 Debug.WriteLine("[MainWindow.Loaded]");
                 AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
                 model.Devices.CollectionChanged += DevicesCollectionChanged;
+                model.VolumeChangeEvent.Update += OnDeviceVolumeUpdate;
             };
 
             Activated += (o, e) =>
@@ -175,6 +174,12 @@ namespace AudioSourceSelector
             return count < 1 ? 0 : count < columnSize ? count : columnSize;
         }
 
+        /// <summary>
+        /// Initialize Audio device list item button
+        /// </summary>
+        /// <param name="id">device id</param>
+        /// <param name="devicename">device name</param>
+        /// <returns>Initialized button</returns>
         private RadioButton CreateButtonItem(string id, string devicename)
         {
             RadioButton button = new()
@@ -182,10 +187,70 @@ namespace AudioSourceSelector
                 Content = devicename,
                 Tag = id,
                 IsChecked = false,
-                GroupName = "AudioDevices"
+                GroupName = "AudioDevices",
+                Style = (Style)FindResource("SelectorRadioButtonStyle"),
             };
+
+            button.ApplyTemplate();
+
+            TextBlock volumeIcon = (TextBlock)button.Template.FindName("VolumeIcon", button);
+            volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
+            volumeIcon.Text = VolumeIconSelect(Enumeration.GetMute(id), Enumeration.GetMasterVolume(id));
+
             button.Click += OnButtonItemClick;
             return button;
+        }
+
+        /// <summary>
+        /// Update Audio device list item volume icon
+        /// </summary>
+        /// <param name="args">new volume information</param>
+        /// <returns>HRESULT</returns>
+        private uint OnDeviceVolumeUpdate(AudioVolumeNotificationData args)
+        {
+            if (deviceCollection.TryGetValue(args.deviceId, out RadioButton value))
+            {
+                TextBlock volumeIcon = (TextBlock)value.Template.FindName("VolumeIcon", value);
+
+                if (volumeIcon != null)
+                {
+                    volumeIcon.Dispatcher.Invoke(() =>
+                    {
+                        volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
+                        volumeIcon.Text = VolumeIconSelect(args.muted, args.masterVolume);
+                        volumeIcon.InvalidateVisual();
+                    });
+                }
+            }
+            
+            return 0;
+        }
+
+        private static string VolumeIconSelect(bool muted, float masterVolume)
+        {
+            int vol = (int)(masterVolume * 1000000);
+
+            if (muted)
+            {
+                return "\uE74F";
+            }
+
+            if(vol > 666666)
+            {
+                return "\uE995";
+            }
+
+            if (vol > 333333)
+            {
+                return "\uE994";
+            }
+
+            if (vol > 1)
+            {
+                return "\uE993";
+            }
+
+            return "\uE992";
         }
 
         private void OnButtonItemClick(object sender, RoutedEventArgs e)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using static NativeCoreAudio.ComInterfaces;
 
-namespace AudioSourceSelector.AudioDevice
+namespace AudioSelector.AudioDevice
 {
     /// <summary>
     /// This class manages audio devices connection list
@@ -67,7 +67,7 @@ namespace AudioSourceSelector.AudioDevice
         /// <returns>Always 0</returns>
         private uint OnDeviceStateChanged(string deviceId, DeviceState state)
         {
-            Trace.WriteLine($"{deviceId}.{state}");
+            Debug.WriteLine($"{deviceId}.{state}");
 
             switch (state)
             {

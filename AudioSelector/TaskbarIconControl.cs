@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace AudioSourceSelector
+namespace AudioSelector
 {
     /// <summary>
     /// The wrapper for NotifyIcon

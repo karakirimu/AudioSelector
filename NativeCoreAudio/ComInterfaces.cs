@@ -1,13 +1,15 @@
 ﻿using Microsoft.VisualStudio.OLE.Interop;
 using System;
 using System.Runtime.InteropServices;
+using stdole;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace NativeCoreAudio
 {
     /// <summary>
     /// ComInterfaces wrapper
     /// </summary>
-    public static class ComInterfaces
+    public static partial class ComInterfaces
     {
         // ObjBase.h
         public static readonly uint STGM_READ = 0x00000000;
@@ -457,8 +459,153 @@ namespace NativeCoreAudio
             [MarshalAs(UnmanagedType.Bool)] bool bRejectMixedPaths,
             /* [annotation][out] */
             [MarshalAs(UnmanagedType.Interface)] out IPartsList ppParts);
-
         };
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct AUDIO_VOLUME_NOTIFICATION_DATA
+        {
+            public GUID guidEventContext;
+            public bool bMuted;
+            public float fMasterVolume;
+            public uint nChannels;
+
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+            public float[] afChannelVolumes;
+        };
+
+        public static readonly Guid IID_IAudioEndpointVolumeCallback
+            = new("657804FA-D6AD-4496-8A60-352752AF4F89");
+            
+        [ComImport]
+        [Guid("657804FA-D6AD-4496-8A60-352752AF4F89")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public partial interface IAudioEndpointVolumeCallback
+        {
+            // AUDIO_VOLUME_NOTIFICATION_DATA
+            [PreserveSig]
+            uint OnNotify(IntPtr pNotify);
+        
+        };
+
+        public static readonly Guid IID_IAudioEndpointVolume
+                = new("5CDF2C82-841E-4546-9722-0CF74078229A");
+        [ComImport]
+        [Guid("5CDF2C82-841E-4546-9722-0CF74078229A")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IAudioEndpointVolume
+        {
+            [PreserveSig]
+            uint RegisterControlChangeNotify(
+                /* [annotation][in] */
+                IAudioEndpointVolumeCallback pNotify);
+
+            [PreserveSig]
+            uint UnregisterControlChangeNotify(
+                /* [annotation][in] */
+                IAudioEndpointVolumeCallback pNotify);
+
+            [PreserveSig]
+            uint GetChannelCount(
+                /* [annotation][out] */
+                out uint pnChannelCount);
+
+            [PreserveSig]
+            uint SetMasterVolumeLevel(
+                 /* [annotation][in] */
+                 float fLevelDB,
+                 /* [unique][in] */ 
+                 [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint SetMasterVolumeLevelScalar(
+                 /* [annotation][in] */
+                 float fLevel,
+                 /* [unique][in] */
+                 [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint GetMasterVolumeLevel(
+                /* [annotation][out] */
+                out float pfLevelDB);
+
+            [PreserveSig]
+            uint GetMasterVolumeLevelScalar(
+                /* [annotation][out] */
+                out float pfLevel);
+
+            [PreserveSig]
+            uint SetChannelVolumeLevel(
+                /* [annotation][in] */
+                uint nChannel,
+                float fLevelDB,
+                /* [unique][in] */
+                [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint SetChannelVolumeLevelScalar(
+                /* [annotation][in] */
+                uint nChannel,
+                float fLevel,
+                /* [unique][in] */
+                [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint GetChannelVolumeLevel(
+                /* [annotation][in] */
+                uint nChannel,
+                /* [annotation][out] */
+                out float pfLevelDB);
+
+            [PreserveSig]
+            uint GetChannelVolumeLevelScalar(
+                /* [annotation][in] */
+                uint nChannel,
+                /* [annotation][out] */
+                out float pfLevel);
+
+            [PreserveSig]
+            uint SetMute(
+                /* [annotation][in] */
+                bool bMute,
+                /* [unique][in] */
+                [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint GetMute(
+                /* [annotation][out] */
+                out bool pbMute);
+
+            [PreserveSig]
+            uint GetVolumeStepInfo(
+                /* [annotation][out] */
+                out uint pnStep,
+                /* [annotation][out] */
+                out uint pnStepCount);
+
+            [PreserveSig]
+            uint VolumeStepUp(
+                /* [unique][in] */
+                [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint VolumeStepDown(
+                /* [unique][in] */ 
+                [MarshalAs(UnmanagedType.LPStruct)] Guid pguidEventContext);
+
+            [PreserveSig]
+            uint QueryHardwareSupport(
+                /* [annotation][out] */
+                out short pdwHardwareSupportMask);
+
+            [PreserveSig]
+            uint GetVolumeRange(
+                /* [annotation][out] */
+                out float pflVolumeMindB,
+                /* [annotation][out] */
+                out float pflVolumeMaxdB,
+                /* [annotation][out] */
+                out float pflVolumeIncrementdB);
+        }
 
         [ComImport]
         [Guid("AE2DE0E4-5BCA-4F2D-AA46-5D13F8FDB3A9")]

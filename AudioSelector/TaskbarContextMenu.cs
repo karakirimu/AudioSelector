@@ -1,7 +1,8 @@
-﻿using System;
+﻿using AudioSelector.Setting;
+using System;
 using System.Windows.Forms;
 
-namespace AudioSourceSelector
+namespace AudioSelector
 {
     /// <summary>
     /// Context Menu for NotifyIcon
@@ -9,7 +10,19 @@ namespace AudioSourceSelector
     internal class TaskbarContextMenu
     {
         public ContextMenuStrip ContextMenu { get; private set; }
+        private readonly IAppConfig appConfig;
 
+        /// <summary>
+        /// Menu item for application setting
+        /// </summary>
+        /// <returns></returns>
+        private ToolStripMenuItem AddSettingMenu()
+        {
+            ToolStripMenuItem item = new(Properties.Resources.TaskBarMenuSetting);
+            item.Click += OpenSettingWindow;
+
+            return item;
+        }
 
         /// <summary>
         /// Menu item for application exit
@@ -17,10 +30,15 @@ namespace AudioSourceSelector
         /// <returns></returns>
         private ToolStripMenuItem AddExitMenu()
         {
-            ToolStripMenuItem item = new("Exit");
+            ToolStripMenuItem item = new(Properties.Resources.TaskbarMenuExit);
             item.Click += AppShutdown;
 
             return item;
+        }
+
+        private void OpenSettingWindow(object sender, EventArgs e)
+        {
+            new Settings(appConfig).ShowDialog();
         }
 
         /// <summary>
@@ -34,10 +52,12 @@ namespace AudioSourceSelector
             System.Windows.Application.Current.Shutdown(0);
         }
 
-        public TaskbarContextMenu()
+        public TaskbarContextMenu(IAppConfig config)
         {
             ContextMenu = new();
+            ContextMenu.Items.Add(AddSettingMenu());
             ContextMenu.Items.Add(AddExitMenu());
+            appConfig = config;
         }
 
     }

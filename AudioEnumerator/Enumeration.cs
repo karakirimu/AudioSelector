@@ -49,7 +49,7 @@ namespace AudioTools
         /// <returns>Device information list</returns>
         public static IReadOnlyCollection<MultiMediaDevice> ListActiveRenderDevices()
         {
-            List<MultiMediaDevice> multiMediaDevices = new();
+            List<MultiMediaDevice> multiMediaDevices = [];
             using SafeIMMDeviceEnumerator enumerator = new();
             using SafeIMMDeviceCollection collection
                 = new(EDataFlow.eRender, DeviceState.ACTIVE, enumerator);
@@ -87,13 +87,35 @@ namespace AudioTools
         {
             using SafeIMMDeviceEnumerator enumerator = new();
             using SafeIMMDevice device = enumerator.GetDevice(deviceId);
-            MultiMediaDevice multiMedia = new();
-
-            multiMedia.Connectors = ListConnector(device);
-            multiMedia.Id = deviceId;
-            multiMedia.DeviceName = GetFriendlyName(device);
+            MultiMediaDevice multiMedia = new()
+            {
+                Connectors = ListConnector(device),
+                Id = deviceId,
+                DeviceName = GetFriendlyName(device)
+            };
 
             return multiMedia;
+        }
+
+        /// <summary>
+        /// Get master volume level from device
+        /// </summary>
+        /// <param name="deviceId">Specific device id</param>
+        /// <returns>volume level (0.0 ~ 1.0)</returns>
+        public static float GetMasterVolume(string deviceId)
+        {
+            using SafeIMMDeviceEnumerator enumerator = new();
+            using SafeIMMDevice device = enumerator.GetDevice(deviceId);
+            using SafeIAudioEndpointVolume volume = new(CLSCTX.CLSCTX_LOCAL_SERVER, device);
+            return volume.GetMasterVolumeLevelScalar();
+        }
+
+        public static bool GetMute(string deviceId)
+        {
+            using SafeIMMDeviceEnumerator enumerator = new();
+            using SafeIMMDevice device = enumerator.GetDevice(deviceId);
+            using SafeIAudioEndpointVolume volume = new(CLSCTX.CLSCTX_LOCAL_SERVER, device);
+            return volume.GetMute();
         }
 
         /// <summary>
@@ -103,7 +125,7 @@ namespace AudioTools
         /// <returns>Device information list</returns>
         public static IReadOnlyCollection<Connector> ListConnector(SafeIMMDevice device)
         {
-            List<Connector> connectors = new();
+            List<Connector> connectors = [];
 
             using SafeIDeviceTopology deviceTopology
                 = new(CLSCTX.CLSCTX_LOCAL_SERVER, device);
