@@ -6,7 +6,6 @@ date: 2024-11-02 21:13:02 +0900
 categories: [Article, Tutorial]
 tags: [getting started]
 pin: true
-media_subpath: '/posts/20241102'
 icon: fas fa-stream
 order: 2
 ---
@@ -15,7 +14,7 @@ When the executable file is run, it will be stored in the task tray.
 
 ## Selection screen
 
-![appimage_1]({{site.baseurl}}/../../assets/img/usage/selector.png)
+![appimage_1]({{site.baseurl}}../../assets/img/usage/selector.png)
 
 - By pressing Ctrl + Alt + V keys or double-clicking the task tray icon. The selection screen will appear.
 

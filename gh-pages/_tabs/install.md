@@ -6,7 +6,6 @@ date: 2024-11-03 11:00:00 +0900
 categories: [Article, Tutorial]
 tags: [getting started]
 pin: true
-media_subpath: '/posts/20241102'
 icon: fas fa-download
 order: 1
 ---

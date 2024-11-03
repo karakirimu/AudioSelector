@@ -4,7 +4,6 @@ categories: [Article, Tutorial]
 tags: [privacy policy]
 date: 2024-11-03 09:16:00 +0900
 pin: true
-media_subpath: '/posts/20241102'
 icon: fas fa-shield
 order: 3
 ---
