@@ -37,6 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           gem install bundler
+          cd ./gh-pages
           bundle install
       - name: Setup Pages
         uses: actions/configure-pages@v5
