@@ -71,6 +71,8 @@
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
   <PropertyGroup>
     <ProjectGuid>a0b60fe2-5676-4429-8bb2-ba9f045cd4b4</ProjectGuid>
+	<TargetFrameworks>net8.0-windows</TargetFrameworks>
+	<RuntimeIdentifiers>win-x64;win-x86;win-arm64</RuntimeIdentifiers>
     <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <DefaultLanguage>ja-JP</DefaultLanguage>
