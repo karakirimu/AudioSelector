@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <Configurations>Debug;Release;Publish</Configurations>
+    <Platforms>AnyCPU;x64;ARM64;x86;ARM</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NativeCoreAudio\NativeCoreAudio.csproj" />

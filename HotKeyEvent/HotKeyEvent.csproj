@@ -3,6 +3,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Configurations>Debug;Release;Publish</Configurations>
+    <Platforms>AnyCPU;x64;ARM64;x86;ARM</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <None Update="MessageWindow.xaml">

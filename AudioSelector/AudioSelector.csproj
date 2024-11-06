@@ -19,6 +19,8 @@
     <StartupObject>AudioSelector.App</StartupObject>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Configurations>Debug;Release;Publish</Configurations>
+    <Platforms>AnyCPU;x64;ARM64;x86;ARM</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Properties\AudioSelector.ico" />
