@@ -21,6 +21,22 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Configurations>Debug;Release;Publish</Configurations>
     <Platforms>AnyCPU;x64;ARM64;x86;ARM</Platforms>
+	<RuntimeIdentifiers>win-x64;win-x86;win-arm64</RuntimeIdentifiers>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|ARM64'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x86'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|ARM'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Properties\AudioSelector.ico" />
@@ -36,9 +52,9 @@
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.421302">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.10" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AudioEnumerator\AudioTools.csproj" />
