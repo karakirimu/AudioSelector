@@ -7,9 +7,9 @@
     <ApplicationIcon>Properties\AudioSelector.ico</ApplicationIcon>
     <PackageIcon>.\Properties\AudioSelector.ico</PackageIcon>
     <PackageIconUrl />
-    <AssemblyVersion>1.1.0.1</AssemblyVersion>
-    <FileVersion>1.1.0.1</FileVersion>
-    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1.1</FileVersion>
+    <Version>1.1.1</Version>
     <RepositoryUrl>https://github.com/karakirimu/AudioSelector</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
