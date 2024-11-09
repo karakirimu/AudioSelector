@@ -103,7 +103,7 @@ namespace AudioSelector.Setting
                         Alt = true,
                         VirtualKey = Key.V.ToString()
                     },
-                    Startup = SystemRegistry.HasStartupEntry()
+                    Startup = StartupStoreApp.IsStoreApp() ? StartupStoreApp.CheckStartupEntry().Result : SystemRegistry.HasStartupEntry()
                 };
 
                 JsonSerializer.Serialize(writer, data);

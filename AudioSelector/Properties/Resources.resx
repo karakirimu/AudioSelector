@@ -156,4 +156,7 @@ Please change the hotkey combination to be registered.</value>
   <data name="TaskbarMenuExit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="StartupDisabledByPolicy" xml:space="preserve">
+    <value>Startup cannot be enabled because this PC is not allowed or supported by Group Policy.</value>
+  </data>
 </root>
