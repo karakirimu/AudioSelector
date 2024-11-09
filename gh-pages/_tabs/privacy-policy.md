@@ -24,5 +24,4 @@ The following privacy policy applies to the handling of users' personal informat
    - Using the task tray
    - Register/unregister hotkeys
    - Registry settings
-     - Register/Unregister startup
      - Obtaining information on themes set in the system

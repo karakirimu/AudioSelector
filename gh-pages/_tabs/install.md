@@ -18,5 +18,5 @@ order: 1
 
 ## Uninstall
 
-1. If the startup is set to Enabled, please change it to Disabled.
+1. If the startup is set to Enabled, please change it to Disabled. (portable version only)
 2. Delete the folder you downloaded and extracted.
