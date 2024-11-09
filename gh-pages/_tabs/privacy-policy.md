@@ -8,7 +8,7 @@ icon: fas fa-shield
 order: 3
 ---
 
-**Update Date: 2024/11/02**
+**Update Date: 2024/11/09**
 
 The following privacy policy applies to the handling of users' personal information for the services provided by this software.
 
