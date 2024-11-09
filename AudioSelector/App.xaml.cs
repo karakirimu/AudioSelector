@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -247,6 +248,23 @@ namespace AudioSelector
 
         private static void UpdateStartup(AppConfigProperty config)
         {
+            bool isStoreApp = StartupStoreApp.IsStoreApp();
+
+            if (isStoreApp)
+            {
+                if (config.Startup)
+                {
+                    Task.Run(() => StartupStoreApp.EnableStartupTask());
+                }
+                else
+                {
+                    Task.Run(() => StartupStoreApp.DisableStartupTask());
+                }
+                return;
+            }
+
+            // for portable app
+
             bool registered = SystemRegistry.HasStartupEntry();
             if (config.Startup)
             {
@@ -273,7 +291,7 @@ namespace AudioSelector
             ShowSelectWindow();
         }
 
-        private void ShowHotKeyError()
+        private static void ShowHotKeyError()
         {
             string exeName = System.IO.Path.GetFileNameWithoutExtension(Environment.ProcessPath);
             _ = System.Windows.MessageBox.Show(

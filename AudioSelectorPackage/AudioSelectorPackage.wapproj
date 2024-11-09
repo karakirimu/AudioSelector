@@ -8,6 +8,26 @@
       <Configuration>Debug</Configuration>
       <Platform>x86</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Publish|AnyCPU">
+      <Configuration>Publish</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Publish|ARM">
+      <Configuration>Publish</Configuration>
+      <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Publish|ARM64">
+      <Configuration>Publish</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Publish|x64">
+      <Configuration>Publish</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Publish|x86">
+      <Configuration>Publish</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x86">
       <Configuration>Release</Configuration>
       <Platform>x86</Platform>
@@ -51,19 +71,23 @@
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.props" />
   <PropertyGroup>
     <ProjectGuid>a0b60fe2-5676-4429-8bb2-ba9f045cd4b4</ProjectGuid>
-    <TargetPlatformVersion>10.0.26100.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <DefaultLanguage>ja-JP</DefaultLanguage>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <NoWarn>$(NoWarn);NU1702</NoWarn>
     <EntryPointProjectUniqueName>..\AudioSelector\AudioSelector.csproj</EntryPointProjectUniqueName>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <RuntimeIdentifiers>win-x64;win-x86;win-arm64</RuntimeIdentifiers>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <PackageCertificateThumbprint>7CAFA87B28436C9A2B3DEC4270D38447DDBD9BF2</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
-    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <DefaultLanguage>en</DefaultLanguage>
@@ -73,11 +97,23 @@
     <DefaultLanguage>en</DefaultLanguage>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|ARM64'">
+    <DefaultLanguage>en</DefaultLanguage>
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefaultLanguage>en</DefaultLanguage>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
+    <DefaultLanguage>en</DefaultLanguage>
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefaultLanguage>en</DefaultLanguage>
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
     <DefaultLanguage>en</DefaultLanguage>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
@@ -86,6 +122,10 @@
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <DefaultLanguage>en</DefaultLanguage>
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|ARM'">
     <DefaultLanguage>en</DefaultLanguage>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
@@ -101,6 +141,10 @@
     <DefaultLanguage>en</DefaultLanguage>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|x86'">
+    <DefaultLanguage>en</DefaultLanguage>
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DefaultLanguage>en</DefaultLanguage>
     <AppxBundle>Always</AppxBundle>
@@ -111,6 +155,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Package.StoreAssociation.xml" />
     <None Include="AudioSelectorPackage_TemporaryKey.pfx" />
     <Content Include="Images\LargeTile.scale-100.png" />
     <Content Include="Images\LargeTile.scale-125.png" />
@@ -165,7 +210,7 @@
   </ItemGroup>
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AudioSelector\AudioSelector.csproj" />

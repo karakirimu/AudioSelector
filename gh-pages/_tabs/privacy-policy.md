@@ -8,7 +8,7 @@ icon: fas fa-shield
 order: 3
 ---
 
-**Update Date: 2024/11/02**
+**Update Date: 2024/11/09**
 
 The following privacy policy applies to the handling of users' personal information for the services provided by this software.
 
@@ -24,5 +24,4 @@ The following privacy policy applies to the handling of users' personal informat
    - Using the task tray
    - Register/unregister hotkeys
    - Registry settings
-     - Register/Unregister startup
      - Obtaining information on themes set in the system

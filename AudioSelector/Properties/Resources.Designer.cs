@@ -127,6 +127,15 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
+        ///   Startup cannot be enabled because this PC is not allowed or supported by Group Policy. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string StartupDisabledByPolicy {
+            get {
+                return ResourceManager.GetString("StartupDisabledByPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Disabled に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string SwitchDisabled {
