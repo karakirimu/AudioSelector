@@ -81,6 +81,16 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
+        ///   This application is already running.
+        ///Please check your task tray. に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string DuplicateApp {
+            get {
+                return ResourceManager.GetString("DuplicateApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Hotkey registration failed.
         ///Please change the hotkey combination to be registered. に類似しているローカライズされた文字列を検索します。
         /// </summary>

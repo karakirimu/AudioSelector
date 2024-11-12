@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AudioSelector
 {
@@ -29,13 +31,27 @@ namespace AudioSelector
         private AppConfig appConfig;
         private ServiceProvider container;
 
+        // Prevent multiple instances
+        private static Mutex mutex = null;
+        private bool mutexCreated = false;
+
         const string LIGHT_THEME = @".\Properties\Light.xaml";
         const string DARK_THEME = @".\Properties\Dark.xaml";
+        const string appName = "AudioSelector.{E2D88EB5-CF16-4367-B7DB-EB3F2A10986D}";
 
         public App()
         {
             Startup += (o, e) =>
             {
+                // Prevent multiple instances
+                mutex = new Mutex(true, appName, out mutexCreated);
+                if (!mutexCreated)
+                {
+                    ShowDuplicateAppInfo();
+                    Current.Shutdown();
+                    return;
+                }
+
                 appConfig = new AppConfig();
                 viewModel = new AudioSelectorViewModel();
 
@@ -91,6 +107,12 @@ namespace AudioSelector
 
             Exit += (o, e) =>
             {
+                // Prevent multiple instances
+                if (!mutexCreated)
+                {
+                    return;
+                }
+
                 hotKey.Stop();
                 foreach (var device in enumerationEvent.Devices)
                 {
@@ -299,6 +321,16 @@ namespace AudioSelector
                 exeName,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
+        }
+
+        private static void ShowDuplicateAppInfo()
+        {
+            string exeName = System.IO.Path.GetFileNameWithoutExtension(Environment.ProcessPath);
+            _ = System.Windows.MessageBox.Show(
+                AudioSelector.Properties.Resources.DuplicateApp,
+                exeName,
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         /// <summary>

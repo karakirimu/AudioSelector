@@ -159,4 +159,8 @@ Please change the hotkey combination to be registered.</value>
   <data name="StartupDisabledByPolicy" xml:space="preserve">
     <value>Startup cannot be enabled because this PC is not allowed or supported by Group Policy.</value>
   </data>
+  <data name="DuplicateApp" xml:space="preserve">
+    <value>This application is already running.
+Please check your task tray.</value>
+  </data>
 </root>
