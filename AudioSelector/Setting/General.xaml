@@ -11,9 +11,11 @@
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="8"/>
+            <RowDefinition Height="16"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="24"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="16"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="8"/>
             <RowDefinition Height="Auto"/>
@@ -33,7 +35,14 @@
 
         <!-- Hotkey Setting -->
         <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="2" Grid.Column="0" Text="Hotkey" VerticalAlignment="Center" Margin="8,0"/>
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+        <ToggleButton Style="{DynamicResource ToggleButtonSwitchStyle}"
+                      Width="60"
+                      Margin="0"
+                      Grid.Row="2"
+                      Grid.Column="1"
+                      IsChecked="{Binding HotKeyEnabled, Mode=TwoWay}"
+                      HorizontalAlignment="Right"/>
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" IsEnabled="{Binding HotKeyEnabled}">
             <ToggleButton Style="{DynamicResource ToggleButtonStyle}" Name="ToggleWin" IsChecked="{Binding ModifierWin, Mode=TwoWay}" Content="Win" Width="40"/>
             <ToggleButton Style="{DynamicResource ToggleButtonStyle}" Name="ToggleCtrl" IsChecked="{Binding ModifierCtrl, Mode=TwoWay}" Content="Ctrl" Width="40" Margin="2,0,0,0"/>
             <ToggleButton Style="{DynamicResource ToggleButtonStyle}" Name="ToggleShift" IsChecked="{Binding ModifierShift, Mode=TwoWay}" Content="Shift" Width="40" Margin="2,0,0,0"/>
@@ -49,13 +58,12 @@
         </StackPanel>
 
         <!-- Startup Setting -->
-        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="4" Grid.Column="0" Text="Launch at startup" VerticalAlignment="Center" Margin="8,0"/>
-        <ToggleButton Style="{DynamicResource ToggleButtonStyle}"
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="6" Grid.Column="0" Text="Launch at startup" VerticalAlignment="Center" Margin="8,0"/>
+        <ToggleButton Style="{DynamicResource ToggleButtonSwitchStyle}"
                       Width="60"
                       Margin="0"
-                      Grid.Row="4"
+                      Grid.Row="6"
                       Grid.Column="1"
-                      Content="{Binding AutoStartState, FallbackValue='State'}"
                       IsChecked="{Binding AutoStart, Mode=TwoWay}"
                       HorizontalAlignment="Right"/>
 

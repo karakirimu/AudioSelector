@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace AudioSelector
 {
@@ -54,6 +53,8 @@ namespace AudioSelector
 
                 appConfig = new AppConfig();
                 viewModel = new AudioSelectorViewModel();
+                hotKey = new GlobalHotKey();
+                GlobalHotKey.HotKeyDown += OnKeyChange;
 
                 // Load json
                 appConfig.Load();
@@ -96,13 +97,10 @@ namespace AudioSelector
                 container = service.BuildServiceProvider();
 
                 UpdateTheme(appConfig.Property);
-                InitializeHotKey(appConfig.Property);
+                UpdateHotKeyEnabled(appConfig.Property);
                 UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
-                if (!hotKey.Start())
-                {
-                    ShowHotKeyError();
-                }
+
             };
 
             Exit += (o, e) =>
@@ -113,7 +111,7 @@ namespace AudioSelector
                     return;
                 }
 
-                hotKey.Stop();
+                hotKey.Close();
                 foreach (var device in enumerationEvent.Devices)
                 {
                     volumeChangeEvent.RemoveCallback(device.Id);
@@ -133,12 +131,15 @@ namespace AudioSelector
                 case AppConfigType.Theme:
                     UpdateTheme(config);
                     break;
+                case AppConfigType.HotKeyEnabled:
+                    UpdateHotKeyEnabled(config);
+                    break;
                 case AppConfigType.HotKey:
                     {
-                        UpdateHotKey(config);
+                        UpdateHotKey(config, false);
                         break;
                     }
-                case AppConfigType.HotkeyId:
+                case AppConfigType.HotKeyId:
                     break;
                 case AppConfigType.Startup:
                     UpdateStartup(config);
@@ -165,43 +166,19 @@ namespace AudioSelector
             };
         }
 
-        private void InitializeHotKey(AppConfigProperty config)
+        private void UpdateHotKeyEnabled(AppConfigProperty config)
         {
-            List<string> keylist = [];
-            ushort modifier = 0;
-            if (config.Hotkey.Win)
+            if (config.Hotkey_enabled)
             {
-                modifier |= GlobalHotKey.MOD_WIN;
-                keylist.Add(AudioSelector.Properties.Resources.KeyWin);
+                UpdateHotKey(config, true);
+                return;
             }
-            if (config.Hotkey.Ctrl)
-            {
-                modifier |= GlobalHotKey.MOD_CONTROL;
-                keylist.Add(AudioSelector.Properties.Resources.KeyCtrl);
-            }
-            if (config.Hotkey.Alt)
-            {
-                modifier |= GlobalHotKey.MOD_ALT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyAlt);
-            }
-            if (config.Hotkey.Shift)
-            {
-                modifier |= GlobalHotKey.MOD_SHIFT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyShift);
-            }
-            keylist.Add(config.Hotkey.VirtualKey);
 
-            string hotkeys = string.Join("+", keylist);
-            taskbarControl.Text = string.Format(AudioSelector.Properties.Resources.TaskbarToolTip, hotkeys);
-
-            Key key = (Key)Enum.Parse(typeof(Key), config.Hotkey.VirtualKey);
-            Keys formsKey = (Keys)KeyInterop.VirtualKeyFromKey(key);
-
-            hotKey = new(config.Hotkey_id, modifier, (ushort)formsKey);
-            GlobalHotKey.HotKeyDown += OnKeyChange;
+            taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
+            hotKey.Stop();
         }
 
-        private void UpdateHotKey(AppConfigProperty config)
+        private void UpdateHotKey(AppConfigProperty config, bool initialize)
         {
             List<string> keylist = [];
             ushort modifier = 0;
@@ -232,6 +209,15 @@ namespace AudioSelector
 
             Key key = (Key)Enum.Parse(typeof(Key), config.Hotkey.VirtualKey);
             Keys formsKey = (Keys)KeyInterop.VirtualKeyFromKey(key);
+
+            if (initialize && config.Hotkey_enabled)
+            {
+                if (!hotKey.Start(config.Hotkey_id, modifier, (ushort)formsKey))
+                {
+                    ShowHotKeyError();
+                }
+                return;
+            }
 
             if (!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
             {

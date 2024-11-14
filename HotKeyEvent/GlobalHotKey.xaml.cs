@@ -30,22 +30,28 @@ namespace HotKeyEvent
         public static readonly ushort MOD_SHIFT = 0x0004;
         public static readonly ushort MOD_WIN = 0x0008;
 
-        public GlobalHotKey(int id, ushort modifiers, ushort vk)
+        public GlobalHotKey()
         {
             InitializeComponent();
             source = null;
-            hotKeyId = id;
-            modKey = modifiers;
-            virtualKey = vk;
+            hotKeyId = 0;
+            modKey = 0;
+            virtualKey = 0;
         }
 
         /// <summary>
         /// Start hotkey capture
         /// </summary>
+        /// <param name="id">hotkey id</param>
+        /// <param name="modifiers">modifier key flags</param>
+        /// <param name="vk">Virtual key (Win32)</param>
         /// <returns>if the hotkey register success, return true, otherwise return false.</returns>
-        public bool Start()
+        public bool Start(int id, ushort modifiers, ushort vk)
         {
             Show();
+            hotKeyId = id;
+            modKey = modifiers;
+            virtualKey = vk;
             return Set(hotKeyId, modKey, virtualKey);
         }
 
@@ -70,7 +76,8 @@ namespace HotKeyEvent
         /// </summary>
         public void Stop()
         {
-            Close();
+            UnSet(hotKeyId);
+            Hide();
         }
 
         /// <summary>
@@ -95,9 +102,17 @@ namespace HotKeyEvent
         /// <param name="e">Eventargs</param>
         protected override void OnClosed(EventArgs e)
         {
-            source.RemoveHook(hHook);
-            source = null;
-            UnSet(hotKeyId);
+            if(source != null)
+            {
+                source.RemoveHook(hHook);
+                source = null;
+            }
+
+            if(hotKeyId > 0)
+            {
+                UnSet(hotKeyId);
+            }
+
             UnSetWindowProc();
             base.OnClosed(e);
         }

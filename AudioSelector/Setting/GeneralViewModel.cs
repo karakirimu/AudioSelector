@@ -4,6 +4,7 @@ namespace AudioSelector.Setting
 {
     public class GeneralViewModel : INotifyPropertyChanged
     {
+        private bool _hotKeyEnabled;
         private bool _modifierCtrl;
         private bool _modifierShift;
         private bool _modifierAlt;
@@ -11,9 +12,21 @@ namespace AudioSelector.Setting
         private bool _autoStart;
 
         private string _vKey;
-        private string _autoStartState;
 
         private int _themeIndex;
+
+        public bool HotKeyEnabled
+        {
+            get { return _hotKeyEnabled; }
+            set
+            {
+                if (_hotKeyEnabled != value)
+                {
+                    _hotKeyEnabled = value;
+                    OnPropertyChanged(nameof(HotKeyEnabled));
+                }
+            }
+        }
 
         public bool ModifierCtrl
         {
@@ -93,19 +106,6 @@ namespace AudioSelector.Setting
             }
         }
 
-        public string AutoStartState
-        {
-            get { return _autoStartState; }
-            set
-            {
-                if (value != _autoStartState)
-                {
-                    _autoStartState = value;
-                    OnPropertyChanged(nameof(AutoStartState));
-                }
-            }
-        }
-
         public bool AutoStart
         {
             get { return _autoStart; }
@@ -115,7 +115,6 @@ namespace AudioSelector.Setting
                 {
                     _autoStart = value;
                     OnPropertyChanged(nameof(AutoStart));
-                    AutoStartState = _autoStart ? Properties.Resources.SwitchEnabled : Properties.Resources.SwitchDisabled;
                 }
             }
         }
@@ -129,6 +128,7 @@ namespace AudioSelector.Setting
 
         public GeneralViewModel(IAppConfig config)
         {
+            _hotKeyEnabled = config.Property.Hotkey_enabled;
             _modifierShift = config.Property.Hotkey.Shift;
             _modifierCtrl = config.Property.Hotkey.Ctrl;
             _modifierAlt = config.Property.Hotkey.Alt;
@@ -136,7 +136,6 @@ namespace AudioSelector.Setting
             _vKey = config.Property.Hotkey.VirtualKey;
             _themeIndex = (int)config.Property.Theme;
             _autoStart = config.Property.Startup;
-            _autoStartState = _autoStart ? Properties.Resources.SwitchEnabled : Properties.Resources.SwitchDisabled;
         }
     }
 }

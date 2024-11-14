@@ -146,24 +146,6 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
-        ///   Disabled に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string SwitchDisabled {
-            get {
-                return ResourceManager.GetString("SwitchDisabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Enabled に類似しているローカライズされた文字列を検索します。
-        /// </summary>
-        internal static string SwitchEnabled {
-            get {
-                return ResourceManager.GetString("SwitchEnabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Exit に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TaskbarMenuExit {
@@ -183,11 +165,21 @@ namespace AudioSelector.Properties {
         
         /// <summary>
         ///   AudioSelector
-        ///Press {0} to show selector window. に類似しているローカライズされた文字列を検索します。
+        ///Press {0} or double-click this icon to display に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TaskbarToolTip {
             get {
                 return ResourceManager.GetString("TaskbarToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   AudioSelector
+        ///Double-click this icon to display に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string TaskbarToolTipNoHotKey {
+            get {
+                return ResourceManager.GetString("TaskbarToolTipNoHotKey", resourceCulture);
             }
         }
     }
