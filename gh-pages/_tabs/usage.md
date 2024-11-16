@@ -48,7 +48,7 @@ The selected modifier key is highlighted in green. The last text box can be set 
 
 If the key has been changed, it will also be displayed in a tooltip in the taskbar.
 
-![appimage_4](./gh-pages/assets/img/usage/tasktray_tooltip.png)
+![appimage_4]({{site.baseurl}}../../assets/img/usage/tasktray_tooltip.png)
 
 ### Launch at Startup
 
