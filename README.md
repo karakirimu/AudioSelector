@@ -67,8 +67,7 @@ If enabled, the application is automatically launched at system startup.
 ## Environment
 
 - NET 8.0
-- C# Build with AnyCPU
-- Windows 11
+- Windows 11 23H2
 
 ## License
 
