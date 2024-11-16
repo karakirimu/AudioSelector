@@ -8,9 +8,11 @@ This is a simple audio output selection tool for Windows.
 
 When the executable file is run, it will be stored in the task tray.
 
+![appimage_1](./gh-pages/assets/img/usage/tasktray.png)
+
 ## Selection screen
 
-![appimage_1](./Document/Image/selector.png)
+![appimage_2](./gh-pages/assets/img/usage/selector.png)
 
 - By pressing Ctrl + Alt + V keys or double-clicking the task tray icon. The selection screen will appear.
 
@@ -22,7 +24,7 @@ When the executable file is run, it will be stored in the task tray.
 
 Right click on the task tray icon and select "Settings" to launch the settings window.
 
-![appimage_2](./Document/Image/settings_general.png)
+![appimage_3](./gh-pages/assets/img/usage/settings_general.png)
 
 ### Theme
 
@@ -40,11 +42,27 @@ You can set the shortcut key for starting the Selection screen. The default sett
 
 The selected modifier key is highlighted in green. The last text box can be set to any one key.
 
+If the key has been changed, it will also be displayed in a tooltip in the taskbar.
+
+![appimage_4](./gh-pages/assets/img/usage/tasktray_tooltip.png)
+
 ### Launch at Startup
 
-Enabled: The application is automatically launched at system startup.
+If enabled, the application is automatically launched at system startup.
 
-Disabled: Applications are not automatically launched at system startup.
+## TroubleShooting
+
+- When the same application is launched twice
+  
+  ![error_1](./gh-pages/assets/img/usage/twice_launch.png)
+
+  A notification will appear in the task tray indicating that it is in place.
+
+- "Hotkey registration failed. Please change the hotkey combination to be registered."
+
+  ![error_2](./gh-pages/assets/img/usage/error_hotkey.png)
+  
+  The cause of this error indicates that the selected hotkey or default hotkey is already registered in another application. In this case, the error can be resolved by changing the hotkey setting to another key combination.
 
 ## Environment
 
