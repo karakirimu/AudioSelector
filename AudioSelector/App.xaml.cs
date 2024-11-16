@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -31,22 +30,20 @@ namespace AudioSelector
         private ServiceProvider container;
 
         // Prevent multiple instances
-        private static Mutex mutex = null;
-        private bool mutexCreated = false;
+        private MultiInstanceHandler multi;
+        private bool isLaunched = false;
 
         const string LIGHT_THEME = @".\Properties\Light.xaml";
         const string DARK_THEME = @".\Properties\Dark.xaml";
-        const string appName = "AudioSelector.{E2D88EB5-CF16-4367-B7DB-EB3F2A10986D}";
 
         public App()
         {
             Startup += (o, e) =>
             {
                 // Prevent multiple instances
-                mutex = new Mutex(true, appName, out mutexCreated);
-                if (!mutexCreated)
+                multi = new MultiInstanceHandler();
+                if (!multi.Start())
                 {
-                    ShowDuplicateAppInfo();
                     Current.Shutdown();
                     return;
                 }
@@ -100,16 +97,17 @@ namespace AudioSelector
                 UpdateHotKeyEnabled(appConfig.Property);
                 UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
+                isLaunched = true;
 
             };
 
             Exit += (o, e) =>
             {
                 // Prevent multiple instances
-                if (!mutexCreated)
-                {
-                    return;
-                }
+                multi.AnotherAppLaunched -= OnAnotherAppLaunched;
+                multi.Stop();
+
+                if(isLaunched == false) return;
 
                 hotKey.Close();
                 foreach (var device in enumerationEvent.Devices)
@@ -164,6 +162,8 @@ namespace AudioSelector
                 Icon = taskbarIcon,
                 Visible = true
             };
+
+            multi.AnotherAppLaunched += OnAnotherAppLaunched;
         }
 
         private void UpdateHotKeyEnabled(AppConfigProperty config)
@@ -309,14 +309,13 @@ namespace AudioSelector
                 MessageBoxImage.Warning);
         }
 
-        private static void ShowDuplicateAppInfo()
+        private void OnAnotherAppLaunched()
         {
             string exeName = System.IO.Path.GetFileNameWithoutExtension(Environment.ProcessPath);
-            _ = System.Windows.MessageBox.Show(
-                AudioSelector.Properties.Resources.DuplicateApp,
+            taskbarControl.ShowBalloonTip(3000,
                 exeName,
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                AudioSelector.Properties.Resources.DuplicateApp,
+                ToolTipIcon.Info);
         }
 
         /// <summary>
