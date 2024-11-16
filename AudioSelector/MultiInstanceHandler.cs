@@ -42,7 +42,6 @@ namespace AudioSelector
                 return false;
             }
 
-            // NamedPipeサーバーを開始
             StartPipeServer();
             return true;
         }
