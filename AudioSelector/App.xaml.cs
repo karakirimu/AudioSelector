@@ -29,6 +29,10 @@ namespace AudioSelector
         private AppConfig appConfig;
         private ServiceProvider container;
 
+        // Prevent multiple instances
+        private MultiInstanceHandler multi;
+        private bool isLaunched = false;
+
         const string LIGHT_THEME = @".\Properties\Light.xaml";
         const string DARK_THEME = @".\Properties\Dark.xaml";
 
@@ -36,8 +40,18 @@ namespace AudioSelector
         {
             Startup += (o, e) =>
             {
+                // Prevent multiple instances
+                multi = new MultiInstanceHandler();
+                if (!multi.Start())
+                {
+                    Current.Shutdown();
+                    return;
+                }
+
                 appConfig = new AppConfig();
                 viewModel = new AudioSelectorViewModel();
+                hotKey = new GlobalHotKey();
+                GlobalHotKey.HotKeyDown += OnKeyChange;
 
                 // Load json
                 appConfig.Load();
@@ -80,18 +94,22 @@ namespace AudioSelector
                 container = service.BuildServiceProvider();
 
                 UpdateTheme(appConfig.Property);
-                InitializeHotKey(appConfig.Property);
+                UpdateHotKeyEnabled(appConfig.Property);
                 UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
-                if (!hotKey.Start())
-                {
-                    ShowHotKeyError();
-                }
+                isLaunched = true;
+
             };
 
             Exit += (o, e) =>
             {
-                hotKey.Stop();
+                // Prevent multiple instances
+                multi.AnotherAppLaunched -= OnAnotherAppLaunched;
+                multi.Stop();
+
+                if(isLaunched == false) return;
+
+                hotKey.Close();
                 foreach (var device in enumerationEvent.Devices)
                 {
                     volumeChangeEvent.RemoveCallback(device.Id);
@@ -111,12 +129,15 @@ namespace AudioSelector
                 case AppConfigType.Theme:
                     UpdateTheme(config);
                     break;
+                case AppConfigType.HotKeyEnabled:
+                    UpdateHotKeyEnabled(config);
+                    break;
                 case AppConfigType.HotKey:
                     {
-                        UpdateHotKey(config);
+                        UpdateHotKey(config, false);
                         break;
                     }
-                case AppConfigType.HotkeyId:
+                case AppConfigType.HotKeyId:
                     break;
                 case AppConfigType.Startup:
                     UpdateStartup(config);
@@ -141,9 +162,23 @@ namespace AudioSelector
                 Icon = taskbarIcon,
                 Visible = true
             };
+
+            multi.AnotherAppLaunched += OnAnotherAppLaunched;
         }
 
-        private void InitializeHotKey(AppConfigProperty config)
+        private void UpdateHotKeyEnabled(AppConfigProperty config)
+        {
+            if (config.Hotkey_enabled)
+            {
+                UpdateHotKey(config, true);
+                return;
+            }
+
+            taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
+            hotKey.Stop();
+        }
+
+        private void UpdateHotKey(AppConfigProperty config, bool initialize)
         {
             List<string> keylist = [];
             ushort modifier = 0;
@@ -175,41 +210,14 @@ namespace AudioSelector
             Key key = (Key)Enum.Parse(typeof(Key), config.Hotkey.VirtualKey);
             Keys formsKey = (Keys)KeyInterop.VirtualKeyFromKey(key);
 
-            hotKey = new(config.Hotkey_id, modifier, (ushort)formsKey);
-            GlobalHotKey.HotKeyDown += OnKeyChange;
-        }
-
-        private void UpdateHotKey(AppConfigProperty config)
-        {
-            List<string> keylist = [];
-            ushort modifier = 0;
-            if (config.Hotkey.Win)
+            if (initialize && config.Hotkey_enabled)
             {
-                modifier |= GlobalHotKey.MOD_WIN;
-                keylist.Add(AudioSelector.Properties.Resources.KeyWin);
+                if (!hotKey.Start(config.Hotkey_id, modifier, (ushort)formsKey))
+                {
+                    ShowHotKeyError();
+                }
+                return;
             }
-            if (config.Hotkey.Ctrl)
-            {
-                modifier |= GlobalHotKey.MOD_CONTROL;
-                keylist.Add(AudioSelector.Properties.Resources.KeyCtrl);
-            }
-            if (config.Hotkey.Alt)
-            {
-                modifier |= GlobalHotKey.MOD_ALT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyAlt);
-            }
-            if (config.Hotkey.Shift)
-            {
-                modifier |= GlobalHotKey.MOD_SHIFT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyShift);
-            }
-            keylist.Add(config.Hotkey.VirtualKey);
-
-            string hotkeys = string.Join("+", keylist);
-            taskbarControl.Text = string.Format(AudioSelector.Properties.Resources.TaskbarToolTip, hotkeys);
-
-            Key key = (Key)Enum.Parse(typeof(Key), config.Hotkey.VirtualKey);
-            Keys formsKey = (Keys)KeyInterop.VirtualKeyFromKey(key);
 
             if (!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
             {
@@ -299,6 +307,15 @@ namespace AudioSelector
                 exeName,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
+        }
+
+        private void OnAnotherAppLaunched()
+        {
+            string exeName = System.IO.Path.GetFileNameWithoutExtension(Environment.ProcessPath);
+            taskbarControl.ShowBalloonTip(3000,
+                exeName,
+                AudioSelector.Properties.Resources.DuplicateApp,
+                ToolTipIcon.Info);
         }
 
         /// <summary>

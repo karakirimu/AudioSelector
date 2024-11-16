@@ -29,6 +29,12 @@ namespace AudioSelector.Setting
 
         private void GeneralSettingPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if(e.PropertyName == nameof(viewModel.HotKeyEnabled))
+            {
+                appConfig?.SetHotKeyEnabled(viewModel.HotKeyEnabled);
+                return;
+            }
+
             if(e.PropertyName == nameof(viewModel.ModifierCtrl)
                 || e.PropertyName == nameof(viewModel.ModifierShift)
                 || e.PropertyName == nameof(viewModel.ModifierAlt)

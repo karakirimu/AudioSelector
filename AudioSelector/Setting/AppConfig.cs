@@ -30,6 +30,9 @@ namespace AudioSelector.Setting
         [JsonPropertyName("theme")]
         public SystemTheme Theme { get; set; }
 
+        [JsonPropertyName("hotkey_enabled")]
+        public bool Hotkey_enabled { get; set; }
+
         [JsonPropertyName("hotkey_id")]
         public ushort Hotkey_id { get; set; }
 
@@ -43,7 +46,8 @@ namespace AudioSelector.Setting
     public enum AppConfigType
     {
         Theme,
-        HotkeyId,
+        HotKeyEnabled,
+        HotKeyId,
         HotKey,
         Startup
     }
@@ -53,6 +57,7 @@ namespace AudioSelector.Setting
         public AppConfigProperty Property { get; }
         public event ValueUpdate UserConfigurationUpdate;
         public void SetTheme(SystemTheme theme);
+        public void SetHotKeyEnabled(bool enabled);
         public void SetHotkeyId(ushort hotkeyId);
         public void SetHotkey(HotKey hotkey);
         public void SetStartup(bool enabled);
@@ -94,6 +99,7 @@ namespace AudioSelector.Setting
                 var data = new AppConfigProperty
                 {
                     Theme = SystemTheme.System,
+                    Hotkey_enabled = true,
                     Hotkey_id = 0x2652,
                     Hotkey = new HotKey()
                     {
@@ -123,11 +129,18 @@ namespace AudioSelector.Setting
             UserConfigurationUpdate?.Invoke(AppConfigType.Theme, Property);
         }
 
+        public void SetHotKeyEnabled(bool enabled)
+        {
+            Property.Hotkey_enabled = enabled;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.HotKeyEnabled, Property);
+        }
+
         public void SetHotkeyId(ushort hotkeyId)
         {
             Property.Hotkey_id = hotkeyId;
             Save();
-            UserConfigurationUpdate?.Invoke(AppConfigType.HotkeyId, Property);
+            UserConfigurationUpdate?.Invoke(AppConfigType.HotKeyId, Property);
         }
 
         public void SetHotkey(HotKey hotkey)

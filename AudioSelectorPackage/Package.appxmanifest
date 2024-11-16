@@ -10,7 +10,7 @@
   <Identity
     Name="90f54cc1-c53d-42b9-a5da-46b7ab9d64a1"
     Publisher="CN=testCert"
-    Version="1.1.1.0" />
+    Version="1.1.2.0" />
 
   <Properties>
     <DisplayName>AudioSelector</DisplayName>

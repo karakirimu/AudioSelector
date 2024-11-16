@@ -126,7 +126,7 @@
   </data>
   <data name="TaskbarToolTip" xml:space="preserve">
     <value>AudioSelector
-Press {0} to show selector window.</value>
+Press {0} or double-click this icon to display</value>
   </data>
   <data name="KeyWin" xml:space="preserve">
     <value>Win</value>
@@ -144,12 +144,6 @@ Press {0} to show selector window.</value>
     <value>Hotkey registration failed.
 Please change the hotkey combination to be registered.</value>
   </data>
-  <data name="SwitchEnabled" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
-  <data name="SwitchDisabled" xml:space="preserve">
-    <value>Disabled</value>
-  </data>
   <data name="TaskBarMenuSetting" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -158,5 +152,13 @@ Please change the hotkey combination to be registered.</value>
   </data>
   <data name="StartupDisabledByPolicy" xml:space="preserve">
     <value>Startup cannot be enabled because this PC is not allowed or supported by Group Policy.</value>
+  </data>
+  <data name="DuplicateApp" xml:space="preserve">
+    <value>This application is already running.
+Please check your task tray.</value>
+  </data>
+  <data name="TaskbarToolTipNoHotKey" xml:space="preserve">
+    <value>AudioSelector
+Double-click this icon to display</value>
   </data>
 </root>

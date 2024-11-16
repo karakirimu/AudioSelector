@@ -12,6 +12,16 @@ namespace AudioSelector
         private readonly NotifyIcon notifyIcon;
         private bool disposedValue;
 
+        public void ShowBalloonTip(int timeout)
+        {
+            notifyIcon.ShowBalloonTip(timeout);
+        }
+
+        public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon)
+        {
+            notifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
+        }
+
         public string Text
         {
             get => notifyIcon.Text;

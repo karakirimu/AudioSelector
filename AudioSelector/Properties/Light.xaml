@@ -7,6 +7,7 @@
     <Color x:Key="DefaultColor">Transparent</Color>
     <Color x:Key="MouseOverColor">#FFE9E9E9</Color>
     <Color x:Key="MouseOverOverlayColor">#10000000</Color>
+    <Color x:Key="DisabledOverlayColor">#BFBFBF</Color>
     <Color x:Key="SelectedColor">#FFEAEAEA</Color>
     <Color x:Key="DisabledForegroundColor">#FF888888</Color>
     <Color x:Key="GlyphColor">#FF444444</Color>
@@ -17,16 +18,17 @@
     <Color x:Key="TextBoxBorderColor">#FFE5E5E5</Color>
     <Color x:Key="ToggleButtonBackgroundColor">#FFF3F3F3</Color>
     <Color x:Key="ToggleButtonBorderColor">#FFE5E5E5</Color>
+    <Color x:Key="ToggleButtonSwitchBackgroundColor">Transparent</Color>
+    <Color x:Key="ToggleButtonSwitchBorderColor">#5A5A5A</Color>
+    <Color x:Key="ToggleButtonSwitchEllipseColor">#5A5A5A</Color>
+    <Color x:Key="ToggleButtonSwitchSelectedEllipseColor">White</Color>
     <Color x:Key="SelectorRadioButtonBorderColor">#FFE5E5E5</Color>
-
     <SolidColorBrush x:Key="TextBlockForeground" Color="#FF191919" />
     <Color x:Key="TextBlockForegroundColor">#FF191919</Color>
     <Color x:Key="ToggleButtonSelectedForegroundColor">White</Color>
-
-
     <!-- Setting window colors -->
     <Color x:Key="ListBackgroundColor">#FFF3F3F3</Color>
-    <Color x:Key="ContentBackgroundColor">#FFF3F3F3</Color>
+    <Color x:Key="ContentBackgroundColor">#FFF9F9F9</Color>
     
 
     <!-- SelectorPanel colors -->
@@ -46,7 +48,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border Name="Border" CornerRadius="6" Margin="0,0,0,2" SnapsToDevicePixels="true" Height="32px">
+                    <Border Name="Border" CornerRadius="4" Margin="0,0,0,2" SnapsToDevicePixels="true" Height="32px">
                         <Border.Background>
                             <SolidColorBrush Color="{DynamicResource DefaultColor}" />
                         </Border.Background>
@@ -152,7 +154,7 @@
                     <VisualState x:Name="Indeterminate" />
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
-            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="2" BorderThickness="1">
+            <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="4" BorderThickness="1">
                 <Border.BorderBrush>
                     <SolidColorBrush Color="{DynamicResource ComboboxBorderColor}"/>
                 </Border.BorderBrush>
@@ -160,7 +162,7 @@
                     <SolidColorBrush Color="{DynamicResource DefaultColor}"/>
                 </Border.Background>
             </Border>
-            <Border x:Name="TextBorder" Grid.Column="0" CornerRadius="2,0,0,2" Margin="1" >
+            <Border x:Name="TextBorder" Grid.Column="0" CornerRadius="4,0,0,4" Margin="1" >
                 <Border.Background>
                     <SolidColorBrush Color="{DynamicResource DefaultColor}"/>
                 </Border.Background>
@@ -381,6 +383,14 @@
                                         </ColorAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="InnerBorder" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource DisabledOverlayColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimation Storyboard.TargetName="InnerBorder" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0" />
+                                    </Storyboard>
+                                </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="CheckStates">
                                 <VisualState x:Name="Unchecked"/>
@@ -402,6 +412,83 @@
         </Setter>
     </Style>
 
+    <!-- ToggleButtonSwitch -->
+    <Style x:Key="ToggleButtonSwitchStyle" TargetType="ToggleButton">
+        <Setter Property="Foreground" Value="{DynamicResource TextBlockForeground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Name="Border" BorderThickness="1" CornerRadius="10" Height="20" Width="38">
+                        <Border.Background>
+                            <SolidColorBrush Color="{DynamicResource ToggleButtonSwitchBackgroundColor}" />
+                        </Border.Background>
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{DynamicResource ToggleButtonSwitchBorderColor}" />
+                        </Border.BorderBrush>
+                        <Border Name="InnerBorder" CornerRadius="10">
+                            <Border.Background>
+                                <SolidColorBrush Color="Transparent" />
+                            </Border.Background>
+                            <Ellipse x:Name="SwitchKnob" Height="12" Width="12" HorizontalAlignment="Left" Margin="3,0,0,0">
+                                <Ellipse.Fill>
+                                    <SolidColorBrush Color="{DynamicResource ToggleButtonSwitchEllipseColor}"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Border>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="InnerBorder" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource MouseOverOverlayColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource DisabledOverlayColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource ToggleButtonSwitchBackgroundColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ThicknessAnimationUsingKeyFrames  Storyboard.TargetName="SwitchKnob" Storyboard.TargetProperty="Margin">
+                                            <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="3,0,0,0"/>
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource SelectedColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource SelectedAccentColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="SwitchKnob" Storyboard.TargetProperty="Fill.Color">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource ToggleButtonSwitchSelectedEllipseColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ThicknessAnimationUsingKeyFrames  Storyboard.TargetName="SwitchKnob" Storyboard.TargetProperty="Margin">
+                                            <SplineThicknessKeyFrame KeyTime="0:0:0.2" Value="21,0,0,0"/>
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- TextBox -->
     <Style x:Key="StyledTextBox" TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource TextBlockForeground}"/>
@@ -409,7 +496,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Border CornerRadius="2" BorderThickness="1">
+                    <Border x:Name="Border" CornerRadius="4" BorderThickness="1">
                         <Border.Background>
                             <SolidColorBrush Color="{DynamicResource TextBoxBackgroundColor}"/>
                         </Border.Background>
@@ -417,6 +504,20 @@
                             <SolidColorBrush Color="{DynamicResource TextBoxBorderColor}"/>
                         </Border.BorderBrush>
                         <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource DisabledOverlayColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimation Storyboard.TargetName="Border" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
