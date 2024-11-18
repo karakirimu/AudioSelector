@@ -120,6 +120,16 @@ namespace AudioSelector.Setting
 
             // Deserialize the JSON data
             Property = JsonSerializer.Deserialize<AppConfigProperty>(reader);
+
+            if(Property != null)
+            {
+                bool startup = StartupStoreApp.IsStoreApp() ? StartupStoreApp.CheckStartupEntry().Result : SystemRegistry.HasStartupEntry();
+                if(Property.Startup != startup)
+                {
+                    reader.Close();
+                    SetStartup(startup);
+                }
+            }
         }
 
         public void SetTheme(SystemTheme theme)
