@@ -4,6 +4,10 @@
 
 This is a simple audio output selection tool for Windows.
 
+<a href="https://apps.microsoft.com/detail/9NTJMHQFFBXZ?mode=mini">
+	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+</a>
+
 ## Usage
 
 When the executable file is run, it will be stored in the task tray.
