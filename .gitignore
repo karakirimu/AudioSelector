@@ -362,3 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AudioSelector/Properties/launchSettings.json
+
+# Publish
+AudioSelector_[0-9]*/
+AudioSelector_[0-9]*.zip
