@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Settings" Height="450" Width="600">
+        Title="{DynamicResource SettingTitle}" Height="450" Width="600">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -28,7 +28,7 @@
                  BorderThickness="0"
                  Margin="8"
                  >
-                <ListBoxItem Style="{DynamicResource ListBoxItemStyle}" x:Name="General" Content="General"/>
+                <ListBoxItem Style="{DynamicResource ListBoxItemStyle}" x:Name="General" Content="{DynamicResource SettingGeneral}"/>
             </ListBox>
         </Border>
         <Rectangle Grid.Column="1" StrokeThickness="0">

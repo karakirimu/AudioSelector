@@ -14,6 +14,7 @@ namespace AudioSelector.Setting
         private string _vKey;
 
         private int _themeIndex;
+        private int _languageIndex;
 
         public bool HotKeyEnabled
         {
@@ -106,6 +107,19 @@ namespace AudioSelector.Setting
             }
         }
 
+        public int LanguageIndex
+        {
+            get { return _languageIndex; }
+            set
+            {
+                if (_languageIndex != value)
+                {
+                    _languageIndex = value;
+                    OnPropertyChanged(nameof(LanguageIndex));
+                }
+            }
+        }
+
         public bool AutoStart
         {
             get { return _autoStart; }
@@ -135,6 +149,7 @@ namespace AudioSelector.Setting
             _modifierWin = config.Property.Hotkey.Win;
             _vKey = config.Property.Hotkey.VirtualKey;
             _themeIndex = (int)config.Property.Theme;
+            _languageIndex = LanguageConverter.GetIndexFromSupportedLanguage(config.Property.Language);
             _autoStart = config.Property.Startup;
         }
     }

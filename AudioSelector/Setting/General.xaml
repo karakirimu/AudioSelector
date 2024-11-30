@@ -13,6 +13,8 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="16"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="4"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="16"/>
@@ -21,28 +23,36 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
         <!-- Theme Setting -->
-        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="0" Grid.Column="0" Text="Theme" VerticalAlignment="Center" Margin="8,0"/>
-        <ComboBox Style="{DynamicResource ComboBoxStyle}" Grid.Row="0" Grid.Column="1" Name="themeComboBox" SelectedIndex="{Binding ThemeIndex, Mode=TwoWay, FallbackValue=2}" SelectionChanged="ThemeSelectionChanged">
-            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="Light"/>
-            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="Dark"/>
-            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="System"/>
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="0" Grid.Column="0" Text="{DynamicResource GeneralTheme}" VerticalAlignment="Center" Margin="8,0"/>
+        <ComboBox Style="{DynamicResource ComboBoxStyle}" Grid.Row="0" Grid.Column="1" Name="themeComboBox" SelectedIndex="{Binding ThemeIndex, Mode=TwoWay, FallbackValue=0}" SelectionChanged="ThemeSelectionChanged">
+            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="{DynamicResource ThemeSystem}" Tag="0"/>
+            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="{DynamicResource ThemeLight}" Tag="1"/>
+            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="{DynamicResource ThemeDark}" Tag="2"/>
+        </ComboBox>
+
+        <!-- Language Setting -->
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="2" Grid.Column="0" Text="{DynamicResource GeneralLanguage}" VerticalAlignment="Center" Margin="8,0"/>
+        <ComboBox Style="{DynamicResource ComboBoxStyle}" Grid.Row="2" Grid.Column="1" Name="languageComboBox" SelectedIndex="{Binding LanguageIndex, Mode=TwoWay, FallbackValue=0}" SelectionChanged="LanguageSelectionChanged">
+            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="{DynamicResource LanguageSystem}"/>
+            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="English"/>
+            <ComboBoxItem Style="{DynamicResource ComboBoxItemStyle}" Content="日本語"/>
         </ComboBox>
 
         <!-- Hotkey Setting -->
-        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="2" Grid.Column="0" Text="Hotkey" VerticalAlignment="Center" Margin="8,0"/>
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="4" Grid.Column="0" Text="{DynamicResource GeneralHotkey}" VerticalAlignment="Center" Margin="8,0"/>
         <ToggleButton Style="{DynamicResource ToggleButtonSwitchStyle}"
                       Width="60"
                       Margin="0"
-                      Grid.Row="2"
+                      Grid.Row="4"
                       Grid.Column="1"
                       IsChecked="{Binding HotKeyEnabled, Mode=TwoWay}"
                       HorizontalAlignment="Right"/>
-        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" IsEnabled="{Binding HotKeyEnabled}">
+        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" IsEnabled="{Binding HotKeyEnabled}">
             <ToggleButton Style="{DynamicResource ToggleButtonStyle}" Name="ToggleWin" IsChecked="{Binding ModifierWin, Mode=TwoWay}" Content="Win" Width="40"/>
             <ToggleButton Style="{DynamicResource ToggleButtonStyle}" Name="ToggleCtrl" IsChecked="{Binding ModifierCtrl, Mode=TwoWay}" Content="Ctrl" Width="40" Margin="2,0,0,0"/>
             <ToggleButton Style="{DynamicResource ToggleButtonStyle}" Name="ToggleShift" IsChecked="{Binding ModifierShift, Mode=TwoWay}" Content="Shift" Width="40" Margin="2,0,0,0"/>
@@ -58,11 +68,11 @@
         </StackPanel>
 
         <!-- Startup Setting -->
-        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="6" Grid.Column="0" Text="Launch at startup" VerticalAlignment="Center" Margin="8,0"/>
+        <TextBlock Foreground="{DynamicResource TextBlockForeground}" Grid.Row="8" Grid.Column="0" Text="{DynamicResource GeneralStartup}" VerticalAlignment="Center" Margin="8,0"/>
         <ToggleButton Style="{DynamicResource ToggleButtonSwitchStyle}"
                       Width="60"
                       Margin="0"
-                      Grid.Row="6"
+                      Grid.Row="8"
                       Grid.Column="1"
                       IsChecked="{Binding AutoStart, Mode=TwoWay}"
                       HorizontalAlignment="Right"/>

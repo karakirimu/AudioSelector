@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -83,8 +82,17 @@ namespace AudioSelector.Setting
         {
             if (themeComboBox.SelectedItem != null && themeComboBox.SelectedItem is ComboBoxItem comboBoxItem)
             {
-                var theme = Enum.Parse<SystemTheme>((string)comboBoxItem.Content);
+                var theme = (SystemTheme)(int.Parse(comboBoxItem.Tag.ToString()));
                 appConfig?.SetTheme(theme);
+            }
+        }
+        private void LanguageSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (languageComboBox.SelectedItem != null && languageComboBox.SelectedItem is ComboBoxItem comboBoxItem)
+            {
+                var lang = (string)comboBoxItem.Content;
+                string cultureName = LanguageConverter.GetSupportedLanguage(lang);
+                appConfig?.SetLanguage(cultureName);
             }
         }
     }

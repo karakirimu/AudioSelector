@@ -14,5 +14,9 @@ namespace AudioSelector
 
         public const int MDT_EFFECTIVE_DPI = 0;
         public const uint MONITOR_DEFAULTTONEAREST = 2;
+
+        [LibraryImport("kernel32.dll", SetLastError = true)]
+        public static partial int GetUserDefaultLCID();
+
     }
 }

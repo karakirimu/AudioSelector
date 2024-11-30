@@ -30,6 +30,9 @@ namespace AudioSelector.Setting
         [JsonPropertyName("theme")]
         public SystemTheme Theme { get; set; }
 
+        [JsonPropertyName("language")]
+        public string Language { get; set; }
+
         [JsonPropertyName("hotkey_enabled")]
         public bool Hotkey_enabled { get; set; }
 
@@ -46,6 +49,7 @@ namespace AudioSelector.Setting
     public enum AppConfigType
     {
         Theme,
+        Language,
         HotKeyEnabled,
         HotKeyId,
         HotKey,
@@ -57,6 +61,7 @@ namespace AudioSelector.Setting
         public AppConfigProperty Property { get; }
         public event ValueUpdate UserConfigurationUpdate;
         public void SetTheme(SystemTheme theme);
+        public void SetLanguage(string language);
         public void SetHotKeyEnabled(bool enabled);
         public void SetHotkeyId(ushort hotkeyId);
         public void SetHotkey(HotKey hotkey);
@@ -95,10 +100,11 @@ namespace AudioSelector.Setting
                 // If the JSON file doesn't exist, create it
                 using var writer = File.Create(configFilePath);
 
-                // Create the data object
+                // Create the default data object
                 var data = new AppConfigProperty
                 {
                     Theme = SystemTheme.System,
+                    Language = "System",
                     Hotkey_enabled = true,
                     Hotkey_id = 0x2652,
                     Hotkey = new HotKey()
@@ -137,6 +143,13 @@ namespace AudioSelector.Setting
             Property.Theme = theme;
             Save();
             UserConfigurationUpdate?.Invoke(AppConfigType.Theme, Property);
+        }
+
+        public void SetLanguage(string language)
+        { 
+            Property.Language = language;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.Language, Property);
         }
 
         public void SetHotKeyEnabled(bool enabled)
