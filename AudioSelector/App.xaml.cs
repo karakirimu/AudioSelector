@@ -61,8 +61,8 @@ namespace AudioSelector
                 // Set system theme.
                 InitializeTaskbarIcon();
 
-                // Set language
-                UpdateLanguage(appConfig.Property);
+                // Set language and hotkey
+                UpdateLanguageAndHotKey(appConfig.Property, true);
 
                 // Add DoubleClick event to taskbar icon.
                 taskbarControl.DoubleClick += OnTaskIconDoubleClick;
@@ -99,7 +99,6 @@ namespace AudioSelector
                 container = service.BuildServiceProvider();
 
                 UpdateTheme(appConfig.Property);
-                UpdateHotKeyEnabled(appConfig.Property);
                 UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
                 isLaunched = true;
@@ -135,10 +134,8 @@ namespace AudioSelector
                     UpdateTheme(config);
                     break;
                 case AppConfigType.Language:
-                    UpdateLanguage(config);
-                    break;
                 case AppConfigType.HotKeyEnabled:
-                    UpdateHotKeyEnabled(config);
+                    UpdateLanguageAndHotKey(config);
                     break;
                 case AppConfigType.HotKey:
                     {
@@ -172,18 +169,6 @@ namespace AudioSelector
             };
 
             multi.AnotherAppLaunched += OnAnotherAppLaunched;
-        }
-
-        private void UpdateHotKeyEnabled(AppConfigProperty config)
-        {
-            if (config.Hotkey_enabled)
-            {
-                UpdateHotKey(config, true);
-                return;
-            }
-
-            taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
-            hotKey.Stop();
         }
 
         private void UpdateHotKey(AppConfigProperty config, bool initialize)
@@ -227,6 +212,12 @@ namespace AudioSelector
                 return;
             }
 
+            if(config.Hotkey_enabled == false)
+            {
+                hotKey.Stop();
+                return;
+            }
+
             if (!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
             {
                 ShowHotKeyError();
@@ -238,7 +229,7 @@ namespace AudioSelector
             dynamicResource.UpdateTheme(config.Theme);
         }
 
-        private void UpdateLanguage(AppConfigProperty config)
+        private void UpdateLanguageAndHotKey(AppConfigProperty config, bool initialize = false)
         {
             var code = LanguageConverter.GetSupportedLanguageCode(config.Language);
             CultureInfo culture = new(code);
@@ -254,10 +245,11 @@ namespace AudioSelector
             // Update hotkey tooltip language
             if (config.Hotkey_enabled)
             {
-                UpdateHotKey(config, true);
+                UpdateHotKey(config, initialize);
                 return;
             }
 
+            UpdateHotKey(config, initialize);
             taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
         }
 

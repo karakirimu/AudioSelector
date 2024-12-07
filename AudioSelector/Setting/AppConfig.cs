@@ -1,51 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Windows.Input;
 using static AudioSelector.Setting.AppConfig;
 
 namespace AudioSelector.Setting
 {
-    public class HotKey
-    {
-        [JsonPropertyName("win")]
-        public bool Win { get; set; }
-
-        [JsonPropertyName("ctrl")]
-        public bool Ctrl { get; set; }
-
-        [JsonPropertyName("shift")]
-        public bool Shift { get; set; }
-
-        [JsonPropertyName("alt")]
-        public bool Alt { get; set; }
-
-        [JsonPropertyName("virtual_key")]
-        public string VirtualKey { get; set; }
-    }
-
-    public class AppConfigProperty
-    {
-        [JsonPropertyName("theme")]
-        public SystemTheme Theme { get; set; }
-
-        [JsonPropertyName("language")]
-        public string Language { get; set; }
-
-        [JsonPropertyName("hotkey_enabled")]
-        public bool Hotkey_enabled { get; set; }
-
-        [JsonPropertyName("hotkey_id")]
-        public ushort Hotkey_id { get; set; }
-
-        [JsonPropertyName("hotkey")]
-        public HotKey Hotkey { get; set; }
-
-        [JsonPropertyName("startup")]
-        public bool Startup{ get; set; }
-    }
-
     public enum AppConfigType
     {
         Theme,
@@ -101,24 +60,7 @@ namespace AudioSelector.Setting
                 using var writer = File.Create(configFilePath);
 
                 // Create the default data object
-                var data = new AppConfigProperty
-                {
-                    Theme = SystemTheme.System,
-                    Language = "System",
-                    Hotkey_enabled = true,
-                    Hotkey_id = 0x2652,
-                    Hotkey = new HotKey()
-                    {
-                        Win = false,
-                        Ctrl = true,
-                        Shift = false,
-                        Alt = true,
-                        VirtualKey = Key.V.ToString()
-                    },
-                    Startup = StartupStoreApp.IsStoreApp() ? StartupStoreApp.CheckStartupEntry().Result : SystemRegistry.HasStartupEntry()
-                };
-
-                JsonSerializer.Serialize(writer, data);
+                JsonSerializer.Serialize(writer, AppJsonFormat.CreateLatest());
             }
 
             // Load the existing JSON file
@@ -126,6 +68,9 @@ namespace AudioSelector.Setting
 
             // Deserialize the JSON data
             Property = JsonSerializer.Deserialize<AppConfigProperty>(reader);
+
+            // Update Property if needed
+            Property = AppJsonFormat.Update(Property);
 
             if(Property != null)
             {
