@@ -19,6 +19,12 @@ namespace AudioSelector.Setting
                 settingsListBox.SelectedIndex = 0;
             };
 
+            Closing += (o, e) =>
+            {
+                e.Cancel = true;
+                this.Visibility = Visibility.Collapsed;
+            };
+
         }
 
         private void SettingsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
