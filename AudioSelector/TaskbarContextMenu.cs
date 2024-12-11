@@ -41,7 +41,7 @@ namespace AudioSelector
         {
             if (settingsWindow.IsVisible == false)
             {
-                settingsWindow.ShowDialog();
+                settingsWindow.Show();
             }
         }
 
