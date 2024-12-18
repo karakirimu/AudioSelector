@@ -4,6 +4,10 @@
 
 This is a simple audio output selection tool for Windows.
 
+## Install
+
+You can download the software from the Microsoft Store from the banner below. A portable version is also available from Releases.
+
 <a href="https://apps.microsoft.com/detail/9NTJMHQFFBXZ?mode=mini">
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a>
@@ -68,10 +72,10 @@ If enabled, the application is automatically launched at system startup.
   
   The cause of this error indicates that the selected hotkey or default hotkey is already registered in another application. In this case, the error can be resolved by changing the hotkey setting to another key combination.
 
-## Environment
+## Development environment
 
 - NET 8.0
-- Windows 11 23H2
+- Windows 11 24H2
 
 ## License
 
