@@ -1,4 +1,5 @@
 ﻿using AudioSelector.AudioDevice;
+using AudioSelector.Properties;
 using AudioSelector.Setting;
 using AudioTools;
 using HotKeyEvent;
@@ -7,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -28,13 +31,11 @@ namespace AudioSelector
         private AudioSelectorViewModel viewModel;
         private AppConfig appConfig;
         private ServiceProvider container;
+        private DynamicResource dynamicResource;
 
         // Prevent multiple instances
         private MultiInstanceHandler multi;
         private bool isLaunched = false;
-
-        const string LIGHT_THEME = @".\Properties\Light.xaml";
-        const string DARK_THEME = @".\Properties\Dark.xaml";
 
         public App()
         {
@@ -50,6 +51,7 @@ namespace AudioSelector
 
                 appConfig = new AppConfig();
                 viewModel = new AudioSelectorViewModel();
+                dynamicResource = new DynamicResource();
                 hotKey = new GlobalHotKey();
                 GlobalHotKey.HotKeyDown += OnKeyChange;
 
@@ -58,6 +60,9 @@ namespace AudioSelector
 
                 // Set system theme.
                 InitializeTaskbarIcon();
+
+                // Set language and hotkey
+                UpdateLanguageAndHotKey(appConfig.Property, true);
 
                 // Add DoubleClick event to taskbar icon.
                 taskbarControl.DoubleClick += OnTaskIconDoubleClick;
@@ -94,7 +99,6 @@ namespace AudioSelector
                 container = service.BuildServiceProvider();
 
                 UpdateTheme(appConfig.Property);
-                UpdateHotKeyEnabled(appConfig.Property);
                 UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
                 isLaunched = true;
@@ -129,8 +133,9 @@ namespace AudioSelector
                 case AppConfigType.Theme:
                     UpdateTheme(config);
                     break;
+                case AppConfigType.Language:
                 case AppConfigType.HotKeyEnabled:
-                    UpdateHotKeyEnabled(config);
+                    UpdateLanguageAndHotKey(config);
                     break;
                 case AppConfigType.HotKey:
                     {
@@ -164,18 +169,6 @@ namespace AudioSelector
             };
 
             multi.AnotherAppLaunched += OnAnotherAppLaunched;
-        }
-
-        private void UpdateHotKeyEnabled(AppConfigProperty config)
-        {
-            if (config.Hotkey_enabled)
-            {
-                UpdateHotKey(config, true);
-                return;
-            }
-
-            taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
-            hotKey.Stop();
         }
 
         private void UpdateHotKey(AppConfigProperty config, bool initialize)
@@ -219,39 +212,45 @@ namespace AudioSelector
                 return;
             }
 
+            if(config.Hotkey_enabled == false)
+            {
+                hotKey.Stop();
+                return;
+            }
+
             if (!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
             {
                 ShowHotKeyError();
             }
         }
 
-        private static void UpdateTheme(AppConfigProperty config)
+        private void UpdateTheme(AppConfigProperty config)
         {
-            Current.Resources.MergedDictionaries.Clear();
-            switch (config.Theme)
+            dynamicResource.UpdateTheme(config.Theme);
+        }
+
+        private void UpdateLanguageAndHotKey(AppConfigProperty config, bool initialize = false)
+        {
+            var code = LanguageConverter.GetSupportedLanguageCode(config.Language);
+            CultureInfo culture = new(code);
+            System.Windows.Forms.Application.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+            // Update context menu language
+            contextMenu = new(appConfig);
+            taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
+            dynamicResource.UpdateLanguage(code);
+
+            // Update hotkey tooltip language
+            if (config.Hotkey_enabled)
             {
-                case SystemTheme.Light:
-                    Current.Resources.MergedDictionaries.Add(
-                        new ResourceDictionary() { Source = new Uri(LIGHT_THEME, UriKind.Relative) });
-                    break;
-                case SystemTheme.Dark:
-                    Current.Resources.MergedDictionaries.Add(
-                        new ResourceDictionary() { Source = new Uri(DARK_THEME, UriKind.Relative) });
-                    break;
-                case SystemTheme.System:
-                    SystemTheme theme = SystemRegistry.GetCurrentTheme();
-                    if (theme == SystemTheme.Dark)
-                    {
-                        Current.Resources.MergedDictionaries.Add(
-                            new ResourceDictionary() { Source = new Uri(DARK_THEME, UriKind.Relative) });
-                    }
-                    else
-                    {
-                        Current.Resources.MergedDictionaries.Add(
-                            new ResourceDictionary() { Source = new Uri(LIGHT_THEME, UriKind.Relative) });
-                    }
-                    break;
+                UpdateHotKey(config, initialize);
+                return;
             }
+
+            UpdateHotKey(config, initialize);
+            taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
         }
 
         private static void UpdateStartup(AppConfigProperty config)

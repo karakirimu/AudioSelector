@@ -6,9 +6,9 @@ namespace AudioSelector.Setting
 {
     public enum SystemTheme : int
     {
+        System,
         Light,
-        Dark,
-        System
+        Dark
     }
 
     internal class SystemRegistry

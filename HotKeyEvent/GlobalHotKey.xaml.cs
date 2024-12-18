@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -97,22 +98,24 @@ namespace HotKeyEvent
         }
 
         /// <summary>
+        /// Unregister hotkey
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (hotKeyId > 0)
+            {
+                UnSet(hotKeyId);
+            }
+            base.OnClosing(e);
+        }
+
+        /// <summary>
         /// Close hook and callback
         /// </summary>
         /// <param name="e">Eventargs</param>
         protected override void OnClosed(EventArgs e)
         {
-            if(source != null)
-            {
-                source.RemoveHook(hHook);
-                source = null;
-            }
-
-            if(hotKeyId > 0)
-            {
-                UnSet(hotKeyId);
-            }
-
             UnSetWindowProc();
             base.OnClosed(e);
         }

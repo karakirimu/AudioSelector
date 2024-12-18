@@ -11,6 +11,7 @@ namespace AudioSelector
     {
         public ContextMenuStrip ContextMenu { get; private set; }
         private readonly IAppConfig appConfig;
+        private Settings settingsWindow { get; set; }
 
         /// <summary>
         /// Menu item for application setting
@@ -38,7 +39,10 @@ namespace AudioSelector
 
         private void OpenSettingWindow(object sender, EventArgs e)
         {
-            new Settings(appConfig).ShowDialog();
+            if (settingsWindow.IsVisible == false)
+            {
+                settingsWindow.Show();
+            }
         }
 
         /// <summary>
@@ -58,6 +62,7 @@ namespace AudioSelector
             ContextMenu.Items.Add(AddSettingMenu());
             ContextMenu.Items.Add(AddExitMenu());
             appConfig = config;
+            settingsWindow = new Settings(appConfig);
         }
 
     }
