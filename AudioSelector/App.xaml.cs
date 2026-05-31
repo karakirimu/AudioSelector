@@ -108,8 +108,11 @@ namespace AudioSelector
             Exit += (o, e) =>
             {
                 // Prevent multiple instances
-                multi.AnotherAppLaunched -= OnAnotherAppLaunched;
-                multi.Stop();
+                if (multi != null)
+                {
+                    multi.AnotherAppLaunched -= OnAnotherAppLaunched;
+                    multi.Stop();
+                }
 
                 if(isLaunched == false) return;
 
@@ -310,6 +313,12 @@ namespace AudioSelector
 
         private void OnAnotherAppLaunched()
         {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(OnAnotherAppLaunched);
+                return;
+            }
+
             string exeName = System.IO.Path.GetFileNameWithoutExtension(Environment.ProcessPath);
             taskbarControl.ShowBalloonTip(3000,
                 exeName,
