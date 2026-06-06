@@ -5,6 +5,8 @@
     <!-- Setting window strings -->
     <sys:String x:Key="SettingTitle">設定</sys:String>
     <sys:String x:Key="SettingGeneral">一般</sys:String>
+    <sys:String x:Key="SettingSpeaker">スピーカー</sys:String>
+    <sys:String x:Key="SettingMicrophone">マイク</sys:String>
     
     <!-- General UserControl strings -->
     <sys:String x:Key="GeneralTheme">テーマ</sys:String>
@@ -14,6 +16,7 @@
     <sys:String x:Key="GeneralLanguage">言語</sys:String>
     <sys:String x:Key="LanguageSystem">システム</sys:String>
     <sys:String x:Key="GeneralHotkey">ホットキー</sys:String>
+    <sys:String x:Key="GeneralTrayDoubleClickTarget">トレイアイコンのダブルクリック起動</sys:String>
     <sys:String x:Key="GeneralStartup">スタートアップ時に起動</sys:String>
 
 </ResourceDictionary>

@@ -7,6 +7,12 @@ using static NativeCoreAudio.ComInterfaces;
 
 namespace AudioTools
 {
+    public enum AudioDeviceKind
+    {
+        Speaker,
+        Microphone
+    }
+
     /// <summary>
     /// Audio device enumerator
     /// </summary>
@@ -36,9 +42,20 @@ namespace AudioTools
         /// <returns>eRender audio device Id</returns>
         public static string GetDefaultDeviceEndpointId(ERole role)
         {
+            return GetDefaultDeviceEndpointId(AudioDeviceKind.Speaker, role);
+        }
+
+        /// <summary>
+        /// Get default AudioDeviceEndpoint
+        /// </summary>
+        /// <param name="kind">Audio device kind</param>
+        /// <param name="role">Audio role</param>
+        /// <returns>audio device Id</returns>
+        public static string GetDefaultDeviceEndpointId(AudioDeviceKind kind, ERole role)
+        {
             using SafeIMMDeviceEnumerator enumerator = new();
             using SafeIMMDevice device
-                = enumerator.GetDefaultAudioEndpoint(EDataFlow.eRender, role);
+                = enumerator.GetDefaultAudioEndpoint(GetDataFlow(kind), role);
 
             return device.GetId();
         }
@@ -49,10 +66,29 @@ namespace AudioTools
         /// <returns>Device information list</returns>
         public static IReadOnlyCollection<MultiMediaDevice> ListActiveRenderDevices()
         {
+            return ListActiveDevices(AudioDeviceKind.Speaker);
+        }
+
+        /// <summary>
+        /// Get eCapture active devices list
+        /// </summary>
+        /// <returns>Device information list</returns>
+        public static IReadOnlyCollection<MultiMediaDevice> ListActiveCaptureDevices()
+        {
+            return ListActiveDevices(AudioDeviceKind.Microphone);
+        }
+
+        /// <summary>
+        /// Get active devices list
+        /// </summary>
+        /// <param name="kind">Audio device kind</param>
+        /// <returns>Device information list</returns>
+        public static IReadOnlyCollection<MultiMediaDevice> ListActiveDevices(AudioDeviceKind kind)
+        {
             List<MultiMediaDevice> multiMediaDevices = [];
             using SafeIMMDeviceEnumerator enumerator = new();
             using SafeIMMDeviceCollection collection
-                = new(EDataFlow.eRender, DeviceState.ACTIVE, enumerator);
+                = new(GetDataFlow(kind), DeviceState.ACTIVE, enumerator);
 
             uint deviceCount = collection.GetCount();
 
@@ -70,7 +106,7 @@ namespace AudioTools
 
                 }catch(COMException ex)
                 {
-                    Debug.WriteLine($"[Enumeration.ListActiveRenderDevices] {ex.Message}");
+                    Debug.WriteLine($"[Enumeration.ListActiveDevices] {ex.Message}");
                 }
 
             }
@@ -145,6 +181,15 @@ namespace AudioTools
             }
 
             return connectors;
+        }
+
+        private static EDataFlow GetDataFlow(AudioDeviceKind kind)
+        {
+            return kind switch
+            {
+                AudioDeviceKind.Microphone => EDataFlow.eCapture,
+                AudioDeviceKind.Speaker or _ => EDataFlow.eRender,
+            };
         }
     }
 }

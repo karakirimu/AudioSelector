@@ -4,7 +4,7 @@ using static NativeCoreAudio.ComInterfaces;
 
 namespace AudioTools
 {
-    class Selection
+    public class Selection
     {
         public Selection()
         {
@@ -17,13 +17,22 @@ namespace AudioTools
         /// <param name="speakerId">audio device id</param>
         public static void SelectOutput(string speakerId)
         {
+            Select(speakerId);
+        }
+
+        /// <summary>
+        /// Set system audio device
+        /// </summary>
+        /// <param name="deviceId">audio device id</param>
+        public static void Select(string deviceId)
+        {
             using SafeIPolicyConfig config = new();
 
             try
             {
-                config.SetDefaultEndpoint(speakerId, ERole.eConsole);
-                config.SetDefaultEndpoint(speakerId, ERole.eMultimedia);
-                config.SetDefaultEndpoint(speakerId, ERole.eCommunications);
+                config.SetDefaultEndpoint(deviceId, ERole.eConsole);
+                config.SetDefaultEndpoint(deviceId, ERole.eMultimedia);
+                config.SetDefaultEndpoint(deviceId, ERole.eCommunications);
             }
             catch (Exception e)
             {

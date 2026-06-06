@@ -137,7 +137,9 @@
   </data>
   <data name="TaskbarToolTip" xml:space="preserve">
     <value>AudioSelector
-{0} キーを押すか、ダブルクリックで表示</value>
+スピーカー: {0}
+マイク: {1}
+ダブルクリック: {2}</value>
   </data>
   <data name="HotKeyRegistrationError" xml:space="preserve">
     <value>ホットキーの登録に失敗しました。
@@ -153,5 +155,14 @@
   <data name="TaskbarToolTipNoHotKey" xml:space="preserve">
     <value>AudioSelector
 ダブルクリックで表示</value>
+  </data>
+  <data name="HotKeyDisabled" xml:space="preserve">
+    <value>無効</value>
+  </data>
+  <data name="SettingSpeaker" xml:space="preserve">
+    <value>スピーカー</value>
+  </data>
+  <data name="SettingMicrophone" xml:space="preserve">
+    <value>マイク</value>
   </data>
 </root>

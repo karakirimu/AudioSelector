@@ -126,7 +126,9 @@
   </data>
   <data name="TaskbarToolTip" xml:space="preserve">
     <value>AudioSelector
-Press {0} or double-click this icon to display</value>
+Speaker: {0}
+Microphone: {1}
+Double-click: {2}</value>
   </data>
   <data name="KeyWin" xml:space="preserve">
     <value>Win</value>
@@ -160,5 +162,14 @@ Please check your task tray.</value>
   <data name="TaskbarToolTipNoHotKey" xml:space="preserve">
     <value>AudioSelector
 Double-click this icon to display</value>
+  </data>
+  <data name="HotKeyDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="SettingSpeaker" xml:space="preserve">
+    <value>Speaker</value>
+  </data>
+  <data name="SettingMicrophone" xml:space="preserve">
+    <value>Microphone</value>
   </data>
 </root>

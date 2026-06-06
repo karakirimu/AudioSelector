@@ -7,7 +7,11 @@ namespace AudioSelector
 {
     internal class AudioSelectorViewModel
     {
-        public ObservableCollection<MultiMediaDevice> Devices { get; set; }
+        public ObservableCollection<MultiMediaDevice> SpeakerDevices { get; set; }
+
+        public ObservableCollection<MultiMediaDevice> MicrophoneDevices { get; set; }
+
+        public AudioDeviceKind CurrentDeviceKind { get; set; }
 
         public IDeviceVolumeChangeEvent VolumeChangeEvent { get; set; }
 

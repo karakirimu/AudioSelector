@@ -5,6 +5,8 @@
     <!-- Setting window strings -->
     <sys:String x:Key="SettingTitle">Settings</sys:String>
     <sys:String x:Key="SettingGeneral">General</sys:String>
+    <sys:String x:Key="SettingSpeaker">Speaker</sys:String>
+    <sys:String x:Key="SettingMicrophone">Microphone</sys:String>
     
     <!-- General UserControl strings -->
     <sys:String x:Key="GeneralTheme">Theme</sys:String>
@@ -14,6 +16,7 @@
     <sys:String x:Key="GeneralLanguage">Language</sys:String>
     <sys:String x:Key="LanguageSystem">System</sys:String>
     <sys:String x:Key="GeneralHotkey">Hotkey</sys:String>
+    <sys:String x:Key="GeneralTrayDoubleClickTarget">Double-click tray icon</sys:String>
     <sys:String x:Key="GeneralStartup">Launch at startup</sys:String>
 
 </ResourceDictionary>

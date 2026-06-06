@@ -1,4 +1,4 @@
-﻿using AudioSelector.AudioDevice;
+using AudioSelector.AudioDevice;
 using AudioSelector.Properties;
 using AudioSelector.Setting;
 using AudioTools;
@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,9 +26,13 @@ namespace AudioSelector
     {
         private TaskbarIconControl taskbarControl;
         private TaskbarContextMenu contextMenu;
-        private AudioDeviceEnumerationEvent enumerationEvent;
+        private AudioDeviceEnumerationEvent speakerEnumerationEvent;
+        private AudioDeviceEnumerationEvent microphoneEnumerationEvent;
         private DeviceVolumeChangeEvent volumeChangeEvent;
-        private GlobalHotKey hotKey;
+        private GlobalHotKey speakerHotKey;
+        private GlobalHotKey microphoneHotKey;
+        private bool speakerHotKeyRegistered;
+        private bool microphoneHotKeyRegistered;
         private AudioSelectorViewModel viewModel;
         private AppConfig appConfig;
         private ServiceProvider container;
@@ -52,7 +57,8 @@ namespace AudioSelector
                 appConfig = new AppConfig();
                 viewModel = new AudioSelectorViewModel();
                 dynamicResource = new DynamicResource();
-                hotKey = new GlobalHotKey();
+                speakerHotKey = new GlobalHotKey();
+                microphoneHotKey = new GlobalHotKey();
                 GlobalHotKey.HotKeyDown += OnKeyChange;
 
                 // Load json
@@ -72,19 +78,25 @@ namespace AudioSelector
                 taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
 
                 // Audio device enumeration event setup
-                enumerationEvent = new();
-                enumerationEvent.Start();
-                enumerationEvent.Add += OnDeviceAdd;
-                enumerationEvent.Remove += OnDeviceRemoved;
+                speakerEnumerationEvent = new(AudioDeviceKind.Speaker);
+                microphoneEnumerationEvent = new(AudioDeviceKind.Microphone);
+                speakerEnumerationEvent.Start();
+                microphoneEnumerationEvent.Start();
+                speakerEnumerationEvent.Add += OnSpeakerDeviceAdd;
+                speakerEnumerationEvent.Remove += OnSpeakerDeviceRemoved;
+                microphoneEnumerationEvent.Add += OnMicrophoneDeviceAdd;
+                microphoneEnumerationEvent.Remove += OnMicrophoneDeviceRemoved;
 
                 // Audio device volume change event setup
                 volumeChangeEvent = new();
-                foreach (var device in enumerationEvent.Devices)
+                foreach (var device in speakerEnumerationEvent.Devices.Concat(microphoneEnumerationEvent.Devices))
                 {
                     volumeChangeEvent.AddCallback(device.Id);
                 }
 
-                viewModel.Devices = new ObservableCollection<MultiMediaDevice>(enumerationEvent.Devices);
+                viewModel.SpeakerDevices = new ObservableCollection<MultiMediaDevice>(speakerEnumerationEvent.Devices);
+                viewModel.MicrophoneDevices = new ObservableCollection<MultiMediaDevice>(microphoneEnumerationEvent.Devices);
+                viewModel.CurrentDeviceKind = AudioDeviceKind.Speaker;
                 viewModel.AppConfig = appConfig;
                 viewModel.VolumeChangeEvent = volumeChangeEvent;
 
@@ -95,7 +107,8 @@ namespace AudioSelector
 
                 var service = new ServiceCollection();
                 service.AddSingleton(viewModel);
-                service.AddSingleton(MainWindow);
+                service.AddSingleton(Current.MainWindow);
+                service.AddSingleton<Window>(Current.MainWindow);
                 container = service.BuildServiceProvider();
 
                 UpdateTheme(appConfig.Property);
@@ -116,15 +129,19 @@ namespace AudioSelector
 
                 if(isLaunched == false) return;
 
-                hotKey.Close();
-                foreach (var device in enumerationEvent.Devices)
+                speakerHotKey.Close();
+                microphoneHotKey.Close();
+                foreach (var device in speakerEnumerationEvent.Devices.Concat(microphoneEnumerationEvent.Devices))
                 {
-                    volumeChangeEvent.RemoveCallback(device.Id);
+                    RemoveVolumeCallback(device.Id);
                 }
 
-                enumerationEvent.Stop();
-                enumerationEvent.Add -= OnDeviceAdd;
-                enumerationEvent.Remove -= OnDeviceRemoved;
+                speakerEnumerationEvent.Stop();
+                microphoneEnumerationEvent.Stop();
+                speakerEnumerationEvent.Add -= OnSpeakerDeviceAdd;
+                speakerEnumerationEvent.Remove -= OnSpeakerDeviceRemoved;
+                microphoneEnumerationEvent.Add -= OnMicrophoneDeviceAdd;
+                microphoneEnumerationEvent.Remove -= OnMicrophoneDeviceRemoved;
             };
 
         }
@@ -137,15 +154,14 @@ namespace AudioSelector
                     UpdateTheme(config);
                     break;
                 case AppConfigType.Language:
-                case AppConfigType.HotKeyEnabled:
+                case AppConfigType.SpeakerHotKeyEnabled:
+                case AppConfigType.SpeakerHotKey:
+                case AppConfigType.SpeakerHotKeyId:
+                case AppConfigType.MicrophoneHotKeyEnabled:
+                case AppConfigType.MicrophoneHotKey:
+                case AppConfigType.MicrophoneHotKeyId:
+                case AppConfigType.TrayDoubleClickTarget:
                     UpdateLanguageAndHotKey(config);
-                    break;
-                case AppConfigType.HotKey:
-                    {
-                        UpdateHotKey(config, false);
-                        break;
-                    }
-                case AppConfigType.HotKeyId:
                     break;
                 case AppConfigType.Startup:
                     UpdateStartup(config);
@@ -174,57 +190,61 @@ namespace AudioSelector
             multi.AnotherAppLaunched += OnAnotherAppLaunched;
         }
 
-        private void UpdateHotKey(AppConfigProperty config, bool initialize)
+        private bool UpdateHotKey(GlobalHotKey targetHotKey, ushort id, HotKey hotkey, bool enabled, bool registered, bool initialize)
         {
-            List<string> keylist = [];
-            ushort modifier = 0;
-            if (config.Hotkey.Win)
-            {
-                modifier |= GlobalHotKey.MOD_WIN;
-                keylist.Add(AudioSelector.Properties.Resources.KeyWin);
-            }
-            if (config.Hotkey.Ctrl)
-            {
-                modifier |= GlobalHotKey.MOD_CONTROL;
-                keylist.Add(AudioSelector.Properties.Resources.KeyCtrl);
-            }
-            if (config.Hotkey.Alt)
-            {
-                modifier |= GlobalHotKey.MOD_ALT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyAlt);
-            }
-            if (config.Hotkey.Shift)
-            {
-                modifier |= GlobalHotKey.MOD_SHIFT;
-                keylist.Add(AudioSelector.Properties.Resources.KeyShift);
-            }
-            keylist.Add(config.Hotkey.VirtualKey);
-
-            string hotkeys = string.Join("+", keylist);
-            taskbarControl.Text = string.Format(AudioSelector.Properties.Resources.TaskbarToolTip, hotkeys);
-
-            Key key = (Key)Enum.Parse(typeof(Key), config.Hotkey.VirtualKey);
+            ushort modifier = GetModifier(hotkey);
+            Key key = (Key)Enum.Parse(typeof(Key), hotkey.VirtualKey);
             Keys formsKey = (Keys)KeyInterop.VirtualKeyFromKey(key);
 
-            if (initialize && config.Hotkey_enabled)
+            if(enabled == false)
             {
-                if (!hotKey.Start(config.Hotkey_id, modifier, (ushort)formsKey))
+                if (registered)
+                {
+                    targetHotKey.Stop();
+                }
+                return false;
+            }
+
+            if (initialize || !registered)
+            {
+                if (!targetHotKey.Start(id, modifier, (ushort)formsKey))
                 {
                     ShowHotKeyError();
+                    return false;
                 }
-                return;
+                return true;
             }
 
-            if(config.Hotkey_enabled == false)
-            {
-                hotKey.Stop();
-                return;
-            }
-
-            if (!hotKey.Update(config.Hotkey_id, modifier, (ushort)formsKey))
+            if (!targetHotKey.Update(id, modifier, (ushort)formsKey))
             {
                 ShowHotKeyError();
+                return false;
             }
+
+            return true;
+        }
+
+        private static ushort GetModifier(HotKey hotkey)
+        {
+            ushort modifier = 0;
+            if (hotkey.Win)
+            {
+                modifier |= GlobalHotKey.MOD_WIN;
+            }
+            if (hotkey.Ctrl)
+            {
+                modifier |= GlobalHotKey.MOD_CONTROL;
+            }
+            if (hotkey.Alt)
+            {
+                modifier |= GlobalHotKey.MOD_ALT;
+            }
+            if (hotkey.Shift)
+            {
+                modifier |= GlobalHotKey.MOD_SHIFT;
+            }
+
+            return modifier;
         }
 
         private void UpdateTheme(AppConfigProperty config)
@@ -245,15 +265,77 @@ namespace AudioSelector
             taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
             dynamicResource.UpdateLanguage(code);
 
-            // Update hotkey tooltip language
-            if (config.Hotkey_enabled)
+            speakerHotKeyRegistered = UpdateHotKey(
+                speakerHotKey,
+                config.SpeakerHotkeyId,
+                config.SpeakerHotkey,
+                config.SpeakerHotkeyEnabled,
+                speakerHotKeyRegistered,
+                initialize);
+            microphoneHotKeyRegistered = UpdateHotKey(
+                microphoneHotKey,
+                config.MicrophoneHotkeyId,
+                config.MicrophoneHotkey,
+                config.MicrophoneHotkeyEnabled,
+                microphoneHotKeyRegistered,
+                initialize);
+            UpdateTaskbarToolTip(config);
+        }
+
+        private void UpdateTaskbarToolTip(AppConfigProperty config)
+        {
+            string speakerHotkey = GetHotKeyText(config.SpeakerHotkey, config.SpeakerHotkeyEnabled);
+            string microphoneHotkey = GetHotKeyText(config.MicrophoneHotkey, config.MicrophoneHotkeyEnabled);
+            string doubleClickTarget = GetDeviceKindText(ConvertTarget(config.TrayDoubleClickTarget));
+
+            taskbarControl.Text = string.Format(
+                GetResourceString("TaskbarToolTip"),
+                speakerHotkey,
+                microphoneHotkey,
+                doubleClickTarget);
+        }
+
+        private static string GetHotKeyText(HotKey hotkey, bool enabled)
+        {
+            if (!enabled)
             {
-                UpdateHotKey(config, initialize);
-                return;
+                return GetResourceString("HotKeyDisabled");
             }
 
-            UpdateHotKey(config, initialize);
-            taskbarControl.Text = AudioSelector.Properties.Resources.TaskbarToolTipNoHotKey;
+            List<string> keylist = [];
+            if (hotkey.Win)
+            {
+                keylist.Add(AudioSelector.Properties.Resources.KeyWin);
+            }
+            if (hotkey.Ctrl)
+            {
+                keylist.Add(AudioSelector.Properties.Resources.KeyCtrl);
+            }
+            if (hotkey.Alt)
+            {
+                keylist.Add(AudioSelector.Properties.Resources.KeyAlt);
+            }
+            if (hotkey.Shift)
+            {
+                keylist.Add(AudioSelector.Properties.Resources.KeyShift);
+            }
+            keylist.Add(hotkey.VirtualKey);
+
+            return string.Join("+", keylist);
+        }
+
+        private static string GetDeviceKindText(AudioDeviceKind kind)
+        {
+            return kind switch
+            {
+                AudioDeviceKind.Microphone => GetResourceString("SettingMicrophone"),
+                AudioDeviceKind.Speaker or _ => GetResourceString("SettingSpeaker"),
+            };
+        }
+
+        private static string GetResourceString(string name)
+        {
+            return AudioSelector.Properties.Resources.ResourceManager.GetString(name) ?? name;
         }
 
         private static void UpdateStartup(AppConfigProperty config)
@@ -293,12 +375,30 @@ namespace AudioSelector
 
         private void OnTaskIconDoubleClick(object sender, EventArgs e)
         {
-            ShowSelectWindow();
+            ShowSelectWindow(ConvertTarget(appConfig.Property.TrayDoubleClickTarget));
         }
 
         private void OnKeyChange(int param)
         {
-            ShowSelectWindow();
+            if (param == appConfig.Property.MicrophoneHotkeyId)
+            {
+                ShowSelectWindow(AudioDeviceKind.Microphone);
+                return;
+            }
+
+            if (param == appConfig.Property.SpeakerHotkeyId)
+            {
+                ShowSelectWindow(AudioDeviceKind.Speaker);
+            }
+        }
+
+        private static AudioDeviceKind ConvertTarget(TrayDoubleClickTarget target)
+        {
+            return target switch
+            {
+                TrayDoubleClickTarget.Microphone => AudioDeviceKind.Microphone,
+                TrayDoubleClickTarget.Speaker or _ => AudioDeviceKind.Speaker,
+            };
         }
 
         private static void ShowHotKeyError()
@@ -329,9 +429,10 @@ namespace AudioSelector
         /// <summary>
         /// Show audio device selector window
         /// </summary>
-        private void ShowSelectWindow()
+        private void ShowSelectWindow(AudioDeviceKind kind)
         {
-            if (enumerationEvent.Devices.Count == 0)
+            IReadOnlyCollection<MultiMediaDevice> devices = GetDevices(kind);
+            if (devices.Count == 0)
             {
                 Debug.WriteLine($"[App.ShowSelectWindow] No device listed");
                 return;
@@ -340,6 +441,7 @@ namespace AudioSelector
             try
             {
                 taskbarControl.Visible = false;
+                viewModel.CurrentDeviceKind = kind;
                 Window window = container.GetRequiredService<Window>();
 
                 // Display the window at the cursor position.
@@ -373,18 +475,60 @@ namespace AudioSelector
             }
         }
 
-        private void OnDeviceAdd(MultiMediaDevice device)
+        private IReadOnlyCollection<MultiMediaDevice> GetDevices(AudioDeviceKind kind)
         {
-            Debug.WriteLine("[App.OnDeviceAdd]");
-            viewModel.Devices.Add(device);
+            return kind switch
+            {
+                AudioDeviceKind.Microphone => microphoneEnumerationEvent.Devices,
+                AudioDeviceKind.Speaker or _ => speakerEnumerationEvent.Devices,
+            };
         }
 
-        private void OnDeviceRemoved(MultiMediaDevice device)
+        private void OnSpeakerDeviceAdd(MultiMediaDevice device)
         {
-            Debug.WriteLine("[App.OnDeviceRemove]");
-            if (viewModel.Devices.Remove(viewModel.Devices.Where(i => i.Id == device.Id).Single()))
+            Debug.WriteLine("[App.OnSpeakerDeviceAdd]");
+            volumeChangeEvent.AddCallback(device.Id);
+            viewModel.SpeakerDevices.Add(device);
+        }
+
+        private void OnSpeakerDeviceRemoved(MultiMediaDevice device)
+        {
+            Debug.WriteLine("[App.OnSpeakerDeviceRemove]");
+            RemoveVolumeCallback(device.Id);
+            MultiMediaDevice foundDevice = viewModel.SpeakerDevices.FirstOrDefault(i => i.Id == device.Id);
+            if (foundDevice != null && viewModel.SpeakerDevices.Remove(foundDevice))
             {
-                Debug.WriteLine("[App.OnDeviceRemove] Remove success");
+                Debug.WriteLine("[App.OnSpeakerDeviceRemove] Remove success");
+            }
+        }
+
+        private void OnMicrophoneDeviceAdd(MultiMediaDevice device)
+        {
+            Debug.WriteLine("[App.OnMicrophoneDeviceAdd]");
+            volumeChangeEvent.AddCallback(device.Id);
+            viewModel.MicrophoneDevices.Add(device);
+        }
+
+        private void OnMicrophoneDeviceRemoved(MultiMediaDevice device)
+        {
+            Debug.WriteLine("[App.OnMicrophoneDeviceRemove]");
+            RemoveVolumeCallback(device.Id);
+            MultiMediaDevice foundDevice = viewModel.MicrophoneDevices.FirstOrDefault(i => i.Id == device.Id);
+            if (foundDevice != null && viewModel.MicrophoneDevices.Remove(foundDevice))
+            {
+                Debug.WriteLine("[App.OnMicrophoneDeviceRemove] Remove success");
+            }
+        }
+
+        private void RemoveVolumeCallback(string deviceId)
+        {
+            try
+            {
+                volumeChangeEvent.RemoveCallback(deviceId);
+            }
+            catch (COMException ex)
+            {
+                Debug.WriteLine($"[App.RemoveVolumeCallback] {ex.Message}");
             }
         }
     }

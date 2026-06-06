@@ -33,6 +33,27 @@ namespace AudioToolsTest
         }
 
         [Test]
+        public void EnumCaptureDevices()
+        {
+            IReadOnlyCollection<MultiMediaDevice> devices
+                = Enumeration.ListActiveCaptureDevices();
+
+            foreach (MultiMediaDevice device in devices)
+            {
+                Console.WriteLine($"Name: {device.DeviceName}, ID: {device.Id}");
+
+                foreach (var connector in device.Connectors)
+                {
+                    Console.WriteLine($"Connected: {connector.Connected}," +
+                        $" DataFlow: {connector.Flow}," +
+                        $" ConnectionType: {connector.Type}");
+                }
+            }
+
+            Assert.Pass();
+        }
+
+        [Test]
         public void GetDefaultEndpoint()
         {
             Console.WriteLine($"Default Endpoint: " +
@@ -41,9 +62,31 @@ namespace AudioToolsTest
         }
 
         [Test]
+        public void GetDefaultCaptureEndpoint()
+        {
+            try
+            {
+                Console.WriteLine($"Default Capture Endpoint: " +
+                    $"{Enumeration.GetDefaultDeviceEndpointId(AudioDeviceKind.Microphone, ComInterfaces.ERole.eMultimedia)}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Assert.Inconclusive("Default capture endpoint is not available in this environment.");
+            }
+
+            Assert.Pass();
+        }
+
+        [Test]
         public void SetDefaultEndpoint()
         {
             string speakerId = "{0.0.0.00000000}.{<uuid of device>}";
+
+            if (speakerId.Contains("<uuid of device>"))
+            {
+                Assert.Inconclusive("Set speakerId manually before running this device-changing test.");
+            }
 
             using SafeIPolicyConfig config = new();
 
