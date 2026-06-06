@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="{DynamicResource SettingTitle}" Height="450" Width="600">
+        Title="{DynamicResource SettingTitle}" Height="450" Width="640">
 
     <Grid>
         <Grid.RowDefinitions>
