@@ -193,30 +193,53 @@ namespace AudioSelector
 
             button.ApplyTemplate();
 
-            TextBlock volumeIcon = (TextBlock)button.Template.FindName("VolumeIcon", button);
-            volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
-            volumeIcon.Text = GetDeviceIcon(kind, id);
+            UpdateButtonIcon(button, kind, id);
 
             button.Click += OnButtonItemClick;
             return button;
         }
 
-        private static string GetDeviceIcon(AudioDeviceKind kind, string id)
+        private void UpdateButtonIcon(RadioButton button, AudioDeviceKind kind, string id)
         {
-            return kind == AudioDeviceKind.Microphone ? GetMicIcon(id) : GetVolumeIcon(id);
+            TextBlock volumeIcon = (TextBlock)button.Template.FindName("VolumeIcon", button);
+            Image microphoneIcon = (Image)button.Template.FindName("MicrophoneIcon", button);
+
+            if (volumeIcon == null || microphoneIcon == null)
+            {
+                return;
+            }
+
+            if (kind == AudioDeviceKind.Microphone)
+            {
+                volumeIcon.Visibility = Visibility.Collapsed;
+                microphoneIcon.Visibility = Visibility.Visible;
+                microphoneIcon.Source = GetMicrophoneImageSourceById(id);
+                return;
+            }
+
+            microphoneIcon.Source = null;
+            microphoneIcon.Visibility = Visibility.Collapsed;
+            volumeIcon.Visibility = Visibility.Visible;
+            volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
+            volumeIcon.Text = GetVolumeIcon(id);
         }
 
-        private static string GetMicIcon(string id)
+        private ImageSource GetMicrophoneImageSourceById(string id)
         {
             try
             {
-                return MicIconSelect(Enumeration.GetMute(id), Enumeration.GetMasterVolume(id));
+                return GetMicrophoneImageSourceByResourceKey(MicIconSelect(Enumeration.GetMute(id), Enumeration.GetMasterVolume(id)));
             }
             catch (COMException ex)
             {
-                Debug.WriteLine($"[MainWindow.GetMicIcon] {ex.Message}");
-                return MicIconSelect(false, 1000000);
+                Debug.WriteLine($"[MainWindow.GetMicrophoneImageSourceById] {ex.Message}");
+                return GetMicrophoneImageSourceByResourceKey(MicIconSelect(false, 1000000));
             }
+        }
+
+        private ImageSource GetMicrophoneImageSourceByResourceKey(string resourceKey)
+        {
+            return TryFindResource(resourceKey) as ImageSource;
         }
 
         private static string GetVolumeIcon(string id)
@@ -247,15 +270,27 @@ namespace AudioSelector
             if (deviceCollection.TryGetValue(args.deviceId, out RadioButton value))
             {
                 TextBlock volumeIcon = (TextBlock)value.Template.FindName("VolumeIcon", value);
+                Image microphoneIcon = (Image)value.Template.FindName("MicrophoneIcon", value);
                 AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
 
-                if (volumeIcon != null && model != null)
+                if (volumeIcon != null && microphoneIcon != null && model != null)
                 {
-                    volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
-                    volumeIcon.Text = model.CurrentDeviceKind == AudioDeviceKind.Microphone
-                        ? MicIconSelect(args.muted, args.masterVolume)
-                        : VolumeIconSelect(args.muted, args.masterVolume);
-                    volumeIcon.InvalidateVisual();
+                    if (model.CurrentDeviceKind == AudioDeviceKind.Microphone)
+                    {
+                        volumeIcon.Visibility = Visibility.Collapsed;
+                        microphoneIcon.Visibility = Visibility.Visible;
+                        microphoneIcon.Source = GetMicrophoneImageSourceByResourceKey(MicIconSelect(args.muted, args.masterVolume));
+                        microphoneIcon.InvalidateVisual();
+                    }
+                    else
+                    {
+                        microphoneIcon.Source = null;
+                        microphoneIcon.Visibility = Visibility.Collapsed;
+                        volumeIcon.Visibility = Visibility.Visible;
+                        volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
+                        volumeIcon.Text = VolumeIconSelect(args.muted, args.masterVolume);
+                        volumeIcon.InvalidateVisual();
+                    }
                 }
             }
             
@@ -291,11 +326,29 @@ namespace AudioSelector
 
         private static string MicIconSelect(bool muted, float masterVolume)
         {
-            const string MicrophoneIconGlyph = "\uE720";
-            const string MicrophoneOffIconGlyph = "\uF781";
-
             int vol = (int)(masterVolume * 1000000);
-            return muted || vol <= 1 ? MicrophoneOffIconGlyph : MicrophoneIconGlyph;
+
+            if (muted)
+            {
+                return "MicrophoneMuteIcon";
+            }
+
+            if (vol > 666666)
+            {
+                return "MicrophoneHighIcon";
+            }
+
+            if (vol > 333333)
+            {
+                return "MicrophoneMidIcon";
+            }
+
+            if (vol > 1)
+            {
+                return "MicrophoneLowIcon";
+            }
+
+            return "MicrophoneMuteIcon";
         }
 
         private void OnButtonItemClick(object sender, RoutedEventArgs e)
