@@ -41,11 +41,18 @@ namespace AudioSelector
         // Prevent multiple instances
         private MultiInstanceHandler multi;
         private bool isLaunched = false;
+        private bool isStoreApp;
 
         public App()
         {
             Startup += (o, e) =>
             {
+                isStoreApp = StartupStoreApp.IsStoreApp();
+                if (isStoreApp)
+                {
+                    StoreCrashReporting.Register(this);
+                }
+
                 // Prevent multiple instances
                 multi = new MultiInstanceHandler();
                 if (!multi.Start())
@@ -338,10 +345,8 @@ namespace AudioSelector
             return AudioSelector.Properties.Resources.ResourceManager.GetString(name) ?? name;
         }
 
-        private static void UpdateStartup(AppConfigProperty config)
+        private void UpdateStartup(AppConfigProperty config)
         {
-            bool isStoreApp = StartupStoreApp.IsStoreApp();
-
             if (isStoreApp)
             {
                 if (config.Startup)
