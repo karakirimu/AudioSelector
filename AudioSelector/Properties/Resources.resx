@@ -172,4 +172,10 @@ Double-click this icon to display</value>
   <data name="SettingMicrophone" xml:space="preserve">
     <value>Microphone</value>
   </data>
+  <data name="mic_black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>mic_black.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="mic_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>mic_white.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

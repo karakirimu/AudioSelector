@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -37,6 +38,8 @@ namespace AudioSelector
         private AppConfig appConfig;
         private ServiceProvider container;
         private DynamicResource dynamicResource;
+        private System.Drawing.Icon microphoneTaskbarIconLight;
+        private System.Drawing.Icon microphoneTaskbarIconDark;
 
         // Prevent multiple instances
         private MultiInstanceHandler multi;
@@ -149,6 +152,8 @@ namespace AudioSelector
                 speakerEnumerationEvent.Remove -= OnSpeakerDeviceRemoved;
                 microphoneEnumerationEvent.Add -= OnMicrophoneDeviceAdd;
                 microphoneEnumerationEvent.Remove -= OnMicrophoneDeviceRemoved;
+                microphoneTaskbarIconLight?.Dispose();
+                microphoneTaskbarIconDark?.Dispose();
             };
 
         }
@@ -159,6 +164,7 @@ namespace AudioSelector
             {
                 case AppConfigType.Theme:
                     UpdateTheme(config);
+                    UpdateTaskbarIcon(config);
                     break;
                 case AppConfigType.Language:
                 case AppConfigType.SpeakerHotKeyEnabled:
@@ -167,8 +173,11 @@ namespace AudioSelector
                 case AppConfigType.MicrophoneHotKeyEnabled:
                 case AppConfigType.MicrophoneHotKey:
                 case AppConfigType.MicrophoneHotKeyId:
+                    UpdateLanguageAndHotKey(config);
+                    break;
                 case AppConfigType.TrayDoubleClickTarget:
                     UpdateLanguageAndHotKey(config);
+                    UpdateTaskbarIcon(config);
                     break;
                 case AppConfigType.Startup:
                     UpdateStartup(config);
@@ -178,21 +187,11 @@ namespace AudioSelector
 
         private void InitializeTaskbarIcon()
         {
-            // Taskbar icon is always system theme.
-            SystemTheme theme = SystemRegistry.GetCurrentTheme();
-            System.Drawing.Icon taskbarIcon
-            = theme switch
-            {
-                SystemTheme.Dark => AudioSelector.Properties.Resources.appicon_white,
-                SystemTheme.Light or SystemTheme.System => AudioSelector.Properties.Resources.appicon_black,
-                _ => AudioSelector.Properties.Resources.appicon_black,
-            };
-
             taskbarControl = new()
             {
-                Icon = taskbarIcon,
                 Visible = true
             };
+            UpdateTaskbarIcon(appConfig.Property);
 
             multi.AnotherAppLaunched += OnAnotherAppLaunched;
         }
@@ -257,6 +256,45 @@ namespace AudioSelector
         private void UpdateTheme(AppConfigProperty config)
         {
             dynamicResource.UpdateTheme(config.Theme);
+        }
+
+        private void UpdateTaskbarIcon(AppConfigProperty config)
+        {
+            taskbarControl.Icon = GetTaskbarIcon(config.TrayDoubleClickTarget);
+        }
+
+        private System.Drawing.Icon GetTaskbarIcon(TrayDoubleClickTarget target)
+        {
+            // Taskbar icon is always system theme.
+            bool useWhiteIcon = SystemRegistry.GetCurrentTheme() == SystemTheme.Dark;
+
+            return target switch
+            {
+                TrayDoubleClickTarget.Microphone => GetMicrophoneTaskbarIcon(useWhiteIcon),
+                TrayDoubleClickTarget.Speaker or _ => useWhiteIcon
+                    ? AudioSelector.Properties.Resources.appicon_white
+                    : AudioSelector.Properties.Resources.appicon_black,
+            };
+        }
+
+        private System.Drawing.Icon GetMicrophoneTaskbarIcon(bool useWhiteIcon)
+        {
+            if (useWhiteIcon)
+            {
+                microphoneTaskbarIconDark ??= CreateIconFromBytes(AudioSelector.Properties.Resources.mic_white);
+                return microphoneTaskbarIconDark;
+            }
+
+            microphoneTaskbarIconLight ??= CreateIconFromBytes(AudioSelector.Properties.Resources.mic_black);
+            return microphoneTaskbarIconLight;
+        }
+
+        private static System.Drawing.Icon CreateIconFromBytes(byte[] iconBytes)
+        {
+            using MemoryStream memoryStream = new(iconBytes);
+            using System.Drawing.Icon icon = new(memoryStream);
+
+            return (System.Drawing.Icon)icon.Clone();
         }
 
         private void UpdateLanguageAndHotKey(AppConfigProperty config, bool initialize = false)
