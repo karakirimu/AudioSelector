@@ -74,7 +74,7 @@ namespace AudioSelectorTest
         }
 
         /// <summary>
-        /// Version 1.1.3 to 1.2.0 Setting Update
+        /// Version 1.1.3 to 1.3.0 Setting Update
         /// </summary>
         [Test]
         public void UpdateFrom113()
@@ -117,6 +117,9 @@ namespace AudioSelectorTest
             Assert.That(themeDark.Theme, Is.EqualTo(SystemTheme.Dark));
         }
 
+        /// <summary>
+        /// Version 1.2.0 to 1.3.0 Setting Update
+        /// </summary>
         [Test]
         public void UpdateFrom120()
         {
