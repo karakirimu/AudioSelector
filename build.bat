@@ -37,5 +37,3 @@ powershell Compress-Archive -Path "./publish/AudioSelector_%version%_x64" -Desti
 powershell Compress-Archive -Path "./publish/AudioSelector_%version%_ARM64" -DestinationPath "./publish/AudioSelector_%version%_ARM64.zip" -Force
 
 echo Publish complete.
-
-pause .

@@ -74,6 +74,8 @@ namespace AudioSelector
                 // Load json
                 appConfig.Load();
 
+                UpdateTheme(appConfig.Property);
+
                 // Set system theme.
                 InitializeTaskbarIcon();
 
@@ -84,8 +86,7 @@ namespace AudioSelector
                 taskbarControl.DoubleClick += OnTaskIconDoubleClick;
 
                 // Add context menu to taskbar icon.
-                contextMenu = new(appConfig);
-                taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
+                UpdateTaskbarContextMenu(appConfig.Property);
 
                 // Audio device enumeration event setup
                 speakerEnumerationEvent = new(AudioDeviceKind.Speaker);
@@ -121,7 +122,6 @@ namespace AudioSelector
                 service.AddSingleton<Window>(Current.MainWindow);
                 container = service.BuildServiceProvider();
 
-                UpdateTheme(appConfig.Property);
                 UpdateStartup(appConfig.Property);
                 appConfig.UserConfigurationUpdate += OnUserConfigurationUpdate;
                 isLaunched = true;
@@ -164,6 +164,7 @@ namespace AudioSelector
             {
                 case AppConfigType.Theme:
                     UpdateTheme(config);
+                    UpdateTaskbarContextMenu(config);
                     UpdateTaskbarIcon(config);
                     break;
                 case AppConfigType.Language:
@@ -174,9 +175,11 @@ namespace AudioSelector
                 case AppConfigType.MicrophoneHotKey:
                 case AppConfigType.MicrophoneHotKeyId:
                     UpdateLanguageAndHotKey(config);
+                    UpdateTaskbarContextMenu(config);
                     break;
                 case AppConfigType.TrayDoubleClickTarget:
                     UpdateLanguageAndHotKey(config);
+                    UpdateTaskbarContextMenu(config);
                     UpdateTaskbarIcon(config);
                     break;
                 case AppConfigType.Startup:
@@ -258,6 +261,18 @@ namespace AudioSelector
             dynamicResource.UpdateTheme(config.Theme);
         }
 
+        private void UpdateTaskbarContextMenu(AppConfigProperty config)
+        {
+            if (contextMenu == null)
+            {
+                contextMenu = new(appConfig, config.Theme);
+                taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
+                return;
+            }
+
+            contextMenu.Update(config.Theme);
+        }
+
         private void UpdateTaskbarIcon(AppConfigProperty config)
         {
             taskbarControl.Icon = GetTaskbarIcon(config.TrayDoubleClickTarget);
@@ -271,10 +286,15 @@ namespace AudioSelector
             return target switch
             {
                 TrayDoubleClickTarget.Microphone => GetMicrophoneTaskbarIcon(useWhiteIcon),
-                TrayDoubleClickTarget.Speaker or _ => useWhiteIcon
-                    ? AudioSelector.Properties.Resources.appicon_white
-                    : AudioSelector.Properties.Resources.appicon_black,
+                TrayDoubleClickTarget.Speaker or _ => GetApplicationTaskbarIcon(useWhiteIcon),
             };
+        }
+
+        private static System.Drawing.Icon GetApplicationTaskbarIcon(bool useWhiteIcon)
+        {
+            return useWhiteIcon
+                ? AudioSelector.Properties.Resources.appicon_white
+                : AudioSelector.Properties.Resources.appicon_black;
         }
 
         private System.Drawing.Icon GetMicrophoneTaskbarIcon(bool useWhiteIcon)
@@ -304,10 +324,6 @@ namespace AudioSelector
             System.Windows.Forms.Application.CurrentCulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
-
-            // Update context menu language
-            contextMenu = new(appConfig);
-            taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
             dynamicResource.UpdateLanguage(code);
 
             speakerHotKeyRegistered = UpdateHotKey(
@@ -331,13 +347,11 @@ namespace AudioSelector
         {
             string speakerHotkey = GetHotKeyText(config.SpeakerHotkey, config.SpeakerHotkeyEnabled);
             string microphoneHotkey = GetHotKeyText(config.MicrophoneHotkey, config.MicrophoneHotkeyEnabled);
-            string doubleClickTarget = GetDeviceKindText(ConvertTarget(config.TrayDoubleClickTarget));
 
             taskbarControl.Text = string.Format(
                 GetResourceString("TaskbarToolTip"),
                 speakerHotkey,
-                microphoneHotkey,
-                doubleClickTarget);
+                microphoneHotkey);
         }
 
         private static string GetHotKeyText(HotKey hotkey, bool enabled)
@@ -502,6 +516,7 @@ namespace AudioSelector
                     Debug.WriteLine($"Window Position: X = {window.Left}, Y = {window.Top}");
                 }
 
+                taskbarControl.Visible = true;
                 window.Show();
                 if (window.Activate())
                 {
@@ -514,7 +529,10 @@ namespace AudioSelector
             }
             finally
             {
-                taskbarControl.Visible = true;
+                if (!taskbarControl.Visible)
+                {
+                    taskbarControl.Visible = true;
+                }
             }
         }
 

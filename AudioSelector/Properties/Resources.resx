@@ -127,8 +127,7 @@
   <data name="TaskbarToolTip" xml:space="preserve">
     <value>AudioSelector
 Speaker: {0}
-Microphone: {1}
-Double-click: {2}</value>
+Microphone: {1}</value>
   </data>
   <data name="KeyWin" xml:space="preserve">
     <value>Win</value>

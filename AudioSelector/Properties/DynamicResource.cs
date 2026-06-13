@@ -1,4 +1,4 @@
-﻿using AudioSelector.Setting;
+using AudioSelector.Setting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,6 +29,18 @@ namespace AudioSelector.Properties
             UpdateMergedDictionaries();
         }
 
+        internal static SystemTheme ResolveTheme(SystemTheme theme)
+        {
+            return theme == SystemTheme.System ? SystemRegistry.GetCurrentTheme() : theme;
+        }
+
+        internal static ResourceDictionary LoadThemeDictionary(SystemTheme theme)
+        {
+            string resourcePath = ResolveTheme(theme) == SystemTheme.Dark ? DARK_THEME : LIGHT_THEME;
+
+            return new ResourceDictionary() { Source = new Uri(resourcePath, UriKind.Relative) };
+        }
+
         public void UpdateLanguage(string languageCode)
         {
             LanguageCode = languageCode;
@@ -51,7 +63,7 @@ namespace AudioSelector.Properties
                         new ResourceDictionary() { Source = new Uri(DARK_THEME, UriKind.Relative) });
                     break;
                 case SystemTheme.System:
-                    SystemTheme theme = SystemRegistry.GetCurrentTheme();
+                    SystemTheme theme = ResolveTheme(Theme);
                     if (theme == SystemTheme.Dark)
                     {
                         Application.Current.Resources.MergedDictionaries.Add(

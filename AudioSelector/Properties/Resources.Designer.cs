@@ -213,8 +213,7 @@ namespace AudioSelector.Properties {
         /// <summary>
         ///   AudioSelector
         ///Speaker: {0}
-        ///Microphone: {1}
-        ///Double-click: {2} に類似しているローカライズされた文字列を検索します。
+        ///Microphone: {1} に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TaskbarToolTip {
             get {

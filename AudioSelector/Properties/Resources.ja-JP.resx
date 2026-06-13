@@ -120,8 +120,7 @@
   <data name="TaskbarToolTip" xml:space="preserve">
     <value>AudioSelector
 スピーカー: {0}
-マイク: {1}
-ダブルクリック: {2}</value>
+マイク: {1}</value>
   </data>
   <data name="KeyWin" xml:space="preserve">
     <value>Win</value>
