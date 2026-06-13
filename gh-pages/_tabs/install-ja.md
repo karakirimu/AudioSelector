@@ -5,7 +5,7 @@ translation_key: install
 title: インストール
 description: >-
   このページではソフトウェアのインストール方法を説明します。
-date: 2026-06-07 17:00:00 +0900
+date: 2026-06-12 17:00:00 +0900
 categories: [Article, Tutorial]
 tags: [getting started]
 pin: true

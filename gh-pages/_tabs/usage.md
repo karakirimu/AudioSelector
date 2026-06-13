@@ -111,7 +111,7 @@ If the key is changed, it is also shown in the task tray icon tooltip.
 
 - The tooltip shows the current settings.
 
-- Double-click to open the selection window configured in [Task Tray Icon Double-Click Action](#general).
+- Double-click to open the selection window configured in [Double-click tray icon](#general).
 
 ![appimage_4](/assets/img/usage/tasktray_tooltip.png)
 
