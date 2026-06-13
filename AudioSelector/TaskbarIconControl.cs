@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -72,6 +72,18 @@ namespace AudioSelector
             remove
             {
                 notifyIcon.DoubleClick -= value;
+            }
+        }
+
+        public event MouseEventHandler MouseUp
+        {
+            add
+            {
+                notifyIcon.MouseUp += value;
+            }
+            remove
+            {
+                notifyIcon.MouseUp -= value;
             }
         }
 

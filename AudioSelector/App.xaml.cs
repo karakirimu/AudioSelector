@@ -84,8 +84,9 @@ namespace AudioSelector
 
                 // Add DoubleClick event to taskbar icon.
                 taskbarControl.DoubleClick += OnTaskIconDoubleClick;
+                taskbarControl.MouseUp += OnTaskIconMouseUp;
 
-                // Add context menu to taskbar icon.
+                // Add context menu control to taskbar icon.
                 UpdateTaskbarContextMenu(appConfig.Property);
 
                 // Audio device enumeration event setup
@@ -266,7 +267,6 @@ namespace AudioSelector
             if (contextMenu == null)
             {
                 contextMenu = new(appConfig, config.Theme);
-                taskbarControl.ContextMenuStrip = contextMenu.ContextMenu;
                 return;
             }
 
@@ -432,7 +432,18 @@ namespace AudioSelector
 
         private void OnTaskIconDoubleClick(object sender, EventArgs e)
         {
+            contextMenu?.Close();
             ShowSelectWindow(ConvertTarget(appConfig.Property.TrayDoubleClickTarget));
+        }
+
+        private void OnTaskIconMouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+            {
+                return;
+            }
+
+            contextMenu?.ShowAtCursor(System.Windows.Forms.Cursor.Position);
         }
 
         private void OnKeyChange(int param)
