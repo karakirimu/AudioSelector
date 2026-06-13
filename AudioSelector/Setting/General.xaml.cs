@@ -1,6 +1,5 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace AudioSelector.Setting
 {
@@ -28,54 +27,11 @@ namespace AudioSelector.Setting
 
         private void GeneralSettingPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(viewModel.HotKeyEnabled))
-            {
-                appConfig?.SetHotKeyEnabled(viewModel.HotKeyEnabled);
-                return;
-            }
-
-            if(e.PropertyName == nameof(viewModel.ModifierCtrl)
-                || e.PropertyName == nameof(viewModel.ModifierShift)
-                || e.PropertyName == nameof(viewModel.ModifierAlt)
-                || e.PropertyName == nameof(viewModel.ModifierWin)
-                || e.PropertyName == nameof(viewModel.VKey))
-            {
-                HotKey result = new()
-                {
-                    Ctrl = viewModel.ModifierCtrl,
-                    Shift = viewModel.ModifierShift,
-                    Alt = viewModel.ModifierAlt,
-                    Win = viewModel.ModifierWin,
-                    VirtualKey = viewModel.VKey
-                };
-
-                appConfig?.SetHotkey(result);
-                return;
-            }
-
             if(e.PropertyName == nameof(viewModel.AutoStart))
             {
                 appConfig?.SetStartup(viewModel.AutoStart);
                 return;
             }
-        }
-
-        private void LineEdit_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            lineEdit.Text = e.Key.ToString();
-            lineEdit.CaretIndex = lineEdit.Text.Length;
-
-            HotKey result = new()
-            {
-                Ctrl = viewModel.ModifierCtrl,
-                Shift = viewModel.ModifierShift,
-                Alt = viewModel.ModifierAlt,
-                Win = viewModel.ModifierWin,
-                VirtualKey = e.Key.ToString()
-            };
-
-            appConfig?.SetHotkey(result);
-            e.Handled = true;
         }
 
         private void ThemeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -93,6 +49,15 @@ namespace AudioSelector.Setting
                 var lang = (string)comboBoxItem.Content;
                 string cultureName = LanguageConverter.GetSupportedLanguage(lang);
                 appConfig?.SetLanguage(cultureName);
+            }
+        }
+
+        private void TrayDoubleClickTargetSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (trayDoubleClickTargetComboBox.SelectedItem != null && trayDoubleClickTargetComboBox.SelectedItem is ComboBoxItem comboBoxItem)
+            {
+                var target = (TrayDoubleClickTarget)(int.Parse(comboBoxItem.Tag.ToString()));
+                appConfig?.SetTrayDoubleClickTarget(target);
             }
         }
     }

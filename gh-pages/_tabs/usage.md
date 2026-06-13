@@ -1,8 +1,11 @@
 ---
-layout: post
+layout: page
+lang: en
+translation_key: usage
+title: Usage
 description: >-
-  This page describes how to use this software.
-date: 2024-11-16 22:08:02 +0900
+  Explanation of how to use the software
+date: 2026-06-12 22:08:02 +0900
 categories: [Article, Tutorial]
 tags: [getting started]
 pin: true
@@ -12,58 +15,116 @@ order: 2
 
 When the executable file is run, it will be stored in the task tray.
 
-![appimage_1]({{site.baseurl}}../../assets/img/usage/tasktray.png)
+![init](/assets/img/usage/sp_tasktray.png)
 
 ## Selection screen
 
-![appimage_2]({{site.baseurl}}../../assets/img/usage/selector.png)
-
-- By pressing Ctrl + Alt + V keys or double-clicking the task tray icon. The selection screen will appear.
-
 - The currently selected device is indicated by a green circle.
 
-- Select the output device by moving the selected device with the tab key and pressing the Enter key, or by clicking the mouse on the device you want to output.
+- Move to the target device with the Tab key and press Enter, or click the device with the mouse to select it.
+
+**Output Device**
+
+![speaker_selector](/assets/img/usage/sp_selector.png)
+
+- Press `Ctrl + Alt + V`, or if the task tray icon double-click action is changed to `Speaker` in [Settings](#settings), the selection screen will appear.
+
+**Input Device**
+
+![mic_select](/assets/img/usage/mic_selector.png)
+
+- Press `Ctrl + Alt + N`, or if the task tray icon double-click action is changed to `Microphone` in [Settings](#settings), the selection screen will appear.
 
 ## Settings
 
-Right click on the task tray icon and select "Settings" to launch the settings window.
+Right-click the task tray icon and select `Settings` to open the settings window.
 
-![appimage_3]({{site.baseurl}}../../assets/img/usage/settings_general.png)
+### General
 
-### Theme
+![appimage_3](/assets/img/usage/settings_general.png)
 
-This setting allows you to change the appearance of the application. You can choose from the following three themes.
+**Theme**
+
+This setting lets you change the appearance of the application. You can choose from the following three themes.
+
+- System (Synchronize with system settings)
 
 - Light
 
 - Dark
 
-- System (Synchronize with system settings)
+**Language**
 
-### Hotkey
+Language selection. The following languages are supported.
 
-You can set the shortcut key for starting the Selection screen. The default setting is “Ctrl + Alt + V”.
+- Japanese
+
+- English
+
+**Double-click tray icon**
+
+Select which window opens by default when you double-click the task tray icon. The default is `Speaker`. The following options are available.
+
+- Speaker
+
+- Microphone
+
+> ##### TIP
+> 
+> If you select Microphone, the task tray icon changes to a microphone.
+>
+> ![tasktray_mic](/assets/img/usage/mic_tasktray.png)
+> 
+{: .prompt-tip }
+
+**Launch at Startup**
+
+If enabled, the application starts automatically when the system starts.
+
+### Speaker
+
+![setting_sp](/assets/img/usage/setting_sp.png)
+
+**Hotkey**
+
+You can set the shortcut key to open the selection screen. The default setting is `Ctrl + Alt + V`.
 
 The selected modifier key is highlighted in green. The last text box can be set to any one key.
 
-If the key has been changed, it will also be displayed in a tooltip in the taskbar.
+If the key is changed, it is also shown in the task tray icon tooltip.
 
-![appimage_4]({{site.baseurl}}../../assets/img/usage/tasktray_tooltip.png)
+### Microphone
 
-### Launch at Startup
+![setting_mic](/assets/img/usage/setting_mic.png)
 
-If enabled, the application is automatically launched at system startup.
+**Hotkey**
+
+You can set the shortcut key to open the selection screen. The default setting is `Ctrl + Alt + N`.
+
+The selected modifier key is highlighted in green. The last text box can be set to any one key.
+
+If the key is changed, it is also shown in the task tray icon tooltip.
+
+## Task Tray Icon
+
+- Right-click to open Settings or exit the application.
+
+- The tooltip shows the current settings.
+
+- Double-click to open the selection window configured in [Double-click tray icon](#general).
+
+![appimage_4](/assets/img/usage/tasktray_tooltip.png)
 
 ## TroubleShooting
 
-- When the same application is launched twice
-  
-  ![error_1]({{site.baseurl}}../../assets/img/usage/twice_launch.png)
+**If the same application is launched twice**
 
-  A notification will appear in the task tray indicating that it is in place.
+  ![error_1](/assets/img/usage/twice_launch.png)
 
-- "Hotkey registration failed. Please change the hotkey combination to be registered."
+  A notification appears in the task tray, and the application remains waiting.
 
-  ![error_2]({{site.baseurl}}../../assets/img/usage/error_hotkey.png)
-  
-  The cause of this error indicates that the selected hotkey or default hotkey is already registered in another application. In this case, the error can be resolved by changing the hotkey setting to another key combination.
+**If the hotkey is already registered by another application**
+
+  ![error_2](/assets/img/usage/error_hotkey.png)
+
+  This error occurs when the selected hotkey or the default hotkey is already registered by another application. You can resolve it by changing the setting to a different key combination.

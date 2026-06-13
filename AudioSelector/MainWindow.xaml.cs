@@ -2,9 +2,9 @@
 using NativeCoreAudio;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -39,7 +39,8 @@ namespace AudioSelector
             {
                 Debug.WriteLine("[MainWindow.Loaded]");
                 AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
-                model.Devices.CollectionChanged += DevicesCollectionChanged;
+                model.SpeakerDevices.CollectionChanged += DevicesCollectionChanged;
+                model.MicrophoneDevices.CollectionChanged += DevicesCollectionChanged;
                 model.VolumeChangeEvent.Update += OnDeviceVolumeUpdate;
             };
 
@@ -74,7 +75,7 @@ namespace AudioSelector
                 if ((bool)e.NewValue == true)
                 {
                     AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
-                    UpdateDeviceList(model.Devices);
+                    UpdateDeviceList(GetCurrentDevices(model), model.CurrentDeviceKind);
                 }
             };
 
@@ -83,39 +84,25 @@ namespace AudioSelector
         private void DevicesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             Debug.WriteLine("[MainWindow.DevicesCollectionChanged]");
-            ObservableCollection<MultiMediaDevice> device = sender as ObservableCollection<MultiMediaDevice>;
-
-            switch (e.Action)
+            if (!Dispatcher.CheckAccess())
             {
-                case NotifyCollectionChangedAction.Add:
-                    Debug.WriteLine("[MainWindow.DevicesCollectionChanged] NotifyCollectionChangedAction.Add");
-                    foreach (MultiMediaDevice m in e.NewItems)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            RadioButton selectbutton = CreateButtonItem(m.Id, m.DeviceName);
-                            deviceCollection.Add(m.Id, selectbutton);
-                            AudioList.Columns = GetAudioListColumnCount(deviceCollection.Count);
-
-                            UpdateDeviceList(device);
-                        });
-                    }
-
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    Debug.WriteLine("[MainWindow.DevicesCollectionChanged] NotifyCollectionChangedAction.Remove");
-                    foreach (MultiMediaDevice m in e.OldItems)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            _ = deviceCollection.Remove(m.Id);
-                            UpdateDeviceList(device);
-                        });
-                    }
-                    break;
-                default:
-                    break;
+                Dispatcher.Invoke(() => DevicesCollectionChanged(sender, e));
+                return;
             }
+
+            if (!IsVisible)
+            {
+                return;
+            }
+
+            AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
+            IReadOnlyCollection<MultiMediaDevice> currentDevices = GetCurrentDevices(model);
+            if (!ReferenceEquals(sender, currentDevices))
+            {
+                return;
+            }
+
+            UpdateDeviceList(currentDevices, model.CurrentDeviceKind);
         }
 
         private void AudioListKeyDown(object sender, KeyEventArgs e)
@@ -137,7 +124,7 @@ namespace AudioSelector
                 case Key.Enter:
                 case Key.Separator:
                     RadioButton button = AudioList.Children[index] as RadioButton;
-                    SetDefaultEndpoint(button.Tag as string);
+                    Selection.Select(button.Tag as string);
                     Hide();
                     break;
 
@@ -146,18 +133,31 @@ namespace AudioSelector
             }
         }
 
-        private void UpdateDeviceList(IReadOnlyCollection<MultiMediaDevice> devices)
+        private void UpdateDeviceList(IReadOnlyCollection<MultiMediaDevice> devices, AudioDeviceKind kind)
         {
             deviceCollection.Clear();
             AudioList.Children.Clear();
             AudioList.Columns = GetAudioListColumnCount(devices.Count);
 
-            string defaultId
-                = Enumeration.GetDefaultDeviceEndpointId(ComInterfaces.ERole.eConsole);
+            if (devices.Count == 0)
+            {
+                Hide();
+                return;
+            }
+
+            string defaultId = string.Empty;
+            try
+            {
+                defaultId = Enumeration.GetDefaultDeviceEndpointId(kind, NativeCoreAudio.ComInterfaces.ERole.eConsole);
+            }
+            catch (COMException ex)
+            {
+                Debug.WriteLine($"[MainWindow.UpdateDeviceList] {ex.Message}");
+            }
 
             foreach (MultiMediaDevice device in devices)
             {
-                RadioButton selectbutton = CreateButtonItem(device.Id, device.DeviceName);
+                RadioButton selectbutton = CreateButtonItem(device.Id, device.DeviceName, kind);
 
                 if (device.Id == defaultId)
                 {
@@ -180,7 +180,7 @@ namespace AudioSelector
         /// <param name="id">device id</param>
         /// <param name="devicename">device name</param>
         /// <returns>Initialized button</returns>
-        private RadioButton CreateButtonItem(string id, string devicename)
+        private RadioButton CreateButtonItem(string id, string devicename, AudioDeviceKind kind)
         {
             RadioButton button = new()
             {
@@ -193,12 +193,66 @@ namespace AudioSelector
 
             button.ApplyTemplate();
 
-            TextBlock volumeIcon = (TextBlock)button.Template.FindName("VolumeIcon", button);
-            volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
-            volumeIcon.Text = VolumeIconSelect(Enumeration.GetMute(id), Enumeration.GetMasterVolume(id));
+            UpdateButtonIcon(button, kind, id);
 
             button.Click += OnButtonItemClick;
             return button;
+        }
+
+        private void UpdateButtonIcon(RadioButton button, AudioDeviceKind kind, string id)
+        {
+            TextBlock volumeIcon = (TextBlock)button.Template.FindName("VolumeIcon", button);
+            Image microphoneIcon = (Image)button.Template.FindName("MicrophoneIcon", button);
+
+            if (volumeIcon == null || microphoneIcon == null)
+            {
+                return;
+            }
+
+            if (kind == AudioDeviceKind.Microphone)
+            {
+                volumeIcon.Visibility = Visibility.Collapsed;
+                microphoneIcon.Visibility = Visibility.Visible;
+                microphoneIcon.Source = GetMicrophoneImageSourceById(id);
+                return;
+            }
+
+            microphoneIcon.Source = null;
+            microphoneIcon.Visibility = Visibility.Collapsed;
+            volumeIcon.Visibility = Visibility.Visible;
+            volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
+            volumeIcon.Text = GetVolumeIcon(id);
+        }
+
+        private ImageSource GetMicrophoneImageSourceById(string id)
+        {
+            try
+            {
+                return GetMicrophoneImageSourceByResourceKey(MicIconSelect(Enumeration.GetMute(id), Enumeration.GetMasterVolume(id)));
+            }
+            catch (COMException ex)
+            {
+                Debug.WriteLine($"[MainWindow.GetMicrophoneImageSourceById] {ex.Message}");
+                return GetMicrophoneImageSourceByResourceKey(MicIconSelect(false, 1000000));
+            }
+        }
+
+        private ImageSource GetMicrophoneImageSourceByResourceKey(string resourceKey)
+        {
+            return TryFindResource(resourceKey) as ImageSource;
+        }
+
+        private static string GetVolumeIcon(string id)
+        {
+            try
+            {
+                return VolumeIconSelect(Enumeration.GetMute(id), Enumeration.GetMasterVolume(id));
+            }
+            catch (COMException ex)
+            {
+                Debug.WriteLine($"[MainWindow.GetVolumeIcon] {ex.Message}");
+                return VolumeIconSelect(false, 0);
+            }
         }
 
         /// <summary>
@@ -208,18 +262,35 @@ namespace AudioSelector
         /// <returns>HRESULT</returns>
         private uint OnDeviceVolumeUpdate(AudioVolumeNotificationData args)
         {
+            if (!Dispatcher.CheckAccess())
+            {
+                return Dispatcher.Invoke(() => OnDeviceVolumeUpdate(args));
+            }
+
             if (deviceCollection.TryGetValue(args.deviceId, out RadioButton value))
             {
                 TextBlock volumeIcon = (TextBlock)value.Template.FindName("VolumeIcon", value);
+                Image microphoneIcon = (Image)value.Template.FindName("MicrophoneIcon", value);
+                AudioSelectorViewModel model = DataContext as AudioSelectorViewModel;
 
-                if (volumeIcon != null)
+                if (volumeIcon != null && microphoneIcon != null && model != null)
                 {
-                    volumeIcon.Dispatcher.Invoke(() =>
+                    if (model.CurrentDeviceKind == AudioDeviceKind.Microphone)
                     {
+                        volumeIcon.Visibility = Visibility.Collapsed;
+                        microphoneIcon.Visibility = Visibility.Visible;
+                        microphoneIcon.Source = GetMicrophoneImageSourceByResourceKey(MicIconSelect(args.muted, args.masterVolume));
+                        microphoneIcon.InvalidateVisual();
+                    }
+                    else
+                    {
+                        microphoneIcon.Source = null;
+                        microphoneIcon.Visibility = Visibility.Collapsed;
+                        volumeIcon.Visibility = Visibility.Visible;
                         volumeIcon.FontFamily = new FontFamily("Segoe Fluent Icons");
                         volumeIcon.Text = VolumeIconSelect(args.muted, args.masterVolume);
                         volumeIcon.InvalidateVisual();
-                    });
+                    }
                 }
             }
             
@@ -253,28 +324,48 @@ namespace AudioSelector
             return "\uE992";
         }
 
+        private static string MicIconSelect(bool muted, float masterVolume)
+        {
+            int vol = (int)(masterVolume * 1000000);
+
+            if (muted)
+            {
+                return "MicrophoneMuteIcon";
+            }
+
+            if (vol > 666666)
+            {
+                return "MicrophoneHighIcon";
+            }
+
+            if (vol > 333333)
+            {
+                return "MicrophoneMidIcon";
+            }
+
+            if (vol > 1)
+            {
+                return "MicrophoneLowIcon";
+            }
+
+            return "MicrophoneMuteIcon";
+        }
+
         private void OnButtonItemClick(object sender, RoutedEventArgs e)
         {
             RadioButton clicked = sender as RadioButton;
             Debug.WriteLine(clicked.Tag);
-            SetDefaultEndpoint(clicked.Tag as string);
+            Selection.Select(clicked.Tag as string);
             Hide();
         }
 
-        private static void SetDefaultEndpoint(string id)
+        private static IReadOnlyCollection<MultiMediaDevice> GetCurrentDevices(AudioSelectorViewModel model)
         {
-            using SafeIPolicyConfig config = new();
-
-            try
+            return model.CurrentDeviceKind switch
             {
-                config.SetDefaultEndpoint(id, ComInterfaces.ERole.eConsole);
-                config.SetDefaultEndpoint(id, ComInterfaces.ERole.eMultimedia);
-                config.SetDefaultEndpoint(id, ComInterfaces.ERole.eCommunications);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+                AudioDeviceKind.Microphone => model.MicrophoneDevices,
+                AudioDeviceKind.Speaker or _ => model.SpeakerDevices,
+            };
         }
 
         private static int GetMovedIndex(int index, int maxcount)

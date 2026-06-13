@@ -1,0 +1,6 @@
+{% assign requested_lang = include.lang | default: page.lang | default: site.lang %}
+{% if requested_lang == 'ja-JP' %}
+  {{ '/ja/' | relative_url }}
+{% else %}
+  {{ '/en/' | relative_url }}
+{% endif %}

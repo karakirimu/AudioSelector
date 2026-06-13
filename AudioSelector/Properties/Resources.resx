@@ -126,7 +126,8 @@
   </data>
   <data name="TaskbarToolTip" xml:space="preserve">
     <value>AudioSelector
-Press {0} or double-click this icon to display</value>
+Speaker: {0}
+Microphone: {1}</value>
   </data>
   <data name="KeyWin" xml:space="preserve">
     <value>Win</value>
@@ -160,5 +161,20 @@ Please check your task tray.</value>
   <data name="TaskbarToolTipNoHotKey" xml:space="preserve">
     <value>AudioSelector
 Double-click this icon to display</value>
+  </data>
+  <data name="HotKeyDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="SettingSpeaker" xml:space="preserve">
+    <value>Speaker</value>
+  </data>
+  <data name="SettingMicrophone" xml:space="preserve">
+    <value>Microphone</value>
+  </data>
+  <data name="mic_black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>mic_black.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="mic_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>mic_white.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

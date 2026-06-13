@@ -1,0 +1,211 @@
+---
+---
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+:root {
+  --site-font-sans-en: "Segoe UI Variable Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --site-font-sans-ja: "BIZ UDPGothic", "Yu Gothic UI", "Meiryo UI", "Hiragino Sans", sans-serif;
+  --site-font-heading-en: "Segoe UI Variable Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --site-font-heading-ja: "BIZ UDPGothic", "Yu Gothic UI", "Meiryo UI", "Hiragino Sans", sans-serif;
+  --site-font-theme-body: "Source Sans Pro", "Microsoft Yahei", sans-serif;
+  --site-font-theme-heading: Lato, "Microsoft Yahei", sans-serif;
+  --site-font-mono: "Cascadia Mono", Consolas, "Courier New", monospace;
+  --site-font-body: var(--site-font-sans-en), var(--site-font-sans-ja);
+  --site-font-heading: var(--site-font-heading-en), var(--site-font-heading-ja);
+}
+
+html:lang(ja) {
+  --site-font-body: var(--site-font-sans-ja), var(--site-font-sans-en);
+  --site-font-heading: var(--site-font-heading-ja), var(--site-font-heading-en);
+}
+
+html,
+body,
+input,
+button,
+select,
+textarea {
+  font-family: var(--site-font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header .post-desc,
+#toc-bar .label,
+#search-results a,
+.pagination,
+.tag span,
+#archives .date.day {
+  font-family: var(--site-font-heading);
+}
+
+#sidebar .site-title {
+  font-family: var(--site-font-theme-heading);
+}
+
+#sidebar .site-subtitle {
+  font-family: var(--site-font-theme-body);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--site-font-mono);
+}
+
+.lang-switch-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: auto;
+  margin-bottom: 0.5rem;
+}
+
+.lang-switch {
+  position: relative;
+  display: block;
+}
+
+.lang-switch-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.05rem;
+  min-width: 3.4rem;
+  height: 2.0rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--sidebar-border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.85rem;
+  color: var(--text-muted-color);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+  cursor: pointer;
+  list-style: none;
+}
+
+.lang-switch-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.lang-switch-trigger:hover {
+  color: var(--sidebar-active-color);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lang-switch[open] .lang-switch-trigger {
+  color: var(--sidebar-active-color);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.lang-switch-current {
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.lang-switch-caret {
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.lang-switch[open] .lang-switch-caret {
+  transform: rotate(180deg);
+}
+
+.lang-switch-menu {
+  position: absolute;
+  left: calc(100% + 0.65rem);
+  top: 50%;
+  bottom: auto;
+  right: auto;
+  transform: translateY(-50%);
+  min-width: 8.5rem;
+  padding: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  background: var(--card-bg, #262626);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  z-index: 5;
+}
+
+.lang-switch-option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: auto;
+  min-width: 0;
+  padding: 0.55rem 0.55rem;
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-decoration: none;
+  color: var(--text-muted-color);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: left;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.lang-switch-option:hover {
+  color: var(--sidebar-active-color);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.lang-switch-option.active {
+  color: var(--sidebar-active-color);
+  font-weight: 600;
+}
+
+#sidebar .sidebar-bottom {
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: visible;
+  gap: 0.35rem 0.5rem;
+}
+
+#sidebar .sidebar-bottom > a:not(:last-child) {
+  margin-right: 0;
+}
+
+#sidebar .sidebar-bottom .lang-switch-menu > a,
+#sidebar .sidebar-bottom .lang-switch-menu > a:not(:last-child) {
+  width: 100%;
+  margin-right: 0;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  margin-bottom: 0;
+}
+
+#sidebar .sidebar-bottom .lang-switch-menu > a:not(:focus-visible) {
+  box-shadow: none;
+}
+
+#sidebar .sidebar-bottom .lang-switch-menu > a:hover,
+#sidebar .sidebar-bottom .lang-switch-menu > a:not(:last-child):hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+#sidebar {
+  overflow-x: visible;
+}

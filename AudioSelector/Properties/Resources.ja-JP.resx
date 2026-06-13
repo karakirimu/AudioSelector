@@ -117,6 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="TaskbarToolTip" xml:space="preserve">
+    <value>AudioSelector
+スピーカー: {0}
+マイク: {1}</value>
+  </data>
   <data name="KeyWin" xml:space="preserve">
     <value>Win</value>
   </data>
@@ -129,19 +134,15 @@
   <data name="KeyShift" xml:space="preserve">
     <value>Shift</value>
   </data>
+  <data name="HotKeyRegistrationError" xml:space="preserve">
+    <value>ホットキーの登録に失敗しました。
+登録するホットキーの組み合わせを変更してください。</value>
+  </data>
   <data name="TaskBarMenuSetting" xml:space="preserve">
     <value>設定</value>
   </data>
   <data name="TaskbarMenuExit" xml:space="preserve">
     <value>終了</value>
-  </data>
-  <data name="TaskbarToolTip" xml:space="preserve">
-    <value>AudioSelector
-{0} キーを押すか、ダブルクリックで表示</value>
-  </data>
-  <data name="HotKeyRegistrationError" xml:space="preserve">
-    <value>ホットキーの登録に失敗しました。
-登録するホットキーの組み合わせを変更してください。</value>
   </data>
   <data name="StartupDisabledByPolicy" xml:space="preserve">
     <value>このPCはグループポリシーで許可またはサポートされていないため、スタートアップを有効にできません。</value>
@@ -153,5 +154,14 @@
   <data name="TaskbarToolTipNoHotKey" xml:space="preserve">
     <value>AudioSelector
 ダブルクリックで表示</value>
+  </data>
+  <data name="HotKeyDisabled" xml:space="preserve">
+    <value>無効</value>
+  </data>
+  <data name="SettingSpeaker" xml:space="preserve">
+    <value>スピーカー</value>
+  </data>
+  <data name="SettingMicrophone" xml:space="preserve">
+    <value>マイク</value>
   </data>
 </root>

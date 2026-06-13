@@ -9,9 +9,13 @@ namespace AudioSelector.Setting
     {
         Theme,
         Language,
-        HotKeyEnabled,
-        HotKeyId,
-        HotKey,
+        SpeakerHotKeyEnabled,
+        SpeakerHotKeyId,
+        SpeakerHotKey,
+        MicrophoneHotKeyEnabled,
+        MicrophoneHotKeyId,
+        MicrophoneHotKey,
+        TrayDoubleClickTarget,
         Startup
     }
 
@@ -21,9 +25,13 @@ namespace AudioSelector.Setting
         public event ValueUpdate UserConfigurationUpdate;
         public void SetTheme(SystemTheme theme);
         public void SetLanguage(string language);
-        public void SetHotKeyEnabled(bool enabled);
-        public void SetHotkeyId(ushort hotkeyId);
-        public void SetHotkey(HotKey hotkey);
+        public void SetSpeakerHotKeyEnabled(bool enabled);
+        public void SetSpeakerHotkeyId(ushort hotkeyId);
+        public void SetSpeakerHotkey(HotKey hotkey);
+        public void SetMicrophoneHotKeyEnabled(bool enabled);
+        public void SetMicrophoneHotkeyId(ushort hotkeyId);
+        public void SetMicrophoneHotkey(HotKey hotkey);
+        public void SetTrayDoubleClickTarget(TrayDoubleClickTarget target);
         public void SetStartup(bool enabled);
     }
 
@@ -57,10 +65,11 @@ namespace AudioSelector.Setting
             if (!File.Exists(configFilePath))
             {
                 // If the JSON file doesn't exist, create it
-                using var writer = File.Create(configFilePath);
-
-                // Create the default data object
-                JsonSerializer.Serialize(writer, AppJsonFormat.CreateLatest());
+                using (var writer = File.Create(configFilePath))
+                {
+                    // Create the default data object
+                    JsonSerializer.Serialize(writer, AppJsonFormat.CreateLatest());
+                }
             }
 
             // Load the existing JSON file
@@ -71,13 +80,14 @@ namespace AudioSelector.Setting
 
             // Update Property if needed
             Property = AppJsonFormat.Update(Property);
+            reader.Close();
+            Save();
 
             if(Property != null)
             {
                 bool startup = StartupStoreApp.IsStoreApp() ? StartupStoreApp.CheckStartupEntry().Result : SystemRegistry.HasStartupEntry();
                 if(Property.Startup != startup)
                 {
-                    reader.Close();
                     SetStartup(startup);
                 }
             }
@@ -97,25 +107,53 @@ namespace AudioSelector.Setting
             UserConfigurationUpdate?.Invoke(AppConfigType.Language, Property);
         }
 
-        public void SetHotKeyEnabled(bool enabled)
+        public void SetSpeakerHotKeyEnabled(bool enabled)
         {
-            Property.Hotkey_enabled = enabled;
+            Property.SpeakerHotkeyEnabled = enabled;
             Save();
-            UserConfigurationUpdate?.Invoke(AppConfigType.HotKeyEnabled, Property);
+            UserConfigurationUpdate?.Invoke(AppConfigType.SpeakerHotKeyEnabled, Property);
         }
 
-        public void SetHotkeyId(ushort hotkeyId)
+        public void SetSpeakerHotkeyId(ushort hotkeyId)
         {
-            Property.Hotkey_id = hotkeyId;
+            Property.SpeakerHotkeyId = hotkeyId;
             Save();
-            UserConfigurationUpdate?.Invoke(AppConfigType.HotKeyId, Property);
+            UserConfigurationUpdate?.Invoke(AppConfigType.SpeakerHotKeyId, Property);
         }
 
-        public void SetHotkey(HotKey hotkey)
+        public void SetSpeakerHotkey(HotKey hotkey)
         {
-            Property.Hotkey = hotkey;
+            Property.SpeakerHotkey = hotkey;
             Save();
-            UserConfigurationUpdate?.Invoke(AppConfigType.HotKey, Property);
+            UserConfigurationUpdate?.Invoke(AppConfigType.SpeakerHotKey, Property);
+        }
+
+        public void SetMicrophoneHotKeyEnabled(bool enabled)
+        {
+            Property.MicrophoneHotkeyEnabled = enabled;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.MicrophoneHotKeyEnabled, Property);
+        }
+
+        public void SetMicrophoneHotkeyId(ushort hotkeyId)
+        {
+            Property.MicrophoneHotkeyId = hotkeyId;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.MicrophoneHotKeyId, Property);
+        }
+
+        public void SetMicrophoneHotkey(HotKey hotkey)
+        {
+            Property.MicrophoneHotkey = hotkey;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.MicrophoneHotKey, Property);
+        }
+
+        public void SetTrayDoubleClickTarget(TrayDoubleClickTarget target)
+        {
+            Property.TrayDoubleClickTarget = target;
+            Save();
+            UserConfigurationUpdate?.Invoke(AppConfigType.TrayDoubleClickTarget, Property);
         }
         public void SetStartup(bool enabled)
         {

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+using AudioTools;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace AudioSelector.Setting
@@ -36,6 +37,12 @@ namespace AudioSelector.Setting
                 {
                     case "General":
                         settingsContentControl.Content = new General(AppConfig);
+                        break;
+                    case "Speaker":
+                        settingsContentControl.Content = new DeviceHotKey(AppConfig, AudioDeviceKind.Speaker);
+                        break;
+                    case "Microphone":
+                        settingsContentControl.Content = new DeviceHotKey(AppConfig, AudioDeviceKind.Microphone);
                         break;
                 }
             }

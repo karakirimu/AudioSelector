@@ -39,6 +39,99 @@
     <CornerRadius x:Key="SelectorPanelCornerRadius">8</CornerRadius>
     <sys:Double x:Key="RadiusXValue">8</sys:Double>
     <sys:Double x:Key="RadiusYValue">8</sys:Double>
+    <SolidColorBrush x:Key="MicrophoneIconBrush" Color="{StaticResource TextBlockForegroundColor}" />
+    <DrawingImage x:Key="MicrophoneLowIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource MicrophoneIconBrush}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M16,12C16,7.58172 19.5817,4 24,4C28.4183,4 32,7.58172 32,12V24C32,28.4183 28.4183,32 24,32C19.5817,32 16,28.4183 16,24V12ZM24,6.5C20.9624,6.5 18.5,8.96243 18.5,12V24C18.5,27.0376 20.9624,29.5 24,29.5C27.0376,29.5 29.5,27.0376 29.5,24V12C29.5,8.96243 27.0376,6.5 24,6.5ZM25,37.7148C32.2653,37.2021 38,31.1458 38,23.75C38,23.0596 37.4404,22.5 36.75,22.5C36.0596,22.5 35.5,23.0596 35.5,23.75C35.5,30.1013 30.3513,35.25 24,35.25C17.6487,35.25 12.5,30.1013 12.5,23.75C12.5,23.0596 11.9404,22.5 11.25,22.5C10.5596,22.5 10,23.0596 10,23.75C10,30.9752 15.4734,36.9221 22.5,37.6706V42.75C22.5,43.4404 23.0596,44 23.75,44C24.4404,44 25,43.4404 25,42.75V37.7148Z">
+                            <PathGeometry.Transform>
+                                <TranslateTransform X="-7" />
+                            </PathGeometry.Transform>
+                        </PathGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="{StaticResource MicrophoneIconBrush}" Thickness="2.8" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M31,11C29.3,12.4 29.3,18.6 31,20" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="MicrophoneMidIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource MicrophoneIconBrush}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M16,12C16,7.58172 19.5817,4 24,4C28.4183,4 32,7.58172 32,12V24C32,28.4183 28.4183,32 24,32C19.5817,32 16,28.4183 16,24V12ZM24,6.5C20.9624,6.5 18.5,8.96243 18.5,12V24C18.5,27.0376 20.9624,29.5 24,29.5C27.0376,29.5 29.5,27.0376 29.5,24V12C29.5,8.96243 27.0376,6.5 24,6.5ZM25,37.7148C32.2653,37.2021 38,31.1458 38,23.75C38,23.0596 37.4404,22.5 36.75,22.5C36.0596,22.5 35.5,23.0596 35.5,23.75C35.5,30.1013 30.3513,35.25 24,35.25C17.6487,35.25 12.5,30.1013 12.5,23.75C12.5,23.0596 11.9404,22.5 11.25,22.5C10.5596,22.5 10,23.0596 10,23.75C10,30.9752 15.4734,36.9221 22.5,37.6706V42.75C22.5,43.4404 23.0596,44 23.75,44C24.4404,44 25,43.4404 25,42.75V37.7148Z">
+                            <PathGeometry.Transform>
+                                <TranslateTransform X="-7" />
+                            </PathGeometry.Transform>
+                        </PathGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="{StaticResource MicrophoneIconBrush}" Thickness="2.8" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M31,11C29.3,12.4 29.3,18.6 31,20 M37.6,8C34.7,10.8 34.7,20.2 37.6,23" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="MicrophoneHighIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource MicrophoneIconBrush}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M16,12C16,7.58172 19.5817,4 24,4C28.4183,4 32,7.58172 32,12V24C32,28.4183 28.4183,32 24,32C19.5817,32 16,28.4183 16,24V12ZM24,6.5C20.9624,6.5 18.5,8.96243 18.5,12V24C18.5,27.0376 20.9624,29.5 24,29.5C27.0376,29.5 29.5,27.0376 29.5,24V12C29.5,8.96243 27.0376,6.5 24,6.5ZM25,37.7148C32.2653,37.2021 38,31.1458 38,23.75C38,23.0596 37.4404,22.5 36.75,22.5C36.0596,22.5 35.5,23.0596 35.5,23.75C35.5,30.1013 30.3513,35.25 24,35.25C17.6487,35.25 12.5,30.1013 12.5,23.75C12.5,23.0596 11.9404,22.5 11.25,22.5C10.5596,22.5 10,23.0596 10,23.75C10,30.9752 15.4734,36.9221 22.5,37.6706V42.75C22.5,43.4404 23.0596,44 23.75,44C24.4404,44 25,43.4404 25,42.75V37.7148Z">
+                            <PathGeometry.Transform>
+                                <TranslateTransform X="-7" />
+                            </PathGeometry.Transform>
+                        </PathGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="{StaticResource MicrophoneIconBrush}" Thickness="2.8" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M31,11C29.3,12.4 29.3,18.6 31,20 M37.6,8C34.7,10.8 34.7,20.2 37.6,23 M45,5C40.6,9.6 40.6,21.4 45,26" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    <DrawingImage x:Key="MicrophoneMuteIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource MicrophoneIconBrush}">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M16,12C16,7.58172 19.5817,4 24,4C28.4183,4 32,7.58172 32,12V24C32,28.4183 28.4183,32 24,32C19.5817,32 16,28.4183 16,24V12ZM24,6.5C20.9624,6.5 18.5,8.96243 18.5,12V24C18.5,27.0376 20.9624,29.5 24,29.5C27.0376,29.5 29.5,27.0376 29.5,24V12C29.5,8.96243 27.0376,6.5 24,6.5ZM25,37.7148C32.2653,37.2021 38,31.1458 38,23.75C38,23.0596 37.4404,22.5 36.75,22.5C36.0596,22.5 35.5,23.0596 35.5,23.75C35.5,30.1013 30.3513,35.25 24,35.25C17.6487,35.25 12.5,30.1013 12.5,23.75C12.5,23.0596 11.9404,22.5 11.25,22.5C10.5596,22.5 10,23.0596 10,23.75C10,30.9752 15.4734,36.9221 22.5,37.6706V42.75C22.5,43.4404 23.0596,44 23.75,44C24.4404,44 25,43.4404 25,42.75V37.7148Z">
+                            <PathGeometry.Transform>
+                                <TranslateTransform X="-7" />
+                            </PathGeometry.Transform>
+                        </PathGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="{StaticResource MicrophoneIconBrush}" Thickness="2.8" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M31.5,10.5L39,18 M39,10.5L31.5,18" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 
     <!-- ListBoxItem -->
     <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
@@ -588,20 +681,30 @@
                                         <SolidColorBrush Color="{DynamicResource SelectedAccentColor}" />
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <TextBlock x:Name="VolumeIcon"
-                                           FontWeight="Normal"
-                                           Grid.Column="0"
-                                           Grid.Row="0"
-                                           FontSize="48"
-                                           FontFamily="Segoe Fluent Icons"
+                                <Grid Grid.Column="0"
+                                      Grid.Row="0"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center">
+                                    <TextBlock x:Name="VolumeIcon"
+                                               FontWeight="Normal"
+                                               FontSize="48"
+                                               FontFamily="Segoe Fluent Icons"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               TextAlignment="Center">
+                                        <TextBlock.Foreground>
+                                            <SolidColorBrush Color="{DynamicResource TextBlockForegroundColor}"/>
+                                        </TextBlock.Foreground>
+                                        <ContentPresenter Content="&#xE767;"/>
+                                    </TextBlock>
+                                    <Image x:Name="MicrophoneIcon"
+                                           Width="48"
+                                           Height="48"
+                                           Stretch="Uniform"
+                                           Visibility="Collapsed"
                                            HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           TextAlignment="Center">
-                                    <TextBlock.Foreground>
-                                        <SolidColorBrush Color="{DynamicResource TextBlockForegroundColor}"/>
-                                    </TextBlock.Foreground>
-                                    <ContentPresenter Content="&#xE767;"/>
-                                </TextBlock>
+                                           VerticalAlignment="Center" />
+                                </Grid>
                                 <ContentPresenter Margin="8,4,8,8"
                                                     Grid.Row="1"
                                                     Grid.Column="0"

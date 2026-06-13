@@ -19,7 +19,7 @@ namespace AudioSelector.Properties {
     // または Visual Studio のようなツールを使用して自動生成されました。
     // メンバーを追加または削除するには、.ResX ファイルを編集して、/str オプションと共に
     // ResGen を実行し直すか、または VS プロジェクトをビルドし直します。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -91,6 +91,15 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
+        ///   Disabled に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string HotKeyDisabled {
+            get {
+                return ResourceManager.GetString("HotKeyDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Hotkey registration failed.
         ///Please change the hotkey combination to be registered. に類似しているローカライズされた文字列を検索します。
         /// </summary>
@@ -137,6 +146,44 @@ namespace AudioSelector.Properties {
         }
         
         /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] mic_black {
+            get {
+                object obj = ResourceManager.GetObject("mic_black", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Byte[] のローカライズされたリソースを検索します。
+        /// </summary>
+        internal static byte[] mic_white {
+            get {
+                object obj = ResourceManager.GetObject("mic_white", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Microphone に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SettingMicrophone {
+            get {
+                return ResourceManager.GetString("SettingMicrophone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Speaker に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SettingSpeaker {
+            get {
+                return ResourceManager.GetString("SettingSpeaker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Startup cannot be enabled because this PC is not allowed or supported by Group Policy. に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string StartupDisabledByPolicy {
@@ -165,7 +212,8 @@ namespace AudioSelector.Properties {
         
         /// <summary>
         ///   AudioSelector
-        ///Press {0} or double-click this icon to display に類似しているローカライズされた文字列を検索します。
+        ///Speaker: {0}
+        ///Microphone: {1} に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string TaskbarToolTip {
             get {

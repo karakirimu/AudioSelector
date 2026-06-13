@@ -1,6 +1,7 @@
-﻿using AudioTools;
+using AudioTools;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using static NativeCoreAudio.ComInterfaces;
 
 namespace AudioSelector.AudioDevice
@@ -10,6 +11,7 @@ namespace AudioSelector.AudioDevice
     /// </summary>
     internal class AudioDeviceEnumerationEvent
     {
+        private readonly AudioDeviceKind deviceKind;
         private NotificationEvent notificationEvent;
         public List<MultiMediaDevice> Devices { get; private set; }
 
@@ -17,9 +19,10 @@ namespace AudioSelector.AudioDevice
         public event DeviceEnumerationEvent Add;
         public event DeviceEnumerationEvent Remove;
 
-        public AudioDeviceEnumerationEvent()
+        public AudioDeviceEnumerationEvent(AudioDeviceKind kind = AudioDeviceKind.Speaker)
         {
-            Devices = (List<MultiMediaDevice>)Enumeration.ListActiveRenderDevices();
+            deviceKind = kind;
+            Devices = GetActiveDevices();
         }
 
         /// <summary>
@@ -41,22 +44,13 @@ namespace AudioSelector.AudioDevice
             notificationEvent.DisableNotification();
         }
 
-        /// <summary>
-        /// This function removes specific id from audio devices list
-        /// </summary>
-        /// <param name="removedeviceid">Audio endpoint id for removing</param>
-        /// <returns></returns>
-        private bool RemoveFromId(string removedeviceid)
+        private List<MultiMediaDevice> GetActiveDevices()
         {
-            foreach (MultiMediaDevice device in Devices)
+            return deviceKind switch
             {
-                if (device.Id == removedeviceid)
-                {
-                    return Devices.Remove(device);
-                }
-            }
-
-            return false;
+                AudioDeviceKind.Microphone => (List<MultiMediaDevice>)Enumeration.ListActiveCaptureDevices(),
+                AudioDeviceKind.Speaker or _ => (List<MultiMediaDevice>)Enumeration.ListActiveRenderDevices(),
+            };
         }
 
         /// <summary>
@@ -69,27 +63,21 @@ namespace AudioSelector.AudioDevice
         {
             Debug.WriteLine($"{deviceId}.{state}");
 
-            switch (state)
+            List<MultiMediaDevice> latestDevices = GetActiveDevices();
+            IReadOnlyCollection<string> latestIds = latestDevices.Select(device => device.Id).ToList();
+            IReadOnlyCollection<string> currentIds = Devices.Select(device => device.Id).ToList();
+
+            foreach (MultiMediaDevice removedDevice in Devices.Where(device => !latestIds.Contains(device.Id)).ToList())
             {
-                case DeviceState.ACTIVE:
-                    MultiMediaDevice multiMedia = Enumeration.GetInformationFromId(deviceId);
-                    Devices.Add(multiMedia);
-                    Add?.Invoke(multiMedia);
-                    break;
-                case DeviceState.DISABLED:
-                case DeviceState.UNPLUGGED:
-                case DeviceState.NOTPRESENT:
-                    if (RemoveFromId(deviceId))
-                    {
-                        Remove?.Invoke(Enumeration.GetInformationFromId(deviceId));
-                    }
-                    break;
-                case DeviceState.MASK_ALL:
-                    break;
-                default:
-                    break;
+                Remove?.Invoke(removedDevice);
             }
 
+            foreach (MultiMediaDevice addedDevice in latestDevices.Where(device => !currentIds.Contains(device.Id)))
+            {
+                Add?.Invoke(addedDevice);
+            }
+
+            Devices = latestDevices;
             return 0;
         }
     }
