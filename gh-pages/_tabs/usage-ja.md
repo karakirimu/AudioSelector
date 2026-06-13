@@ -5,7 +5,7 @@ translation_key: usage
 title: 使用方法
 description: >-
   ソフトウェアの使用方法の説明
-date: 2026-06-06 22:08:02 +0900
+date: 2026-06-12 22:08:02 +0900
 categories: [Article, Tutorial]
 tags: [getting started]
 pin: true
@@ -35,7 +35,6 @@ permalink: /ja/usage/
 ![mic_select](/assets/img/usage/mic_selector.png)
 
 - `Ctrl + Alt + N` を押すか、[設定](#設定)でタスクトレイアイコンのダブルクリック操作を`マイク`に変更している場合、選択画面が表示されます。
-
 
 ## 設定
 

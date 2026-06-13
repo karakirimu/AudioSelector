@@ -5,7 +5,7 @@ translation_key: privacy-policy
 title: プライバシーポリシー
 categories: [Article, Tutorial]
 tags: [privacy policy]
-date: 2026-06-07 09:16:00 +0900
+date: 2026-06-08 09:16:00 +0900
 pin: true
 icon: fas fa-shield
 order: 3
