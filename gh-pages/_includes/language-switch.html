@@ -1,0 +1,80 @@
+{% assign current_lang = include.lang | default: page.lang | default: site.lang %}
+{% capture english_url %}{% include localized-page-url.html lang='en' %}{% endcapture %}
+{% capture japanese_url %}{% include localized-page-url.html lang='ja-JP' %}{% endcapture %}
+{% assign current_label = 'EN' %}
+{% if current_lang == 'ja-JP' %}
+  {% assign current_label = 'JA' %}
+{% endif %}
+
+<section class="lang-switch-wrapper" aria-label="Language">
+  <details class="lang-switch" data-lang-switch>
+    <summary class="lang-switch-trigger" aria-label="Language selector">
+      <span class="lang-switch-current">{{ current_label }}</span>
+      <i class="fas fa-chevron-down lang-switch-caret" aria-hidden="true"></i>
+    </summary>
+    <div class="lang-switch-menu" role="listbox" aria-label="Language options">
+      <a
+        href="{{ english_url | strip }}"
+        class="lang-switch-option{% unless current_lang == 'ja-JP' %} active{% endunless %}"
+        data-lang-choice="en"
+        hreflang="en"
+        role="option"
+        aria-selected="{% unless current_lang == 'ja-JP' %}true{% else %}false{% endunless %}"
+      >English</a>
+      <a
+        href="{{ japanese_url | strip }}"
+        class="lang-switch-option{% if current_lang == 'ja-JP' %} active{% endif %}"
+        data-lang-choice="ja-JP"
+        hreflang="ja-JP"
+        role="option"
+        aria-selected="{% if current_lang == 'ja-JP' %}true{% else %}false{% endif %}"
+      >日本語</a>
+    </div>
+  </details>
+</section>
+
+<script>
+  (() => {
+    if (window.audioSelectorLanguageChoiceInitialized) {
+      return;
+    }
+
+    window.audioSelectorLanguageChoiceInitialized = true;
+
+    document.addEventListener('click', (event) => {
+      const switchRoot = event.target.closest('[data-lang-switch]');
+      const languageLink = event.target.closest('[data-lang-choice]');
+
+      document.querySelectorAll('[data-lang-switch][open]').forEach((element) => {
+        if (element !== switchRoot) {
+          element.removeAttribute('open');
+        }
+      });
+
+      if (!languageLink) {
+        return;
+      }
+
+      try {
+        window.localStorage.setItem('preferredLanguage', languageLink.getAttribute('data-lang-choice'));
+      } catch (error) {
+        /* Ignore storage access errors and keep the navigation working. */
+      }
+
+      const openSwitch = languageLink.closest('[data-lang-switch]');
+      if (openSwitch) {
+        openSwitch.removeAttribute('open');
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') {
+        return;
+      }
+
+      document.querySelectorAll('[data-lang-switch][open]').forEach((element) => {
+        element.removeAttribute('open');
+      });
+    });
+  })();
+</script>

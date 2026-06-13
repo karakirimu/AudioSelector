@@ -1,5 +1,8 @@
 ---
-layout: post
+layout: page
+lang: en
+translation_key: privacy-policy
+title: Privacy Policy
 categories: [Article, Tutorial]
 tags: [privacy policy]
 date: 2024-11-03 09:16:00 +0900

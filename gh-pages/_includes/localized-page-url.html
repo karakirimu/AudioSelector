@@ -1,0 +1,25 @@
+{% assign requested_lang = include.lang | default: site.lang %}
+{% assign translation_key = include.translation_key | default: page.translation_key %}
+{% assign target_url = '' %}
+
+{% if translation_key %}
+  {% if page.collection == 'tabs' %}
+    {% assign localized_docs = site.tabs | where: 'translation_key', translation_key | where: 'lang', requested_lang %}
+  {% elsif page.layout == 'post' %}
+    {% assign localized_docs = site.posts | where: 'translation_key', translation_key | where: 'lang', requested_lang %}
+  {% else %}
+    {% assign localized_docs = site.pages | where: 'translation_key', translation_key | where: 'lang', requested_lang %}
+  {% endif %}
+
+  {% assign localized_doc = localized_docs | first %}
+
+  {% if localized_doc %}
+    {% assign target_url = localized_doc.url | relative_url %}
+  {% endif %}
+{% endif %}
+
+{% if target_url == empty %}
+  {% include lang-home-url.html lang=requested_lang %}
+{% else %}
+  {{ target_url }}
+{% endif %}

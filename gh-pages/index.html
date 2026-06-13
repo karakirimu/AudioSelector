@@ -1,0 +1,60 @@
+---
+layout: null
+permalink: /
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AudioSelector</title>
+    <script>
+      (() => {
+        const storageKey = 'preferredLanguage';
+        const englishUrl = {{ '/en/' | relative_url | jsonify }};
+        const japaneseUrl = {{ '/ja/' | relative_url | jsonify }};
+
+        const normalizeLanguage = (value) => {
+          if (typeof value !== 'string') {
+            return 'en';
+          }
+
+          return value.toLowerCase().startsWith('ja') ? 'ja-JP' : 'en';
+        };
+
+        const resolveLanguage = () => {
+          try {
+            const savedLanguage = window.localStorage.getItem(storageKey);
+            if (savedLanguage) {
+              return normalizeLanguage(savedLanguage);
+            }
+          } catch (error) {
+            /* Ignore storage access errors and continue with browser detection. */
+          }
+
+          const browserLanguage =
+            (Array.isArray(window.navigator.languages) && window.navigator.languages[0]) ||
+            window.navigator.language ||
+            '';
+
+          return normalizeLanguage(browserLanguage);
+        };
+
+        const targetLanguage = resolveLanguage();
+
+        try {
+          window.localStorage.setItem(storageKey, targetLanguage);
+        } catch (error) {
+          /* Ignore storage access errors and continue with the redirect. */
+        }
+
+        window.location.replace(targetLanguage === 'ja-JP' ? japaneseUrl : englishUrl);
+      })();
+    </script>
+  </head>
+  <body>
+    <p><a href="{{ '/en/' | relative_url }}">English</a></p>
+    <p><a href="{{ '/ja/' | relative_url }}">日本語</a></p>
+  </body>
+</html>

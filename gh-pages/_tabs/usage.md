@@ -1,8 +1,11 @@
 ---
-layout: post
+layout: page
+lang: en
+translation_key: usage
+title: Usage
 description: >-
   This page describes how to use this software.
-date: 2024-11-16 22:08:02 +0900
+date: 2026-06-06 22:08:02 +0900
 categories: [Article, Tutorial]
 tags: [getting started]
 pin: true
@@ -12,11 +15,11 @@ order: 2
 
 When the executable file is run, it will be stored in the task tray.
 
-![appimage_1]({{site.baseurl}}../../assets/img/usage/tasktray.png)
+![appimage_1](/assets/img/usage/tasktray.png)
 
 ## Selection screen
 
-![appimage_2]({{site.baseurl}}../../assets/img/usage/selector.png)
+![appimage_2](/assets/img/usage/selector.png)
 
 - By pressing Ctrl + Alt + V keys or double-clicking the task tray icon. The selection screen will appear.
 
@@ -28,7 +31,7 @@ When the executable file is run, it will be stored in the task tray.
 
 Right click on the task tray icon and select "Settings" to launch the settings window.
 
-![appimage_3]({{site.baseurl}}../../assets/img/usage/settings_general.png)
+![appimage_3](/assets/img/usage/settings_general.png)
 
 ### Theme
 
@@ -42,13 +45,13 @@ This setting allows you to change the appearance of the application. You can cho
 
 ### Hotkey
 
-You can set the shortcut key for starting the Selection screen. The default setting is “Ctrl + Alt + V”.
+You can set the shortcut key for starting the Selection screen. The default setting is "Ctrl + Alt + V".
 
 The selected modifier key is highlighted in green. The last text box can be set to any one key.
 
 If the key has been changed, it will also be displayed in a tooltip in the taskbar.
 
-![appimage_4]({{site.baseurl}}../../assets/img/usage/tasktray_tooltip.png)
+![appimage_4](/assets/img/usage/tasktray_tooltip.png)
 
 ### Launch at Startup
 
@@ -57,13 +60,13 @@ If enabled, the application is automatically launched at system startup.
 ## TroubleShooting
 
 - When the same application is launched twice
-  
-  ![error_1]({{site.baseurl}}../../assets/img/usage/twice_launch.png)
+
+  ![error_1](/assets/img/usage/twice_launch.png)
 
   A notification will appear in the task tray indicating that it is in place.
 
 - "Hotkey registration failed. Please change the hotkey combination to be registered."
 
-  ![error_2]({{site.baseurl}}../../assets/img/usage/error_hotkey.png)
-  
+  ![error_2](/assets/img/usage/error_hotkey.png)
+
   The cause of this error indicates that the selected hotkey or default hotkey is already registered in another application. In this case, the error can be resolved by changing the hotkey setting to another key combination.

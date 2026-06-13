@@ -1,5 +1,8 @@
 ---
-layout: post
+layout: page
+lang: en
+translation_key: install
+title: Install
 description: >-
   This page describes how to install this software.
 date: 2024-11-03 11:00:00 +0900
