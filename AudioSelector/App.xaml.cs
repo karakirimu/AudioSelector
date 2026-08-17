@@ -92,12 +92,6 @@ namespace AudioSelector
                 // Audio device enumeration event setup
                 speakerEnumerationEvent = new(AudioDeviceKind.Speaker);
                 microphoneEnumerationEvent = new(AudioDeviceKind.Microphone);
-                speakerEnumerationEvent.Start();
-                microphoneEnumerationEvent.Start();
-                speakerEnumerationEvent.Add += OnSpeakerDeviceAdd;
-                speakerEnumerationEvent.Remove += OnSpeakerDeviceRemoved;
-                microphoneEnumerationEvent.Add += OnMicrophoneDeviceAdd;
-                microphoneEnumerationEvent.Remove += OnMicrophoneDeviceRemoved;
 
                 // Audio device volume change event setup
                 volumeChangeEvent = new();
@@ -111,6 +105,13 @@ namespace AudioSelector
                 viewModel.CurrentDeviceKind = AudioDeviceKind.Speaker;
                 viewModel.AppConfig = appConfig;
                 viewModel.VolumeChangeEvent = volumeChangeEvent;
+
+                speakerEnumerationEvent.Add += OnSpeakerDeviceAdd;
+                speakerEnumerationEvent.Remove += OnSpeakerDeviceRemoved;
+                microphoneEnumerationEvent.Add += OnMicrophoneDeviceAdd;
+                microphoneEnumerationEvent.Remove += OnMicrophoneDeviceRemoved;
+                speakerEnumerationEvent.Start();
+                microphoneEnumerationEvent.Start();
 
                 Current.MainWindow = new MainWindow
                 {
