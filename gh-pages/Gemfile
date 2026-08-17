@@ -7,12 +7,15 @@ source "https://rubygems.org"
 #
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
-gem "jekyll", "~> 4.3.4"
+gem "jekyll", "~> 4.4", ">= 4.4.1"
 # This is the default theme for new Jekyll sites. You may change this to anything you like.
-gem 'jekyll-theme-chirpy', '~> 7.5', '>= 7.5.0'
+gem "jekyll-theme-chirpy", "~> 7.6", ">= 7.6.0"
 
-gem "csv", "~> 3.2"
-gem "base64", "~> 0.1.0"
+gem "csv", "~> 3.3", ">= 3.3.6"
+gem "base64", "~> 0.3"
+
+# WEBrick is no longer bundled with Ruby, but is required by `jekyll serve`.
+gem "webrick", "~> 1.9"
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
